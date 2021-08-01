@@ -10,6 +10,36 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
+nnoremap <leader>t :Fern . -reveal=% -drawer -width=30 -toggle<CR>
+nnoremap <silent> <Leader>ee :<C-u>Fern <C-r>=<SID>init_fern()<CR><CR>
+function! s:init_fern() abort
+  nmap <buffer><expr>
+        \ <Plug>(fern-my-expand-or-enter)
+        \ fern#smart#drawer(
+        \   "\<Plug>(fern-open-or-expand)",
+        \   "\<Plug>(fern-open-or-enter)",
+        \ )
+  nmap <buffer><expr>
+        \ <Plug>(fern-my-collapse-or-leave)
+        \ fern#smart#drawer(
+        \   "\<Plug>(fern-action-collapse)",
+        \   "\<Plug>(fern-action-leave)",
+        \ )
+  nmap <buffer><nowait> l <Plug>(fern-my-expand-or-enter)
+  nmap <buffer><nowait> h <Plug>(fern-my-collapse-or-leave)
+endfunction
+let g:fern#renderer = "nerdfont"
+function! s:fern_settings() abort
+  nmap <silent> <buffer> p     <Plug>(fern-action-preview:toggle)
+  nmap <silent> <buffer> <C-p> <Plug>(fern-action-preview:auto:toggle)
+  nmap <silent> <buffer> <C-d> <Plug>(fern-action-preview:scroll:down:half)
+  nmap <silent> <buffer> <C-u> <Plug>(fern-action-preview:scroll:up:half)
+endfunction
+
+augroup fern-settings
+  autocmd!
+  autocmd FileType fern call s:fern_settings()
+augroup END
 " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua<<EOF
 local map = vim.api.nvim_set_keymap
@@ -24,7 +54,7 @@ map('n', '<leader>/', ":silent grep ", default_opts)
 map('n', '<leader>fg', "<cmd>lua require'telescope.builtin'.live_grep()<cr>", default_opts)
 map('n', '<leader>fe', "<cmd>lua require'telescope.builtin'.file_browser()<cr>", default_opts)
 EOF
-
+" mfussenegger/nvim-ts-hint-textobject TreeSitter plugin for highlightingg parts of the code using sytax tree
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 vnoremap <silent> m :lua require('tsht').nodes()<CR>
 " Default rules for matching:

@@ -14,6 +14,14 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'preservim/nerdtree' |
             \ Plug 'Xuyuanp/nerdtree-git-plugin' |
             \ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'lambdalisue/fern.vim' |
+    \ Plug 'lambdalisue/fern-git-status.vim' |
+    \ Plug 'lambdalisue/fern-bookmark.vim' |
+    \ Plug 'https://github.com/lambdalisue/fern-mapping-project-top.vim' |
+    \ Plug 'lambdalisue/nerdfont.vim' |
+    \ Plug 'lambdalisue/fern-renderer-nerdfont.vim' |
+    \ Plug 'yuki-yano/fern-preview.vim' |
+    \ Plug 'csch0/vim-startify-renderer-nerdfont'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
