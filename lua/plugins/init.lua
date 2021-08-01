@@ -1,0 +1,5 @@
+require('lsp.init')
+require('plugins.compe')
+require('plugins.ale')
+require('plugins.devicons')
+require('plugins.treesitter')
