@@ -10,6 +10,7 @@ Plug 'hrsh7th/nvim-compe'
 Plug 'SirVer/ultisnips' | 
             \ Plug 'honza/vim-snippets'
 Plug 'dense-analysis/ale'
+Plug 'stephpy/vim-php-cs-fixer'
 Plug 'ray-x/lsp_signature.nvim'
 Plug 'preservim/nerdtree' |
             \ Plug 'Xuyuanp/nerdtree-git-plugin' |
@@ -54,9 +55,12 @@ Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
 call plug#end()
 filetype plugin indent on    " required
-let g:ale_fixers={'php': ['phpstan']}
+let g:ale_fixers={'php': ['php_cs_fixer']}
+nnoremap <silent><leader>pcd :call PhpCsFixerFixDirectory()<CR>
+nnoremap <silent><leader>pcf :call PhpCsFixerFixFile()<CR>
 let g:ale_linters={'php': ['phpstan']}
 let g:ale_linters_explicit = 1
+let g:ale_fix_on_save = 1
 let g:ale_completion_autoimport = 1
 let g:ale_virtualtext_cursor = 1
 let g:ale_virtualtext_prefix = '😈> '
