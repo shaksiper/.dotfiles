@@ -1,10 +1,12 @@
 let g:plug_home = stdpath('data').'/plugged' 
 " filetype off
+set confirm
+set title titlestring=%(%{expand(\"%:~:.:h\")}%)/%t\ -\ NeoVim\ 🧠
 set encoding=utf-8
 set number relativenumber
 set clipboard+=unnamedplus
 set noerrorbells
-"set smartindent
+set smartindent
 " show existing tab with 4 spaces width
 set tabstop=4
 " when indenting with '>', use 4 spaces width
@@ -33,16 +35,16 @@ runtime plugins.vim
 lua require('init')
 runtime maps.vim
 
+let g:cursorhold_updatetime = 500
 syntax on
 set completeopt=menuone,noinsert,noselect
-colorscheme NeoSolarized
-let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
-let g:indent_guides_enable_on_vim_startup = 1
+let g:rose_pine_variant = 'moon'
+colorscheme rose-pine
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-
+let g:airline_section_b = "%{get(b:,'gitsigns_status','')}  %{get(b:,'gitsigns_head','')} 🌱"
 " If php-cs-fixer is in $PATH, you don't need to define line below
-let g:php_cs_fixer_path = "~/.local/share/php-fixer/vendor/bin/php-cs-fixer" " define the path to the php-cs-fixer.phar
+"let g:php_cs_fixer_path = "~/.config/composer/vendor/bin/php-cs-fixer" " define the path to the php-cs-fixer.phar
 
 " If you use php-cs-fixer version 2.x
 let g:php_cs_fixer_rules = "@PSR2"          " options: --rules (default:@PSR2)
