@@ -3,18 +3,11 @@ local nvim_lsp = require 'lspconfig'
 local cfg = {
   bind = true, -- This is mandatory, otherwise border config won't get registered.
                -- If you want to hook lspsaga or other signature handler, pls set to false
-  doc_lines = 10, -- will show two lines of comment/doc(if there are more than two lines in doc, will be truncated);
-                 -- set to 0 if you DO NOT want any API comments be shown
-                 -- This setting only take effect in insert mode, it does not affect signature help in normal
-                 -- mode, 10 by default
 
   floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
-  fix_pos = false,  -- set to true, the floating window will not auto-close until finish all parameters
   hint_enable = true, -- virtual hint enable
   hint_prefix = "🐼 ",  -- Panda for parameter
   hint_scheme = "String",
-  use_lspsaga = false,  -- set to true if you want to use lspsaga popup
-  hi_parameter = "Search", -- how your parameter will be highlight
   max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
                    -- to view the hiding contents
   max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
@@ -28,21 +21,31 @@ local cfg = {
   -- deprecate !!
   -- decorator = {"`", "`"}  -- this is no longer needed as nvim give me a handler and it allow me to highlight active parameter in floating_window
   zindex = 200, -- by default it will be on top of all floating windows, set to 50 send it to bottom
-  debug = false, -- set to true to enable debug logging
-  log_path = "debug_log_file_path", -- debug log path
 
   padding = '', -- character to pad on left and right of signature can be ' ', or '|'  etc
 
   toggle_key = nil -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
 }
-vim.g.Illuminate_delay = 300
+require'lsp_signature'.setup(cfg)
+-- go to preview plugin setup to show a floating window for def/imp preview
+require('goto-preview').setup {
+    width = 100; -- Width of the floating window
+    height = 15; -- Height of the floating window
+    default_mappings = false; -- Bind default mappings
+    debug = false; -- Print debug information
+    opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
+    post_open_hook = nil -- A function taking two arguments, a buffer and a window to be ran as a hook.
+}
 local on_attach = function(_, bufnr)
-    require'lsp_signature'.on_attach(cfg, bufnr)
+    -- require'lsp_signature'.on_attach(cfg, bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     local opts = { noremap = true, silent = true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpd', '<cmd>lua require(\'goto-preview\').goto_preview_definition()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpi', '<cmd>lua require(\'goto-preview\').goto_preview_implementation()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gp', '<cmd>lua require(\'goto-preview\').close_all_win()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua require(\'lspsaga.hover\').render_hover_doc()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-f>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(1)<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-b>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(-1)<CR>', opts)
@@ -85,6 +88,7 @@ require'lspconfig'.intelephense.setup{
 }
 require'lspconfig'.html.setup {
     cmd = { "vscode-html-language-server", "--stdio" },
+    on_attach = on_attach,
     capabilities = capabilities,
     filetypes = { "html" },
     init_options = {
@@ -99,12 +103,92 @@ require'lspconfig'.html.setup {
     --     end,
     settings = {},
 }
+local configs = require'lspconfig/configs'
+if not nvim_lsp.emmet_ls then
+  configs.emmet_ls = {
+    default_config = {
+      cmd = {'ls_emmet', '--stdio'};
+      filetypes = {'html', 'css'};
+      root_dir = function(fname)
+        return vim.loop.cwd()
+      end;
+      settings = {};
+    };
+  }
+end
+nvim_lsp.emmet_ls.setup{ capabilities = capabilities; }
+
 require'lspconfig'.cssls.setup {
   capabilities = capabilities,
+    on_attach = on_attach,
 }
 require'lspconfig'.jsonls.setup {
   capabilities = capabilities,
+    on_attach = on_attach,
 }
 local saga = require 'lspsaga'
 saga.init_lsp_saga {
+}
+
+-- Vim LSP
+require'lspconfig'.vimls.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+    -- Defaults
+}
+-- TSSERVER
+require'lspconfig'.tsserver.setup{
+    on_attach = on_attach,
+    capabilities = capabilities,
+    -- Defaults
+}
+-- GOPLS
+require('go').setup()
+require'lspconfig'.gopls.setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+    cmd = {"/home/shaksiper/go/bin/gopls", "serve"},
+    settings = {
+        gopls = {
+            analyses = {
+                unusedparams = true,
+                shadow = true,
+            },
+            staticcheck = true,
+        },
+    },
+}
+-- LUA LSP
+local sumneko_root_path = '/home/shaksiper/Documents/lua-language-server'
+local sumneko_binary = sumneko_root_path .. "/bin/Linux/lua-language-server"
+
+local runtime_path = vim.split(package.path, ';')
+table.insert(runtime_path, "lua/?.lua")
+table.insert(runtime_path, "lua/?/init.lua")
+require'lspconfig'.sumneko_lua.setup {
+    cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+    capabilities = capabilities,
+    on_attach = on_attach,
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+                version = 'LuaJIT',
+                -- Setup your lua path
+                path = runtime_path,
+            },
+            diagnostics = {
+                -- Get the language server to recognize the `vim` global
+                globals = {'vim'},
+            },
+            workspace = {
+                -- Make the server aware of Neovim runtime files
+                library = vim.api.nvim_get_runtime_file("", true),
+            },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = {
+                enable = false,
+            },
+        },
+    },
 }

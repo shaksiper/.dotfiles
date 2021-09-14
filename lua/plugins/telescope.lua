@@ -25,6 +25,27 @@ require("telescope").setup({
             },
         },
     },
+    pickers = {
+    -- Your special builtin config goes in here
+        buffers = {
+        path_display = {
+            'smart',
+            -- 'truncate',
+            -- 'shorten',
+        },
+          sort_lastused = true,
+          theme = "dropdown",
+          -- previewer = require("telescope.previewers").vim_buffer_cat.new,
+          mappings = {
+            i = {
+              ["<c-d>"] = require("telescope.actions").delete_buffer,
+            },
+            n = {
+              ["<c-d>"] = require("telescope.actions").delete_buffer,
+            }
+          }
+        },
+    },
     extensions = {
         -- fzy_native = {
         --     override_generic_sorter = false,
@@ -32,7 +53,7 @@ require("telescope").setup({
         -- },
         fzf = {
           fuzzy = true,                    -- false will only do exact matching
-          override_generic_sorter = false, -- override the generic sorter
+          override_generic_sorter = true, -- override the generic sorter
           override_file_sorter = true,     -- override the file sorter
           case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
                                            -- the default case_mode is "smart_case"
@@ -41,6 +62,8 @@ require("telescope").setup({
 })
 --require('telescope').load_extension('fzy_native')
 require('telescope').load_extension('fzf')
+local session_opt = {auto_save_enabled = false, }
+require('auto-session').setup(session_opt)
 require('session-lens').setup {
     path_display={'shorten'},
     previewer = true,

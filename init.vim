@@ -1,7 +1,7 @@
 let g:plug_home = stdpath('data').'/plugged' 
 " filetype off
 set confirm
-set title titlestring=%(%{expand(\"%:~:.:h\")}%)/%t\ -\ NeoVim\ 🧠
+set title titlestring=NeoVim\ 🧠\ %(%{expand(\"%:~:.:h\")}%)/%t
 set encoding=utf-8
 set number relativenumber
 set clipboard+=unnamedplus
@@ -34,7 +34,12 @@ set termguicolors
 runtime plugins.vim
 lua require('init')
 runtime maps.vim
-
+augroup highlight_yank
+    autocmd!
+    au TextYankPost * silent! lua vim.highlight.on_yank { higroup='IncSearch', timeout=200 }
+augroup END
+" autocmd! CursorHoldI * put=&buftype
+" autocmd! CursorHoldI * put=&filetype
 let g:cursorhold_updatetime = 500
 syntax on
 set completeopt=menuone,noinsert,noselect
@@ -42,17 +47,13 @@ let g:rose_pine_variant = 'moon'
 colorscheme rose-pine
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline_focuslost_inactive = 1
+let g:airline_stl_path_style = 'short'
 let g:airline_section_b = "%{get(b:,'gitsigns_status','')}  %{get(b:,'gitsigns_head','')} 🌱"
-" If php-cs-fixer is in $PATH, you don't need to define line below
-"let g:php_cs_fixer_path = "~/.config/composer/vendor/bin/php-cs-fixer" " define the path to the php-cs-fixer.phar
-
-" If you use php-cs-fixer version 2.x
-let g:php_cs_fixer_rules = "@PSR2"          " options: --rules (default:@PSR2)
-"let g:php_cs_fixer_cache = ".php_cs.cache" " options: --cache-file
-"let g:php_cs_fixer_config_file = '.php_cs' " options: --config
-" End of php-cs-fixer version 2 config params
-
-let g:php_cs_fixer_php_path = "php"               " Path to PHP
-let g:php_cs_fixer_enable_default_mapping = 1     " Enable the mapping by default (<leader>pcd)
-let g:php_cs_fixer_dry_run = 0                    " Call command with dry-run option
-let g:php_cs_fixer_verbose = 0                    " Return the output of command if 1, else an inline information.
+" vimscript
+func! NvimGps() abort
+    return luaeval("require'nvim-gps'.is_available()") ?
+                \ luaeval("require'nvim-gps'.get_location()") : ''
+endf
+let g:airline_section_c = '%t %{NvimGps()}'
