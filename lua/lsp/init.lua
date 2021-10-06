@@ -27,25 +27,35 @@ local cfg = {
   toggle_key = nil -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
 }
 require'lsp_signature'.setup(cfg)
--- go to preview plugin setup to show a floating window for def/imp preview
-require('goto-preview').setup {
-    width = 100; -- Width of the floating window
-    height = 15; -- Height of the floating window
-    default_mappings = false; -- Bind default mappings
-    debug = false; -- Print debug information
-    opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
-    post_open_hook = nil -- A function taking two arguments, a buffer and a window to be ran as a hook.
+local saga = require 'lspsaga'
+saga.init_lsp_saga {
+    code_action_prompt = {
+        enable = true,
+        sign = true,
+        sign_priority = 20,
+        virtual_text = false,
+    },
 }
+
+-- go to preview plugin setup to show a floating window for def/imp preview
+-- require('goto-preview').setup {
+--     width = 100; -- Width of the floating window
+--     height = 15; -- Height of the floating window
+--     default_mappings = false; -- Bind default mappings
+--     debug = false; -- Print debug information
+--     opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
+--     post_open_hook = nil -- A function taking two arguments, a buffer and a window to be ran as a hook.
+-- }
 local on_attach = function(_, bufnr)
     -- require'lsp_signature'.on_attach(cfg, bufnr)
-    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc') -- why was it here anyways??
 
     local opts = { noremap = true, silent = true }
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpd', '<cmd>lua require(\'goto-preview\').goto_preview_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpi', '<cmd>lua require(\'goto-preview\').goto_preview_implementation()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gp', '<cmd>lua require(\'goto-preview\').close_all_win()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpd', '<cmd>lua require(\'goto-preview\').goto_preview_definition()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpi', '<cmd>lua require(\'goto-preview\').goto_preview_implementation()<CR>', opts)
+    -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gp', '<cmd>lua require(\'goto-preview\').close_all_win()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua require(\'lspsaga.hover\').render_hover_doc()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-f>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(1)<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-b>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(-1)<CR>', opts)
@@ -55,7 +65,7 @@ local on_attach = function(_, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua require(\'lspsaga.rename\').rename()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua require(\'lspsaga.codeaction\').code_action()<cr>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', ':<C-U>lua require(\'lspsaga.codeaction\').range_code_action()<CR>', opts)
@@ -126,9 +136,6 @@ require'lspconfig'.jsonls.setup {
   capabilities = capabilities,
     on_attach = on_attach,
 }
-local saga = require 'lspsaga'
-saga.init_lsp_saga {
-}
 
 -- Vim LSP
 require'lspconfig'.vimls.setup{
@@ -143,16 +150,17 @@ require'lspconfig'.tsserver.setup{
     -- Defaults
 }
 -- GOPLS
-require('go').setup()
+require('go').setup() -- ray-x/go.nvim init
 require'lspconfig'.gopls.setup {
     on_attach = on_attach,
     capabilities = capabilities,
-    cmd = {"/home/shaksiper/go/bin/gopls", "serve"},
+    cmd = {"gopls", "serve"},
     settings = {
         gopls = {
+            gofumpt = true,
             analyses = {
                 unusedparams = true,
-                shadow = true,
+                -- shadow = true,
             },
             staticcheck = true,
         },
