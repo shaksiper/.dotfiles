@@ -59,10 +59,11 @@ cmp.setup {
     },
     formatting = {
       format = function(entry, vim_item)
+        vim_item.abbr = require("lspkind").presets.default[vim_item.kind] .." ".. vim_item.abbr
         -- fancy icons and a name of kind
-       vim_item.kind = require("lspkind").presets.default[vim_item.kind]
+       --[[ vim_item.kind = require("lspkind").presets.default[vim_item.kind]
           .. " "
-          .. vim_item.kind
+          .. vim_item.kind ]]
         -- set a name for each source
         vim_item.menu = ({
           buffer = "[Buffer]",

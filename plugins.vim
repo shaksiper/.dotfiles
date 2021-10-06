@@ -83,26 +83,29 @@ Plug 'b3nj5m1n/kommentary'
 Plug 'tpope/vim-surround'
 " Let there be colorful schemes
 Plug 'rose-pine/neovim'
-Plug 'nxvu699134/vn-night.nvim'
-Plug 'yonlu/omni.vim'
-Plug 'novakne/kosmikoa.nvim'
-Plug 'folke/tokyonight.nvim'
-Plug 'vim-airline/vim-airline'
-Plug 'morhetz/gruvbox'
-Plug 'lifepillar/vim-solarized8'
-Plug 'altercation/vim-colors-solarized'
-Plug 'marko-cerovac/material.nvim'
-Plug 'dracula/vim', { 'as': 'dracula' } 
-Plug 'overcache/NeoSolarized'
-Plug 'lifepillar/vim-gruvbox8'
+" Plug 'nxvu699134/vn-night.nvim'
+" Plug 'Mangeshrex/uwu.vim'
+" Plug 'shaunsingh/moonlight.nvim'
+" Plug 'nxvu699134/vn-night.nvim'
+" Plug 'yonlu/omni.vim'
+" Plug 'novakne/kosmikoa.nvim'
+" Plug 'folke/tokyonight.nvim'
+" Plug 'morhetz/gruvbox'
+" Plug 'lifepillar/vim-solarized8'
+" Plug 'altercation/vim-colors-solarized'
+" Plug 'marko-cerovac/material.nvim'
+" Plug 'dracula/vim', { 'as': 'dracula' } 
+" Plug 'overcache/NeoSolarized'
+" Plug 'lifepillar/vim-gruvbox8'
 
+Plug 'vim-airline/vim-airline'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'levouh/specs.nvim'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
 Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'nvim-neorg/neorg'
-Plug 'nvim-neorg/neorg-telescope'
+" Plug 'nvim-neorg/neorg'
+" Plug 'nvim-neorg/neorg-telescope'
 Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 filetype plugin indent on    " required
