@@ -1,4 +1,6 @@
 require('tabout').setup {
+    tabkey = '<C-j>',
+    backwards_tabkey = '<C-b>',
     act_as_tab = true, -- shift content if tab out is not possible
     act_as_shift_tab = true, -- reverse shift content if tab out is not possible (if your keyboard/terminal supports <S-Tab>)
     enable_backwards = true, -- well ...
