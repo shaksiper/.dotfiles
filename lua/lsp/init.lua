@@ -160,7 +160,9 @@ require'lspconfig'.gopls.setup {
             gofumpt = true,
             analyses = {
                 unusedparams = true,
-                -- shadow = true,
+                shadow = true,
+                fieldalignment = true,
+                nilness = true,
             },
             staticcheck = true,
         },

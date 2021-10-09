@@ -47,6 +47,8 @@ augroup END
 let g:cursorhold_updatetime = 500
 syntax on
 set completeopt=menuone,noinsert,noselect
+" Live preview of Ex commands
+set inccommand=nosplit
 let g:rose_pine_variant = 'moon'
 colorscheme rose-pine
 let g:airline_powerline_fonts = 1

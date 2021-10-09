@@ -19,6 +19,7 @@ Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 " Plug 'lewis6991/spellsitter.nvim' " Not working for some reason
 Plug 'matze/vim-move'
 Plug 'ggandor/lightspeed.nvim'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Plug 'mg979/vim-visual-multi' " There is a learning curve for this and
 " vanilla vim macros and motions *may* suffice as they say
 " plug 'chrisbra/NrrwRgn' " Again it might be useful to edit a region in a
@@ -35,7 +36,7 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-path'
-" Plug 'ray-x/cmp-treesitter'
+Plug 'ray-x/cmp-treesitter'
 " Plug 'octaltree/cmp-look'
 Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'onsails/lspkind-nvim'
@@ -44,6 +45,11 @@ Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'saadparwaiz1/cmp_luasnip'
+" DAP
+" Plug 'mfussenegger/nvim-dap'
+" Plug 'rcarriga/nvim-dap-ui'
+" Plug 'Pocco81/DAPInstall.nvim'
+
 " Plug 'turbio/bracey.vim', {'do': 'npm install --prefix server'}
 " Plug 'dense-analysis/ale'
 Plug 'stephpy/vim-php-cs-fixer'
@@ -77,6 +83,7 @@ Plug 'ahmedkhalf/lsp-rooter.nvim'
 Plug 'windwp/nvim-autopairs'
 Plug 'folke/which-key.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
+" Plug 'axlebedev/footprints'
 Plug 'tweekmonster/startuptime.vim'
 Plug 'b3nj5m1n/kommentary'
 " Plug 'tpope/vim-commentary'
@@ -152,6 +159,13 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
 " let g:ale_virtualtext_cursor = 1
 " let g:ale_virtualtext_prefix = '😈> '
 
+let g:VM_leader = {'default': '\', 'visual': '\', 'buffer': 'z'}
+let g:VM_maps = {}
+let g:VM_maps['Find Under']         = '<M-d>'
+let g:VM_maps['Find Subword Under'] = '<M-d>'
+
+let g:surround_no_insert_mappings = 1
+
 let g:nvim_tree_ignore = [ '.git', 'node_modules', '.cache' ]
 let g:nvim_tree_gitignore = 1 
 let g:nvim_tree_git_hl = 1
@@ -188,12 +202,12 @@ function! s:gitUntracked()
     let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
     return map(files, "{'line': v:val, 'path': v:val}")
 endfunction
-
+let g:startify_bookmarks = [ {'c': '~/.config/nvim/'}, '~/.zshrc' ]
 let g:startify_lists = [
         \ { 'type': 'files',     'header': ['   MRU']            },
         \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
         \ { 'type': 'sessions',  'header': ['   Sessions']       },
-        \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+        \ { 'type': 'bookmarks', 'header': ['   Configs']      },
         \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
         \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},
         \ { 'type': 'commands',  'header': ['   Commands']       },

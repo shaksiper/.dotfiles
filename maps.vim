@@ -47,3 +47,5 @@ EOF
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 vnoremap <silent> m :lua require('tsht').nodes()<CR>
 nnoremap <M-m> :MinimapToggle<CR>
+" Experimental insert mode surround functionality
+imap <C-S> <Plug>Isurround
