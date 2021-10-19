@@ -6,10 +6,6 @@ local has_words_before = function()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 end
 
-local feedkey = function(key)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), "n", true)
-end
-
 local luasnip = require("luasnip")
 local cmp = require('cmp')
 local WIDE_HEIGHT = 40
@@ -30,8 +26,8 @@ cmp.setup {
             select = true,
         }),
         ["<Tab>"] = cmp.mapping(function(fallback)
-            if vim.fn.pumvisible() == 1 then
-                feedkey("<C-n>")
+            if cmp.visible() then
+                cmp.select_next_item()
             elseif luasnip and luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
             else
@@ -40,8 +36,8 @@ cmp.setup {
         end, { "i", "s" }),
 
         ["<S-Tab>"] = cmp.mapping(function(fallback)
-            if vim.fn.pumvisible() == 1 then
-                feedkey("<C-p>")
+            if cmp.visible() then
+                cmp.select_prev_item()
             elseif luasnip and luasnip.jumpable(-1) then
                 luasnip.jump(-1)
             elseif has_words_before() then
@@ -61,7 +57,7 @@ cmp.setup {
         { name = 'nvim_lsp' },
         { name = 'buffer' },
         { name = 'luasnip' },
-        -- { name = 'treesitter' },
+        { name = 'treesitter' },
         -- { name = 'neorg' },
         { name = 'tags' },
         { name = 'path' },
@@ -88,7 +84,7 @@ cmp.setup {
                 nvim_lsp = "[LSP]",
                 luasnip = "[LuaSnip]",
                 nvim_lua = "[Lua]",
-                -- treesitter = "[TS]",
+                treesitter = "[TS]",
             })[entry.source.name]
             return vim_item
         end,

@@ -3,7 +3,7 @@ Plug 'nathom/filetype.nvim'
 Plug 'tpope/vim-repeat'
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 Plug 'rcarriga/nvim-notify'
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'nvim-treesitter/nvim-treesitter', {'branch' : '0.5-compat', 'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects', {'branch' : '0.5-compat'}
 Plug 'Jason-M-Chan/ts-textobjects'
@@ -29,7 +29,8 @@ Plug 'neovim/nvim-lspconfig'
 " Plug 'jose-elias-alvarez/null-ls.nvim'
 " Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'ray-x/go.nvim'
-Plug 'tami5/lspsaga.nvim' " Changed from glepnir to a more active fork
+Plug 'tami5/lspsaga.nvim', {'branch': 'nvim51'} " Changed from glepnir to a more active fork
+" Plug 'sisodiaa/lspsaga.nvim'
 " Install nvim-cmp
 Plug 'hrsh7th/nvim-cmp'
 " Install the buffer completion source
@@ -45,6 +46,7 @@ Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'ray-x/cmp-treesitter'
 " DAP
 " Plug 'mfussenegger/nvim-dap'
 " Plug 'rcarriga/nvim-dap-ui'
@@ -85,11 +87,14 @@ Plug 'folke/which-key.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
 " Plug 'axlebedev/footprints'
 Plug 'tweekmonster/startuptime.vim'
-Plug 'b3nj5m1n/kommentary'
+" Plug 'b3nj5m1n/kommentary'
+Plug 'numToStr/Comment.nvim'
 " Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 " Let there be colorful schemes
 Plug 'rose-pine/neovim'
+Plug 'rktjmp/lush.nvim'
+" Plug 'mcchrish/zenbones.nvim'
 " Plug 'nxvu699134/vn-night.nvim'
 " Plug 'Mangeshrex/uwu.vim'
 " Plug 'shaunsingh/moonlight.nvim'
@@ -105,7 +110,9 @@ Plug 'rose-pine/neovim'
 " Plug 'overcache/NeoSolarized'
 " Plug 'lifepillar/vim-gruvbox8'
 
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
+Plug 'famiu/feline.nvim'
+Plug 'akinsho/bufferline.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'levouh/specs.nvim'
 Plug 'mbbill/undotree'
@@ -116,7 +123,7 @@ Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 filetype plugin indent on    " required
-lua require('kommentary.config').use_extended_mappings()
+" lua require('kommentary.config').use_extended_mappings()
 call wilder#setup({'modes': [':', '/', '?']})
 call wilder#set_option('pipeline', [
             \   wilder#branch(
@@ -150,14 +157,6 @@ call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_bo
                         \ 'reverse': 1,
                         \ 'border': 'rounded',
                         \ })))
-" let g:ale_fixers={'php': ['php_cs_fixer']}
-" let g:ale_linters={'php': ['psalm']}
-" let g:ale_php_psalm_use_global = 1
-" let g:ale_linters_explicit = 1
-" let g:ale_fix_on_save = 1
-" let g:ale_lint_on_text_changed = 'always'
-" let g:ale_virtualtext_cursor = 1
-" let g:ale_virtualtext_prefix = '😈> '
 
 let g:VM_leader = {'default': '\', 'visual': '\', 'buffer': 'z'}
 let g:VM_maps = {}
@@ -182,9 +181,8 @@ let g:nvim_tree_window_picker_exclude = {
     \     'terminal'
     \   ]
     \ }
-" let g:minimap_auto_start = 1
 let g:minimap_git_colors = 1
-" let g:minimap_highlight_search = 1
+let g:minimap_highlight_search = 1
 let g:minimap_diffadd_color = "GitSignsAdd"
 let g:minimap_diffremove_color = 'GitSignsDelete'
 let g:minimap_diff_color = 'GitSignsChange'

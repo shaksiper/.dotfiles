@@ -7,6 +7,7 @@ set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h12
 set confirm
 set title titlestring=NeoVim\ 🧠\ %(%{expand(\"%:~:.:h\")}%)/%t
 set encoding=utf-8
+set spelllang=en_us
 set number relativenumber
 set clipboard+=unnamedplus
 set noerrorbells
@@ -42,24 +43,20 @@ augroup highlight_yank
     autocmd!
     au TextYankPost * silent! lua vim.highlight.on_yank { higroup='IncSearch', timeout=200 }
 augroup END
-" autocmd! CursorHoldI * put=&buftype
-" autocmd! CursorHoldI * put=&filetype
+" function! SaveWithTS(filename) range
+"     let l:extension = '.' . fnamemodify( a:filename, ':e' )
+"     if len(l:extension) == 1
+"         let l:extension = '.sql'
+"     endif
+
+"     let l:filename = escape( fnamemodify(a:filename, ':r') . strftime("_%Y_%m_%d_%H_%M") . l:extension, ' ' )
+
+"     execute "write " . l:filename
+" endfunction
+" command! -nargs=1 SWT call SaveWithTS( <q-args> )
 let g:cursorhold_updatetime = 500
-syntax on
-set completeopt=menuone,noinsert,noselect
+" syntax on
 " Live preview of Ex commands
 set inccommand=nosplit
 let g:rose_pine_variant = 'moon'
 colorscheme rose-pine
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline_focuslost_inactive = 1
-let g:airline_stl_path_style = 'short'
-let g:airline_section_b = "%{get(b:,'gitsigns_status','')}  %{get(b:,'gitsigns_head','')} 🌱"
-" vimscript
-func! NvimGps() abort
-    return luaeval("require'nvim-gps'.is_available()") ?
-                \ luaeval("require'nvim-gps'.get_location()") : ''
-endf
-let g:airline_section_c = '%t %{NvimGps()}'

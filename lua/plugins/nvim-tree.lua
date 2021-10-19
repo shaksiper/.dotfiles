@@ -7,7 +7,15 @@ require'nvim-tree'.setup {
     hijack_netrw        = true,
     -- open the tree when running this setup function
     open_on_setup       = true,
-    lsp_diagnostics     = true,
+    diagnostics = {
+        enable = true,
+        icons = {
+            hint = "",
+            info = "",
+            warning = "",
+            error = "",
+        }
+    },
     hijack_cursor       = true,
     update_focused_file = {
         -- enables the feature

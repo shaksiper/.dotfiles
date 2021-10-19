@@ -4,7 +4,7 @@ require("indent_blankline").setup {
     buftype_exclude = {"terminal", 'nofile'},
     use_treesitter = true,
     show_current_context = true,
-    char_list = { '│', '|', '¦', '┆', '┊' },
+    char_list = { '│', '┊', '┆', '¦', '|', '⋅'},
     context_highlight_list = {
         "IndentBlanklineIndent1",
         "IndentBlanklineIndent2",

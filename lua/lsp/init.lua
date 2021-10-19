@@ -70,6 +70,7 @@ local on_attach = function(_, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua require(\'lspsaga.codeaction\').code_action()<cr>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', ':<C-U>lua require(\'lspsaga.codeaction\').range_code_action()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gh', '<cmd>lua require(\'lspsaga.provider\').lsp_finder()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
@@ -118,7 +119,8 @@ if not nvim_lsp.emmet_ls then
   configs.emmet_ls = {
     default_config = {
       cmd = {'ls_emmet', '--stdio'};
-      filetypes = {'html', 'css'};
+            filetypes = { 'html', 'css', 'scss', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'haml',
+                'xml', 'xsl', 'pug', 'slim', 'sass', 'stylus', 'less', 'sss'};
       root_dir = function(fname)
         return vim.loop.cwd()
       end;

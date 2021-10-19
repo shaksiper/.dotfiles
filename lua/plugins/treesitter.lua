@@ -114,21 +114,25 @@ require'nvim-treesitter.configs'.setup {
             goto_next_start = {
                 ["]m"] = "@function.outer",
                 ["]e"] = "@parameter.inner",
+                ["]s"] = "@statement.outer",
                 ["]]"] = "@class.outer",
             },
             goto_next_end = {
                 ["]M"] = "@function.outer",
                 ["]E"] = "@parameter.inner",
+                ["]S"] = "@statement.outer",
                 ["]["] = "@class.outer",
             },
             goto_previous_start = {
                 ["[m"] = "@function.outer",
                 ["[e"] = "@parameter.inner",
+                ["[s"] = "@statement.outer",
                 ["[["] = "@class.outer",
             },
             goto_previous_end = {
                 ["[M"] = "@function.outer",
                 ["[E"] = "@parameter.inner",
+                ["[S"] = "@statement.outer",
                 ["[]"] = "@class.outer",
             },
         },
