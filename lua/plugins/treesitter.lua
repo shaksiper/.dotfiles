@@ -8,7 +8,7 @@ parser_configs.norg = {
     },
 }
 require'nvim-treesitter.configs'.setup {
-    element_textobject = {
+    --[[ element_textobject = {
         enable = false,
         set_jumps = false,
         keymaps = {
@@ -19,8 +19,8 @@ require'nvim-treesitter.configs'.setup {
             ['ie'] = 'inner_element',
             ['ae'] = 'an_element',
         }
-    },
-    scope_textobject = {
+    }, --]]
+    --[[ scope_textobject = {
         enable = false,
         set_jumps = true,
         keymaps = {
@@ -29,7 +29,7 @@ require'nvim-treesitter.configs'.setup {
             ['[s'] = 'goto_prev_scope',
             ['as'] = 'a_scope',
         }
-    },
+    }, --]]
     ensure_installed = "php", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
     rainbow = {
         enable = true,
@@ -42,7 +42,7 @@ require'nvim-treesitter.configs'.setup {
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
         -- Using this option may slow down your editor, and you may see some duplicate highlights.
         -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = true,
+        additional_vim_regex_highlighting = false,
     },
     context_commentstring = {
         enable = true
@@ -184,3 +184,13 @@ require'treesitter-context'.setup{
 --   filetype = "vim", -- if filetype does not agrees with parser name
 --   -- used_by = {"bar", "baz"} -- additional filetypes that use this parser
 -- }
+require('spellsitter').setup {
+  -- hl = 'SpellBad',
+  captures = {'comment'},  -- set to {} to spellcheck everything
+
+  -- Spellchecker to use. values:
+  -- * vimfn: built-in spell checker using vim.fn.spellbadword()
+  -- * ffi: built-in spell checker using the FFI to access the
+  --   internal spell_check() function
+  spellchecker = 'vimfn',
+}

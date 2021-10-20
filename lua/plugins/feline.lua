@@ -1,4 +1,3 @@
-require("bufferline").setup{}
 local color = require("plugins.feline-colors")
 local c = color[color.status_color]
 local cc = color[color.status_color].colors

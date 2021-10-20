@@ -1,3 +1,6 @@
+vim.opt.list = true
+vim.opt.listchars:append("trail:⋅")
+vim.opt.listchars:append("tab:▸ ")
 require("indent_blankline").setup {
     enabled = true,
     filetype_exclude = {'startify'},

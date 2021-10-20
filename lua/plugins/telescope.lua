@@ -26,24 +26,25 @@ require("telescope").setup({
         },
     },
     pickers = {
-    -- Your special builtin config goes in here
+        -- Your special builtin config goes in here
         buffers = {
-        path_display = {
-            'smart',
-            -- 'truncate',
-            -- 'shorten',
-        },
-          sort_lastused = true,
-          theme = "dropdown",
-          -- previewer = require("telescope.previewers").vim_buffer_cat.new,
-          mappings = {
-            i = {
-              ["<c-d>"] = require("telescope.actions").delete_buffer,
+            -- layout_strategy = 'bottom_pane',
+            path_display = {
+                'smart',
+                -- 'truncate',
+                -- 'shorten',
             },
-            n = {
-              ["<c-d>"] = require("telescope.actions").delete_buffer,
+            sort_lastused = true,
+            theme = "dropdown",
+            -- previewer = require("telescope.previewers").vim_buffer_cat.new,
+            mappings = {
+                i = {
+                    ["<c-d>"] = require("telescope.actions").delete_buffer,
+                },
+                n = {
+                    ["<c-d>"] = require("telescope.actions").delete_buffer,
+                }
             }
-          }
         },
     },
     extensions = {

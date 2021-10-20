@@ -42,3 +42,8 @@ vnoremap <silent> m :lua require('tsht').nodes()<CR>
 nnoremap <M-m> :MinimapToggle<CR>
 " Experimental insert mode surround functionality
 imap <C-S> <Plug>Isurround
+" Replace word without affecting buffer.
+vnoremap <leader>rp "_dP
+nnoremap <leader>rp viw"_dP
+" Buffer pick
+nnoremap <leader>bb :BufferLinePick<CR>

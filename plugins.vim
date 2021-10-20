@@ -16,7 +16,7 @@ Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'romgrk/nvim-treesitter-context'
 Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 " languages
-" Plug 'lewis6991/spellsitter.nvim' " Not working for some reason
+Plug 'lewis6991/spellsitter.nvim' " Not working for some reason
 Plug 'matze/vim-move'
 Plug 'ggandor/lightspeed.nvim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
@@ -120,9 +120,10 @@ Plug 'mhinz/vim-startify'
 Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'nvim-neorg/neorg'
 " Plug 'nvim-neorg/neorg-telescope'
-Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
+Plug 'wfxr/minimap.vim', {'branch': 'stateful_lines', 'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 filetype plugin indent on    " required
+
 " lua require('kommentary.config').use_extended_mappings()
 call wilder#setup({'modes': [':', '/', '?']})
 call wilder#set_option('pipeline', [

@@ -116,17 +116,17 @@ require'lspconfig'.html.setup {
 }
 local configs = require'lspconfig/configs'
 if not nvim_lsp.emmet_ls then
-  configs.emmet_ls = {
-    default_config = {
-      cmd = {'ls_emmet', '--stdio'};
+    configs.emmet_ls = {
+        default_config = {
+            cmd = {'ls_emmet', '--stdio'};
             filetypes = { 'html', 'css', 'scss', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'haml',
                 'xml', 'xsl', 'pug', 'slim', 'sass', 'stylus', 'less', 'sss'};
-      root_dir = function(fname)
-        return vim.loop.cwd()
-      end;
-      settings = {};
-    };
-  }
+            root_dir = function(fname)
+                return vim.loop.cwd()
+            end;
+            settings = {};
+        };
+    }
 end
 nvim_lsp.emmet_ls.setup{ capabilities = capabilities; }
 
