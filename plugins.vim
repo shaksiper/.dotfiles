@@ -29,6 +29,7 @@ Plug 'neovim/nvim-lspconfig'
 " Plug 'jose-elias-alvarez/null-ls.nvim'
 " Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'ray-x/go.nvim'
+Plug 'mfussenegger/nvim-jdtls'
 Plug 'tami5/lspsaga.nvim', {'branch': 'nvim51'} " Changed from glepnir to a more active fork
 " Plug 'sisodiaa/lspsaga.nvim'
 " Install nvim-cmp
@@ -38,6 +39,9 @@ Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-path'
 Plug 'ray-x/cmp-treesitter'
+Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
 " Plug 'octaltree/cmp-look'
 Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'onsails/lspkind-nvim'
@@ -46,7 +50,7 @@ Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'ray-x/cmp-treesitter'
+" Plug 'tom-doerr/vim_codex'
 " DAP
 " Plug 'mfussenegger/nvim-dap'
 " Plug 'rcarriga/nvim-dap-ui'
@@ -55,15 +59,15 @@ Plug 'ray-x/cmp-treesitter'
 " Plug 'turbio/bracey.vim', {'do': 'npm install --prefix server'}
 " Plug 'dense-analysis/ale'
 Plug 'stephpy/vim-php-cs-fixer'
-Plug 'rmagatti/auto-session'
-Plug 'rmagatti/session-lens'
+" Plug 'rmagatti/auto-session'
+" Plug 'rmagatti/session-lens'
 Plug 'kazhala/close-buffers.nvim'
 Plug 'karb94/neoscroll.nvim'
 Plug 'beauwilliams/focus.nvim' " Causes unwanted side effects with telescope
-" Plug 'simeji/winresizer' " Would be better orginizer than focus.nvim?
+Plug 'simeji/winresizer' " Would be better orginizer than focus.nvim?
 " Buffer select. The preview over extends form the borders to window
 Plug 'https://gitlab.com/yorickpeterse/nvim-window.git'
-Plug 'folke/lsp-colors.nvim'
+" Plug 'folke/lsp-colors.nvim'
 Plug 'ray-x/lsp_signature.nvim'
 " Plug 'rmagatti/goto-preview' lspsaga provides a better and more consistent
 " ui, also won't cause weird behaviour due to being prompt rather that being
@@ -71,8 +75,8 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'simrat39/symbols-outline.nvim'
 Plug 'kyazdani42/nvim-tree.lua'
 Plug 'antoinemadec/FixCursorHold.nvim'
-Plug 'nvim-telescope/telescope.nvim' |
-            \ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 " \ Plug 'nvim-telescope/telescope-fzy-native.nvim' |
 Plug 'romgrk/fzy-lua-native'
 Plug 'nvim-lua/popup.nvim'
@@ -81,8 +85,9 @@ Plug 'kyazdani42/nvim-web-devicons'
 " Plug 'yamatsum/nvim-nonicons'
 " Plug 'ryanoasis/vim-devicons'
 Plug 'lewis6991/gitsigns.nvim'
-Plug 'ahmedkhalf/lsp-rooter.nvim'
+Plug 'ahmedkhalf/project.nvim'
 Plug 'windwp/nvim-autopairs'
+Plug 'rmagatti/alternate-toggler'
 Plug 'folke/which-key.nvim'
 Plug 'norcalli/nvim-colorizer.lua'
 " Plug 'axlebedev/footprints'
@@ -94,6 +99,8 @@ Plug 'tpope/vim-surround'
 " Let there be colorful schemes
 Plug 'rose-pine/neovim'
 Plug 'rktjmp/lush.nvim'
+" Plug 'olimorris/onedarkpro.nvim'
+" Plug 'EdenEast/nightfox.nvim'
 " Plug 'mcchrish/zenbones.nvim'
 " Plug 'nxvu699134/vn-night.nvim'
 " Plug 'Mangeshrex/uwu.vim'
@@ -117,47 +124,46 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'levouh/specs.nvim'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
-Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'nvim-neorg/neorg'
 " Plug 'nvim-neorg/neorg-telescope'
 Plug 'wfxr/minimap.vim', {'branch': 'stateful_lines', 'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 filetype plugin indent on    " required
-
 " lua require('kommentary.config').use_extended_mappings()
-call wilder#setup({'modes': [':', '/', '?']})
-call wilder#set_option('pipeline', [
-            \   wilder#branch(
-            \     wilder#cmdline_pipeline({
-            \       'fuzzy': 1,
-            \       'set_pcre2_pattern': has('nvim'),
-            \     }),
-            \     wilder#python_search_pipeline({
-            \       'pattern': 'fuzzy',
-            \     }),
-            \   ),
-            \ ])
-let s:highlighters = [
-            \ wilder#pcre2_highlighter(),
-            \ wilder#basic_highlighter(),
-            \ ]
-call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
-            \   'highlighter': s:highlighters,
-            \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
-            \ 'highlights': {
-                \   'accent': wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#f4468f'}]),
-                \   'border': 'Normal',
-                \ },
-                \ 'left': [
-                    \   ' ', wilder#popupmenu_devicons(),
-                    \ ],
-                    \ 'right': [
-                        \   ' ', wilder#popupmenu_scrollbar(),
-                        \ ],
-                        \ 'min_width': '20%',
-                        \ 'reverse': 1,
-                        \ 'border': 'rounded',
-                        \ })))
+" call wilder#setup({'modes': [':', '/', '?']})
+" call wilder#set_option('pipeline', [
+"             \   wilder#branch(
+"             \     wilder#cmdline_pipeline({
+"             \       'fuzzy': 1,
+"             \       'set_pcre2_pattern': has('nvim'),
+"             \     }),
+"             \     wilder#python_search_pipeline({
+"             \       'pattern': 'fuzzy',
+"             \     }),
+"             \   ),
+"             \ ])
+" let s:highlighters = [
+"             \ wilder#pcre2_highlighter(),
+"             \ wilder#basic_highlighter(),
+"             \ ]
+" call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
+"             \   'highlighter': s:highlighters,
+"             \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
+"             \ 'highlights': {
+"                 \   'accent': wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#f4468f'}]),
+"                 \   'border': 'Normal',
+"                 \ },
+"                 \ 'left': [
+"                     \   ' ', wilder#popupmenu_devicons(),
+"                     \ ],
+"                     \ 'right': [
+"                         \   ' ', wilder#popupmenu_scrollbar(),
+"                         \ ],
+"                         \ 'min_width': '20%',
+"                         \ 'reverse': 1,
+"                         \ 'border': 'rounded',
+"                         \ })))
 
 let g:VM_leader = {'default': '\', 'visual': '\', 'buffer': 'z'}
 let g:VM_maps = {}

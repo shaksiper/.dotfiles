@@ -21,6 +21,7 @@ map('n', '<leader>/', ":silent grep ", default_opts)
 map('n', '<leader>fg', "<cmd>lua require'telescope.builtin'.live_grep()<cr>", default_opts)
 map('n', '<leader>fe', "<cmd>lua require'telescope.builtin'.file_browser()<cr>", default_opts)
 map('n', '<leader>fz', "<cmd>lua require'telescope.builtin'.current_buffer_fuzzy_find()<cr>", default_opts)
+map('n', '<leader>fp', "<cmd>Telescope projects<cr>", default_opts)
 map('n', '<leader>fs', ":SearchSession<cr>", default_opts)
 map('n', '<leader>th', "<cmd>lua require'close_buffers'.delete({type = 'hidden'})<cr>", {noremap = true, silent = true})
 map('n', '<leader>tu', "<cmd>lua require'close_buffers'.delete({type = 'nameless'})<cr>", {noremap = true, silent = true})
@@ -40,10 +41,12 @@ EOF
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 vnoremap <silent> m :lua require('tsht').nodes()<CR>
 nnoremap <M-m> :MinimapToggle<CR>
-" Experimental insert mode surround functionality
-imap <C-S> <Plug>Isurround
+" " Experimental insert mode surround functionality
+" imap <C-S> <Plug>Isurround
 " Replace word without affecting buffer.
 vnoremap <leader>rp "_dP
 nnoremap <leader>rp viw"_dP
 " Buffer pick
 nnoremap <leader>bb :BufferLinePick<CR>
+let g:winresizer_start_key="<leader>ws"
+nnoremap <leader>sw :ToggleAlternate<CR>

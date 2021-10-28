@@ -54,8 +54,8 @@ augroup END
 "     execute "write " . l:filename
 " endfunction
 " command! -nargs=1 SWT call SaveWithTS( <q-args> )
+set completeopt=menu,menuone,noselect
 let g:cursorhold_updatetime = 500
-" syntax on
 " Live preview of Ex commands
 set inccommand=nosplit
 let g:rose_pine_variant = 'moon'

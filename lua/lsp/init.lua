@@ -103,11 +103,11 @@ require'lspconfig'.html.setup {
     capabilities = capabilities,
     filetypes = { "html" },
     init_options = {
-      configurationSection = { "html", "css", "javascript" },
-      embeddedLanguages = {
-        css = true,
-        javascript = true
-      }
+        configurationSection = { "html", "css", "javascript" },
+        embeddedLanguages = {
+            css = true,
+            javascript = true
+        }
     },
     -- root_dir = function(fname)
     --       return util.root_pattern('package.json', '.git')(fname) or util.path.dirname(fname)
@@ -135,7 +135,7 @@ require'lspconfig'.cssls.setup {
     on_attach = on_attach,
 }
 require'lspconfig'.jsonls.setup {
-  capabilities = capabilities,
+    capabilities = capabilities,
     on_attach = on_attach,
 }
 
@@ -203,4 +203,19 @@ require'lspconfig'.sumneko_lua.setup {
             },
         },
     },
+}
+-- JAVA LS
+require'lspconfig'.java_language_server.setup{
+    capabilities = capabilities,
+    on_attach = on_attach,
+    cmd = { '/home/shaksiper/Documents/java-language-server/dist/lang_server_linux.sh' },
+    --[[ filetypes = { "java" },
+    root_dir = function(startpath)
+        return M.search_ancestors(startpath, matcher)
+    end, --]]
+}
+-- JDTLS from eclipse
+require'lspconfig'.jdtls.setup{
+    capabilities = capabilities,
+    on_attach = on_attach,
 }

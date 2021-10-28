@@ -63,9 +63,10 @@ require("telescope").setup({
 })
 --require('telescope').load_extension('fzy_native')
 require('telescope').load_extension('fzf')
-local session_opt = {auto_save_enabled = false, }
+require('telescope').load_extension('projects')
+--[[local session_opt = {auto_save_enabled = false, }
 require('auto-session').setup(session_opt)
 require('session-lens').setup {
     path_display={'shorten'},
     previewer = true,
-}
+}]]--
