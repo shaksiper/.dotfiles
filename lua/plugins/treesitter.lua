@@ -1,11 +1,12 @@
-local parser_configs = require('nvim-treesitter.parsers').get_parser_configs()
 require("tsht").config.hint_keys = { "h", "j", "f", "d", "n", "v", "s", "l", "a" }
-parser_configs.norg = {
-    install_info = {
-        url = "https://github.com/nvim-neorg/tree-sitter-norg",
-        files = { "src/parser.c", "src/scanner.cc" },
-        branch = "main"
-    },
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.org = {
+  install_info = {
+    url = 'https://github.com/milisims/tree-sitter-org',
+    revision = 'main',
+    files = {'src/parser.c', 'src/scanner.cc'},
+  },
+  filetype = 'org',
 }
 require'nvim-treesitter.configs'.setup {
     --[[ element_textobject = {
@@ -42,7 +43,7 @@ require'nvim-treesitter.configs'.setup {
         -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
         -- Using this option may slow down your editor, and you may see some duplicate highlights.
         -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
+        additional_vim_regex_highlighting = {'org'}, -- for org mode treesitter highlight
     },
     context_commentstring = {
         enable = true
@@ -172,7 +173,7 @@ require'nvim-treesitter.configs'.setup {
 }
 -- local ts_utils = require 'nvim-treesitter.ts_utils'
 require'treesitter-context'.setup{
-    enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+    enable = false, -- Enable this plugin (Can be enabled/disabled later via commands)
     throttle = true, -- Throttles plugin updates (may improve performance)
 }
 -- local parser_config = require "nvim-treesitter.parsers".get_parser_configs()

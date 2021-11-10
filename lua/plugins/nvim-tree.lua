@@ -7,6 +7,7 @@ require'nvim-tree'.setup {
     hijack_netrw        = true,
     -- open the tree when running this setup function
     open_on_setup       = true,
+    ignore_ft_on_setup = { '.git', 'node_modules', '.cache' },
     diagnostics = {
         enable = true,
         icons = {

@@ -19,16 +19,18 @@ tabnine:setup({
     run_on_every_keystroke = true;
     snippet_placeholder = '..';
 })
-cmp.setup {
+local cmp_settings = {
     experimental = {
         ghost_text = true,
     },
     -- You can set mappings if you want
     mapping = {
-        ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-        ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-        ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
+        ['<C-n>'] = cmp.mapping(cmp.mapping.select_next_item(), { 'i', 's', 'c' }),
+        ['<C-p>'] = cmp.mapping(cmp.mapping.select_prev_item(), { 'i', 's', 'c' }),
+        -- ['<C-n>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+        -- ['<C-p>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+        -- ['<Down>'] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
+        -- ['<Up>'] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }),
         ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
         ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
@@ -85,10 +87,12 @@ cmp.setup {
     -- You should specify your *installed* sources.
     sources = {
         { name = 'nvim_lsp' },
-        { name = 'cmp_tabnine' },
+        { name = 'cmp_tabnine', keyword_length = 4},
+        -- { name = 'orgmode' },
+        -- { name = 'fzy_buffer' },
         { name = 'buffer', keyword_length = 4, max_item_count = 15},
         { name = 'luasnip' },
-        { name = 'treesitter' },
+        { name = 'treesitter', keyword_length = 5, max_item_count = 10 },
         -- { name = 'neorg' },
         -- { name = 'tags' },
         { name = 'path' },
@@ -128,11 +132,26 @@ cmp.setup {
                 nvim_lua = "[nlua]",
                 path = "[path]",
                 luasnip = "[snip]",
-                treesitter = '[tsit]',
+                treesitter = "[tsit]",
+                spell = "[spl]"
+                -- fzy_buffer = "[fzy]"
             }
         }
     },
 }
+if vim.fn.expand('%:e') == 'org' then
+    vim.opt.spell = true
+    vim.opt.spelllang = { 'en_us'}
+    cmp_settings.sources = {
+        { name = 'orgmode' },
+        { name = 'spell' },
+        { name = 'luasnip' },
+        { name = 'buffer', keyword_length = 4, max_item_count = 15},
+        { name = 'path' },
+        { name = 'calc' },
+    }
+end
+cmp.setup(cmp_settings)
 cmp.setup.cmdline(':', {
     sources = cmp.config.sources({
         { name = 'path' }

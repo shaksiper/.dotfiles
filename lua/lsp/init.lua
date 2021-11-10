@@ -46,7 +46,7 @@ saga.init_lsp_saga {
 --     opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
 --     post_open_hook = nil -- A function taking two arguments, a buffer and a window to be ran as a hook.
 -- }
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
     -- require'lsp_signature'.on_attach(cfg, bufnr)
     -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc') -- why was it here anyways??
 
@@ -76,7 +76,9 @@ local on_attach = function(_, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
-    vim.cmd [[ command! Format execute 'lua vim.lsp.buf.formatting()' ]]
+    if client.resolved_capabilities.document_formatting then
+        vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+    end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -113,6 +115,10 @@ require'lspconfig'.html.setup {
     --       return util.root_pattern('package.json', '.git')(fname) or util.path.dirname(fname)
     --     end,
     settings = {},
+}
+-- CSS Language Server
+require'lspconfig'.cssls.setup {
+  capabilities = capabilities,
 }
 local configs = require'lspconfig/configs'
 if not nvim_lsp.emmet_ls then
@@ -152,9 +158,17 @@ require'lspconfig'.tsserver.setup{
     -- Defaults
 }
 -- GOPLS
-require('go').setup() -- ray-x/go.nvim init
+require('go').setup({
+    max_line_len = 120,
+    tag_transform = false,
+    test_dir = '',
+    comment_placeholder = '   ', }) -- ray-x/go.nvim init
 require'lspconfig'.gopls.setup {
-    on_attach = on_attach,
+    on_attach = function (client, bufnr) -- resolve the conflict with null_ls formatting
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+        return on_attach(client, bufnr)
+    end,
     capabilities = capabilities,
     cmd = {"gopls", "serve"},
     settings = {
@@ -219,3 +233,17 @@ require'lspconfig'.jdtls.setup{
     capabilities = capabilities,
     on_attach = on_attach,
 }
+-- NULL_LS setup
+local null_ls = require("null-ls")
+null_ls.config({
+    sources = {
+        null_ls.builtins.formatting.gofmt,
+        null_ls.builtins.formatting.goimports,
+        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.diagnostics.eslint_d,
+    }
+})
+require("lspconfig")["null-ls"].setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+})

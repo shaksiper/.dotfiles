@@ -4,8 +4,9 @@ Plug 'tpope/vim-repeat'
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 Plug 'rcarriga/nvim-notify'
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-Plug 'nvim-treesitter/nvim-treesitter', {'branch' : '0.5-compat', 'do': ':TSUpdate'}
-Plug 'nvim-treesitter/nvim-treesitter-textobjects', {'branch' : '0.5-compat'}
+" Plug 'nvim-treesitter/nvim-treesitter', {'branch' : '0.5-compat', 'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'Jason-M-Chan/ts-textobjects'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'nvim-treesitter/playground'
@@ -26,11 +27,11 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " narrow window of its own
 Plug 'abecodes/tabout.nvim'
 Plug 'neovim/nvim-lspconfig'
-" Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'jose-elias-alvarez/null-ls.nvim'
 " Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
 Plug 'ray-x/go.nvim'
 Plug 'mfussenegger/nvim-jdtls'
-Plug 'tami5/lspsaga.nvim', {'branch': 'nvim51'} " Changed from glepnir to a more active fork
+Plug 'tami5/lspsaga.nvim' " Changed from glepnir to a more active fork
 " Plug 'sisodiaa/lspsaga.nvim'
 " Install nvim-cmp
 Plug 'hrsh7th/nvim-cmp'
@@ -46,6 +47,7 @@ Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
 Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'onsails/lspkind-nvim'
 Plug 'hrsh7th/cmp-calc'
+Plug 'f3fora/cmp-spell'
 Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'rafamadriz/friendly-snippets'
@@ -78,7 +80,8 @@ Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 " \ Plug 'nvim-telescope/telescope-fzy-native.nvim' |
-Plug 'romgrk/fzy-lua-native'
+" Plug 'romgrk/fzy-lua-native', { 'do': 'make' } " not working 
+" Plug 'tzachar/cmp-fzy-buffer'
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
@@ -98,9 +101,9 @@ Plug 'numToStr/Comment.nvim'
 Plug 'tpope/vim-surround'
 " Let there be colorful schemes
 Plug 'rose-pine/neovim'
-Plug 'rktjmp/lush.nvim'
+" Plug 'rktjmp/lush.nvim'
 " Plug 'olimorris/onedarkpro.nvim'
-" Plug 'EdenEast/nightfox.nvim'
+Plug 'EdenEast/nightfox.nvim'
 " Plug 'mcchrish/zenbones.nvim'
 " Plug 'nxvu699134/vn-night.nvim'
 " Plug 'Mangeshrex/uwu.vim'
@@ -108,7 +111,7 @@ Plug 'rktjmp/lush.nvim'
 " Plug 'nxvu699134/vn-night.nvim'
 " Plug 'yonlu/omni.vim'
 " Plug 'novakne/kosmikoa.nvim'
-" Plug 'folke/tokyonight.nvim'
+Plug 'folke/tokyonight.nvim'
 " Plug 'morhetz/gruvbox'
 " Plug 'lifepillar/vim-solarized8'
 " Plug 'altercation/vim-colors-solarized'
@@ -127,43 +130,12 @@ Plug 'mhinz/vim-startify'
 " Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'nvim-neorg/neorg'
 " Plug 'nvim-neorg/neorg-telescope'
+Plug 'kristijanhusak/orgmode.nvim'
+Plug 'lukas-reineke/headlines.nvim'
+Plug 'akinsho/org-bullets.nvim'
 Plug 'wfxr/minimap.vim', {'branch': 'stateful_lines', 'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 filetype plugin indent on    " required
-" lua require('kommentary.config').use_extended_mappings()
-" call wilder#setup({'modes': [':', '/', '?']})
-" call wilder#set_option('pipeline', [
-"             \   wilder#branch(
-"             \     wilder#cmdline_pipeline({
-"             \       'fuzzy': 1,
-"             \       'set_pcre2_pattern': has('nvim'),
-"             \     }),
-"             \     wilder#python_search_pipeline({
-"             \       'pattern': 'fuzzy',
-"             \     }),
-"             \   ),
-"             \ ])
-" let s:highlighters = [
-"             \ wilder#pcre2_highlighter(),
-"             \ wilder#basic_highlighter(),
-"             \ ]
-" call wilder#set_option('renderer', wilder#popupmenu_renderer(wilder#popupmenu_border_theme({
-"             \   'highlighter': s:highlighters,
-"             \ 'empty_message': wilder#popupmenu_empty_message_with_spinner(),
-"             \ 'highlights': {
-"                 \   'accent': wilder#make_hl('WilderAccent', 'Pmenu', [{}, {}, {'foreground': '#f4468f'}]),
-"                 \   'border': 'Normal',
-"                 \ },
-"                 \ 'left': [
-"                     \   ' ', wilder#popupmenu_devicons(),
-"                     \ ],
-"                     \ 'right': [
-"                         \   ' ', wilder#popupmenu_scrollbar(),
-"                         \ ],
-"                         \ 'min_width': '20%',
-"                         \ 'reverse': 1,
-"                         \ 'border': 'rounded',
-"                         \ })))
 
 let g:VM_leader = {'default': '\', 'visual': '\', 'buffer': 'z'}
 let g:VM_maps = {}
@@ -172,7 +144,6 @@ let g:VM_maps['Find Subword Under'] = '<M-d>'
 
 let g:surround_no_insert_mappings = 1
 
-let g:nvim_tree_ignore = [ '.git', 'node_modules', '.cache' ]
 let g:nvim_tree_gitignore = 1 
 let g:nvim_tree_git_hl = 1
 let g:nvim_tree_highlight_opened_files = 1

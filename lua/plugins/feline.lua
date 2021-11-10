@@ -126,15 +126,15 @@ table.insert(
         end
     }
 )
-
+local gps = require("nvim-gps")
 table.insert(
     components.active[1],
     {
         provider = function()
-            return require("nvim-gps").get_location()
+            return gps.get_location()
         end,
         enabled = function()
-            return require("nvim-gps").is_available()
+            return gps.is_available()
         end,
         left_sep = {
             str = icons.slant_left_2 ..icons.block.. icons.right_filled.. ' ',
