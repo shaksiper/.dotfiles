@@ -55,6 +55,14 @@ local cmp_settings = {
         }),
         ['<C-J>'] = cmp.mapping({
             i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
+            c = function(fallback)
+                -- This little snippet will confirm with <C-J>, and if no entry is selected, will *enter* the first item
+                if cmp.visible() then
+                    cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }, fallback)
+                else
+                    fallback()
+                end
+            end,
         }),
 
         ["<Tab>"] = cmp.mapping(function(fallback)

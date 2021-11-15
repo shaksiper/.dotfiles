@@ -10,7 +10,7 @@ require("telescope").setup({
           '--column',
           '--smart-case'
         },
-        file_sorter = require("telescope.sorters").get_fzy_sorter,
+        -- file_sorter = require("telescope.sorters").get_fzy_sorter,
         prompt_prefix = " 🔭>",
         color_devicons = true,
 
@@ -48,10 +48,6 @@ require("telescope").setup({
         },
     },
     extensions = {
-        -- fzy_native = {
-        --     override_generic_sorter = false,
-        --     override_file_sorter = true,
-        -- },
         fzf = {
           fuzzy = true,                    -- false will only do exact matching
           override_generic_sorter = true, -- override the generic sorter
@@ -61,12 +57,5 @@ require("telescope").setup({
         },
     },
 })
---require('telescope').load_extension('fzy_native')
 require('telescope').load_extension('fzf')
 require('telescope').load_extension('projects')
---[[local session_opt = {auto_save_enabled = false, }
-require('auto-session').setup(session_opt)
-require('session-lens').setup {
-    path_display={'shorten'},
-    previewer = true,
-}]]--

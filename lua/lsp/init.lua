@@ -76,9 +76,6 @@ local on_attach = function(client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
-    if client.resolved_capabilities.document_formatting then
-        vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
-    end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -164,11 +161,7 @@ require('go').setup({
     test_dir = '',
     comment_placeholder = '   ', }) -- ray-x/go.nvim init
 require'lspconfig'.gopls.setup {
-    on_attach = function (client, bufnr) -- resolve the conflict with null_ls formatting
-        client.resolved_capabilities.document_formatting = false
-        client.resolved_capabilities.document_range_formatting = false
-        return on_attach(client, bufnr)
-    end,
+    on_attach = on_attach,
     capabilities = capabilities,
     cmd = {"gopls", "serve"},
     settings = {
@@ -239,11 +232,16 @@ null_ls.config({
     sources = {
         null_ls.builtins.formatting.gofmt,
         null_ls.builtins.formatting.goimports,
-        null_ls.builtins.formatting.prettier,
+        -- null_ls.builtins.formatting.prettierd,
         null_ls.builtins.diagnostics.eslint_d,
+        null_ls.builtins.formatting.eslint_d,
     }
 })
 require("lspconfig")["null-ls"].setup({
-    on_attach = on_attach,
+    on_attach = function(client)
+        if client.resolved_capabilities.document_formatting then
+            vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+        end
+    end,
     capabilities = capabilities,
 })

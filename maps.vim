@@ -33,7 +33,7 @@ map('n', '<leader>tc', "<cmd>lua require'close_buffers'.delete({type = 'this'})<
 map('n', '<leader>tt', ":bd<cr>", {noremap = true, silent = true})
 
 -- focus.nvim toggle thingy
-map('n', '<m-BS>', ":lua require('focus').focus_toggle()<CR>", default_opts)
+-- map('n', '<m-BS>', ":lua require('focus').focus_toggle()<CR>", default_opts)
 -- Outline symbols toggle
 map('n', '<m-o>', ":SymbolsOutline<CR>", default_opts)
 map('n', '<m-u>', ":UndotreeToggle<CR>", default_opts)

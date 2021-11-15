@@ -19,7 +19,7 @@ Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 " languages
 Plug 'lewis6991/spellsitter.nvim' " Not working for some reason
 Plug 'matze/vim-move'
-Plug 'ggandor/lightspeed.nvim'
+Plug 'ggandor/lightspeed.nvim', {'branch': 'smart-autojump'}
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Plug 'mg979/vim-visual-multi' " There is a learning curve for this and
 " vanilla vim macros and motions *may* suffice as they say
@@ -65,7 +65,8 @@ Plug 'stephpy/vim-php-cs-fixer'
 " Plug 'rmagatti/session-lens'
 Plug 'kazhala/close-buffers.nvim'
 Plug 'karb94/neoscroll.nvim'
-Plug 'beauwilliams/focus.nvim' " Causes unwanted side effects with telescope
+" Plug 'beauwilliams/focus.nvim' " Causes unwanted side effects with telescope
+" and not useful anymore?
 Plug 'simeji/winresizer' " Would be better orginizer than focus.nvim?
 " Buffer select. The preview over extends form the borders to window
 Plug 'https://gitlab.com/yorickpeterse/nvim-window.git'
@@ -101,9 +102,10 @@ Plug 'numToStr/Comment.nvim'
 Plug 'tpope/vim-surround'
 " Let there be colorful schemes
 Plug 'rose-pine/neovim'
+" Plug 'wuelnerdotexe/vim-enfocado'
 " Plug 'rktjmp/lush.nvim'
 " Plug 'olimorris/onedarkpro.nvim'
-Plug 'EdenEast/nightfox.nvim'
+" Plug 'EdenEast/nightfox.nvim'
 " Plug 'mcchrish/zenbones.nvim'
 " Plug 'nxvu699134/vn-night.nvim'
 " Plug 'Mangeshrex/uwu.vim'
@@ -111,7 +113,7 @@ Plug 'EdenEast/nightfox.nvim'
 " Plug 'nxvu699134/vn-night.nvim'
 " Plug 'yonlu/omni.vim'
 " Plug 'novakne/kosmikoa.nvim'
-Plug 'folke/tokyonight.nvim'
+" Plug 'folke/tokyonight.nvim'
 " Plug 'morhetz/gruvbox'
 " Plug 'lifepillar/vim-solarized8'
 " Plug 'altercation/vim-colors-solarized'
