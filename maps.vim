@@ -40,6 +40,15 @@ map('n', '<m-u>', ":UndotreeToggle<CR>", default_opts)
 -- Sniprun
 vim.api.nvim_set_keymap('n', '<leader>rr', '<Plug>SnipRun', {silent = true})
 vim.api.nvim_set_keymap('v', '<leader>rr', '<Plug>SnipRun', {silent = true})
+
+function _G.set_terminal_keymaps()
+  local opts = {noremap = true}
+  vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n><C-W>p]], opts)
+  vim.api.nvim_buf_set_keymap(0, 't', '<C-w>', [[<C-\><C-n><C-W>]], opts)
+end
+
+-- if you only want these mappings for toggle term use term://*toggleterm#* instead
+vim.cmd('autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()')
 EOF
 " mfussenegger/nvim-ts-hint-textobject TreeSitter plugin for highlightingg parts of the code using sytax tree
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>

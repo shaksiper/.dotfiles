@@ -10,7 +10,7 @@ Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 Plug 'Jason-M-Chan/ts-textobjects'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'nvim-treesitter/playground'
-Plug 'mfussenegger/nvim-ts-hint-textobject'
+Plug 'mfussenegger/nvim-treehopper'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
@@ -19,7 +19,7 @@ Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 " languages
 Plug 'lewis6991/spellsitter.nvim' " Not working for some reason
 Plug 'matze/vim-move'
-Plug 'ggandor/lightspeed.nvim', {'branch': 'smart-autojump'}
+Plug 'ggandor/lightspeed.nvim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Plug 'mg979/vim-visual-multi' " There is a learning curve for this and
 " vanilla vim macros and motions *may* suffice as they say
@@ -60,7 +60,7 @@ Plug 'saadparwaiz1/cmp_luasnip'
 
 " Plug 'turbio/bracey.vim', {'do': 'npm install --prefix server'}
 " Plug 'dense-analysis/ale'
-Plug 'stephpy/vim-php-cs-fixer'
+" Plug 'stephpy/vim-php-cs-fixer'
 " Plug 'rmagatti/auto-session'
 " Plug 'rmagatti/session-lens'
 Plug 'kazhala/close-buffers.nvim'
@@ -129,6 +129,7 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'levouh/specs.nvim'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
+Plug 'akinsho/toggleterm.nvim'
 " Plug 'gelguy/wilder.nvim', { 'do': ':UpdateRemotePlugins' }
 " Plug 'nvim-neorg/neorg'
 " Plug 'nvim-neorg/neorg-telescope'

@@ -1,0 +1,6 @@
+[submodule "impatient.nvim"]
+	path = impatient.nvim
+	url = https://github.com/lewis6991/impatient.nvim
+[submodule "lua/impatient.nvim"]
+	path = lua/impatient
+	url = https://github.com/lewis6991/impatient.nvim.git
