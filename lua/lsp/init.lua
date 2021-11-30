@@ -1,30 +1,30 @@
 -- LSP settings
 local nvim_lsp = require 'lspconfig'
 local cfg = {
-  bind = true, -- This is mandatory, otherwise border config won't get registered.
-               -- If you want to hook lspsaga or other signature handler, pls set to false
+    bind = true, -- This is mandatory, otherwise border config won't get registered.
+    -- If you want to hook lspsaga or other signature handler, pls set to false
 
-  floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
-  hint_enable = true, -- virtual hint enable
-  hint_prefix = "🐼 ",  -- Panda for parameter
-  hint_scheme = "String",
-  max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
-                   -- to view the hiding contents
-  max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-  transpancy = 10, -- set this value if you want the floating windows to be transpant (100 fully transpant), nil to disable(default)
-  handler_opts = {
-    border = "single"   -- double, single, shadow, none
-  },
+    floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
+    hint_enable = true, -- virtual hint enable
+    hint_prefix = "🐼 ",  -- Panda for parameter
+    hint_scheme = "String",
+    max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
+    -- to view the hiding contents
+    max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
+    transpancy = 10, -- set this value if you want the floating windows to be transpant (100 fully transpant), nil to disable(default)
+    handler_opts = {
+        border = "single"   -- double, single, shadow, none
+    },
 
-  trigger_on_newline = false, -- set to true if you need multiple line parameter, sometime show signature on new line can be confusing, set it to false for #58
-  extra_trigger_chars = {}, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
-  -- deprecate !!
-  -- decorator = {"`", "`"}  -- this is no longer needed as nvim give me a handler and it allow me to highlight active parameter in floating_window
-  zindex = 200, -- by default it will be on top of all floating windows, set to 50 send it to bottom
+    trigger_on_newline = false, -- set to true if you need multiple line parameter, sometime show signature on new line can be confusing, set it to false for #58
+    extra_trigger_chars = {}, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
+    -- deprecate !!
+    -- decorator = {"`", "`"}  -- this is no longer needed as nvim give me a handler and it allow me to highlight active parameter in floating_window
+    zindex = 200, -- by default it will be on top of all floating windows, set to 50 send it to bottom
 
-  padding = '', -- character to pad on left and right of signature can be ' ', or '|'  etc
+    padding = '', -- character to pad on left and right of signature can be ' ', or '|'  etc
 
-  toggle_key = nil -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
+    toggle_key = nil -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
 }
 require'lsp_signature'.setup(cfg)
 local saga = require 'lspsaga'
@@ -46,7 +46,7 @@ saga.init_lsp_saga {
 --     opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
 --     post_open_hook = nil -- A function taking two arguments, a buffer and a window to be ran as a hook.
 -- }
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr) -- (client, bufnr)
     -- require'lsp_signature'.on_attach(cfg, bufnr)
     -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc') -- why was it here anyways??
 

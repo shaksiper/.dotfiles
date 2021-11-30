@@ -3,6 +3,9 @@ nnoremap  <silent> <m-]>  :if &modifiable && !&readonly && &modified <CR> :write
 nnoremap  <silent> <m-[>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprev<CR>
 " Reselect the last pasted text
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]' 
+" Reselect visual selection after indenting
+vnoremap < <gv
+vnoremap > >gv
 
 map <silent> <leader>w :lua require('nvim-window').pick()<CR>
 nnoremap <C-t> :NvimTreeToggle<CR>
@@ -19,18 +22,20 @@ map('n', '<leader>fo', "<cmd>lua require'telescope.builtin'.oldfiles()<cr>", def
 map('n', '<leader>fh', "<cmd>lua require'telescope.builtin'.help_tags()<cr>", default_opts)
 map('n', '<leader>/', ":silent grep ", default_opts)
 map('n', '<leader>fg', "<cmd>lua require'telescope.builtin'.live_grep()<cr>", default_opts)
-map('n', '<leader>fe', "<cmd>lua require'telescope.builtin'.file_browser()<cr>", default_opts)
+map('n', '<leader>fe', "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>", default_opts)
 map('n', '<leader>fz', "<cmd>lua require'telescope.builtin'.current_buffer_fuzzy_find()<cr>", default_opts)
 map('n', '<leader>fsw', "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", default_opts)
 map('n', '<leader>fsd', "<cmd>lua require'telescope.builtin'.lsp_document_symbols(require('telescope.themes').get_ivy({}))<cr>", default_opts)
 map('n', '<leader>fdd', "<cmd>lua require'telescope.builtin'.lsp_document_diagnostics()<cr>", default_opts)
 map('n', '<leader>fdw', "<cmd>lua require'telescope.builtin'.lsp_workspace_diagnostics()<cr>", default_opts)
 map('n', '<leader>fp', "<cmd>Telescope projects theme=dropdown<cr>", default_opts)
+map('n', '<leader>fl', "<cmd>Telescope resume<cr>", default_opts)
 -- map('n', '<leader>fs', ":SearchSession<cr>", default_opts)
 map('n', '<leader>th', "<cmd>lua require'close_buffers'.delete({type = 'hidden'})<cr>", {noremap = true, silent = true})
 map('n', '<leader>tu', "<cmd>lua require'close_buffers'.delete({type = 'nameless'})<cr>", {noremap = true, silent = true})
 map('n', '<leader>tc', "<cmd>lua require'close_buffers'.delete({type = 'this'})<cr>", {noremap = true, silent = true})
 map('n', '<leader>tt', ":bd<cr>", {noremap = true, silent = true})
+map('n', '<M-t>', "<cmd>lua require('rose-pine.functions').toggle_variant()<cr>", {noremap = true, silent = true})
 
 -- focus.nvim toggle thingy
 -- map('n', '<m-BS>', ":lua require('focus').focus_toggle()<CR>", default_opts)

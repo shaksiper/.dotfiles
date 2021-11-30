@@ -9,40 +9,18 @@ parser_config.org = {
   filetype = 'org',
 }
 require'nvim-treesitter.configs'.setup {
-    --[[ element_textobject = {
-        enable = false,
-        set_jumps = false,
-        keymaps = {
-            ['e'] = 'goto_next_element',
-            ['E'] = 'goto_prev_element',
-            [']e'] = 'swap_next_element',
-            ['[e'] = 'swap_prev_element',
-            ['ie'] = 'inner_element',
-            ['ae'] = 'an_element',
-        }
-    }, --]]
-    --[[ scope_textobject = {
-        enable = false,
-        set_jumps = true,
-        keymaps = {
-            ['s'] = 'incremental_outer_scope',
-            [']s'] = 'goto_next_scope',
-            ['[s'] = 'goto_prev_scope',
-            ['as'] = 'a_scope',
-        }
-    }, --]]
     ensure_installed = "php", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
     rainbow = {
         enable = true,
-        extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-        max_file_lines = 1000, -- Do not enable for files with more than 1000 lines, int
+        extended_mode = true, -- also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+        max_file_lines = 1000, -- do not enable for files with more than 1000 lines, int
     },
     highlight = {
         enable = true,              -- false will disable the whole extension
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
+        -- setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- using this option may slow down your editor, and you may see some duplicate highlights.
+        -- instead of true it can also be a list of languages
         additional_vim_regex_highlighting = {'org'}, -- for org mode treesitter highlight
     },
     context_commentstring = {
@@ -55,10 +33,10 @@ require'nvim-treesitter.configs'.setup {
     incremental_selection = {
         enable = true,
         keymaps = {
-            init_selection = "gsn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
+            init_selection = "<leader>v",
+            node_incremental = "<cr>",
+            scope_incremental = "<tab>",
+            node_decremental = "<s-tab>",
         },
     },
     indent = {
@@ -68,9 +46,8 @@ require'nvim-treesitter.configs'.setup {
         navigation = {
             enable = true,
             keymaps = {
-                goto_definition = "gtd",
                 list_definitions = "gld",
-                list_definitions_toc = "gO",
+                list_definitions_toc = "go",
                 goto_next_usage = "<a-*>",
                 goto_previous_usage = "<a-#>",
             },
@@ -87,11 +64,11 @@ require'nvim-treesitter.configs'.setup {
         select = {
             enable = true,
 
-            -- Automatically jump forward to textobj, similar to targets.vim
+            -- automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
 
             keymaps = {
-                -- You can use the capture groups defined in textobjects.scm
+                -- you can use the capture groups defined in textobjects.scm
                 ["ae"] = "@parameter.outer",
                 ["ie"] = "@parameter.inner",
                 ["af"] = "@function.outer",
@@ -119,9 +96,9 @@ require'nvim-treesitter.configs'.setup {
                 ["]]"] = "@class.outer",
             },
             goto_next_end = {
-                ["]M"] = "@function.outer",
-                ["]E"] = "@parameter.inner",
-                ["]S"] = "@statement.outer",
+                ["]m"] = "@function.outer",
+                ["]e"] = "@parameter.inner",
+                ["]s"] = "@statement.outer",
                 ["]["] = "@class.outer",
             },
             goto_previous_start = {
@@ -131,9 +108,9 @@ require'nvim-treesitter.configs'.setup {
                 ["[["] = "@class.outer",
             },
             goto_previous_end = {
-                ["[M"] = "@function.outer",
-                ["[E"] = "@parameter.inner",
-                ["[S"] = "@statement.outer",
+                ["[m"] = "@function.outer",
+                ["[e"] = "@parameter.inner",
+                ["[s"] = "@statement.outer",
                 ["[]"] = "@class.outer",
             },
         },
@@ -141,26 +118,25 @@ require'nvim-treesitter.configs'.setup {
             enable = false,
             border = 'single',
             peek_definition_code = {
-                ["df"] = "@function.outer",
-                ["dF"] = "@class.outer",
+                ["<leader>df"] = "@function.outer",
+                ["<leader>dp"] = "@class.outer",
             },
         },
-
     },
     playground = {
         enable = true,
         disable = {},
-        updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
-        persist_queries = false, -- Whether the query persists across vim sessions
+        updatetime = 25, -- debounced time for highlighting nodes in the playground from source code
+        persist_queries = false, -- whether the query persists across vim sessions
         keybindings = {
             toggle_query_editor = 'o',
             toggle_hl_groups = 'i',
             toggle_injected_languages = 't',
             toggle_anonymous_nodes = 'a',
-            toggle_language_display = 'I',
+            toggle_language_display = 'i',
             focus_language = 'f',
-            unfocus_language = 'F',
-            update = 'R',
+            unfocus_language = 'f',
+            update = 'r',
             goto_node = '<cr>',
             show_help = '?',
         },
@@ -168,7 +144,7 @@ require'nvim-treesitter.configs'.setup {
     query_linter = {
         enable = true,
         use_virtual_text = true,
-        lint_events = {"BufWrite", "CursorHold"},
+        lint_events = {"bufwrite", "cursorhold"},
     },
 }
 -- local ts_utils = require 'nvim-treesitter.ts_utils'

@@ -8,6 +8,11 @@ require'nvim-tree'.setup {
     -- open the tree when running this setup function
     open_on_setup       = true,
     ignore_ft_on_setup = { '.git', 'node_modules', '.cache' },
+    git = {
+        enable = true,
+        ignore = true,
+        timeout = 500,
+    },
     diagnostics = {
         enable = true,
         icons = {

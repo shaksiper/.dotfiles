@@ -1,6 +1,6 @@
-" -- Do not source the default filetype.vim
 lua require('impatient.lua.impatient')
-let g:did_load_filetypes = 1
+" -- Do not source the default filetype.vim
+" let g:did_load_filetypes = 1
 let g:python3_host_prog = '/usr/bin/python3'
 let g:plug_home = stdpath('data').'/plugged' 
 set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h12
@@ -61,3 +61,19 @@ let g:cursorhold_updatetime = 500
 set inccommand=nosplit
 let g:rose_pine_variant = 'moon'
 colorscheme rose-pine
+" nvim-cmp visual studio code dark+ colors 
+
+" gray
+highlight! CmpItemAbbrDeprecated guibg=NONE gui=strikethrough guifg=#808080
+" blue
+highlight! CmpItemAbbrMatch guibg=NONE guifg=#569CD6
+highlight! CmpItemAbbrMatchFuzzy guibg=NONE guifg=#569CD6
+" light blue
+highlight! CmpItemKindVariable guibg=NONE guifg=#9CDCFE
+highlight! CmpItemKindInterface guibg=NONE guifg=#9CDCFE
+highlight! CmpItemKindText guibg=NONE guifg=#9CDCFE
+" pink
+highlight! CmpItemKindFunction guibg=NONE guifg=#C586C0
+highlight! CmpItemKindMethod guibg=NONE guifg=#C586C0
+" front
+highlight! CmpItemKindKeyword guibg=NONE guifg=#D4D4D4

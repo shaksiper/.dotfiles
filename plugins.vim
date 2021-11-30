@@ -32,6 +32,7 @@ Plug 'jose-elias-alvarez/null-ls.nvim'
 Plug 'ray-x/go.nvim'
 Plug 'mfussenegger/nvim-jdtls'
 Plug 'tami5/lspsaga.nvim' " Changed from glepnir to a more active fork
+" Plug 'weilbith/nvim-code-action-menu' " couldn't get it work
 " Plug 'sisodiaa/lspsaga.nvim'
 " Install nvim-cmp
 Plug 'hrsh7th/nvim-cmp'
@@ -52,6 +53,7 @@ Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
 " Plug 'tom-doerr/vim_codex'
 " DAP
 " Plug 'mfussenegger/nvim-dap'
@@ -68,6 +70,7 @@ Plug 'karb94/neoscroll.nvim'
 " Plug 'beauwilliams/focus.nvim' " Causes unwanted side effects with telescope
 " and not useful anymore?
 Plug 'simeji/winresizer' " Would be better orginizer than focus.nvim?
+Plug 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
 " Buffer select. The preview over extends form the borders to window
 Plug 'https://gitlab.com/yorickpeterse/nvim-window.git'
 " Plug 'folke/lsp-colors.nvim'
@@ -80,6 +83,9 @@ Plug 'kyazdani42/nvim-tree.lua'
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-file-browser.nvim'
+" Plug 'nvim-telescope/telescope-ui-select.nvim'
+Plug 'nvim-telescope/telescope-hop.nvim'
 " \ Plug 'nvim-telescope/telescope-fzy-native.nvim' |
 " Plug 'romgrk/fzy-lua-native', { 'do': 'make' } " not working 
 " Plug 'tzachar/cmp-fzy-buffer'
@@ -147,7 +153,7 @@ let g:VM_maps['Find Subword Under'] = '<M-d>'
 
 let g:surround_no_insert_mappings = 1
 
-let g:nvim_tree_gitignore = 1 
+let g:nvim_tree_quit_on_open = 1
 let g:nvim_tree_git_hl = 1
 let g:nvim_tree_highlight_opened_files = 1
 let g:nvim_tree_group_empty = 1
