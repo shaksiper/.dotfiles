@@ -1,6 +1,7 @@
 let mapleader=" "
 nnoremap  <silent> <m-]>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 nnoremap  <silent> <m-[>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprev<CR>
+imap <C-Space> <C-Right>
 " Reselect the last pasted text
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]' 
 " Reselect visual selection after indenting
@@ -14,6 +15,8 @@ lua<<EOF
 local map = vim.api.nvim_set_keymap
 local default_opts = {noremap = true}
 
+-- map('i', '<C-Space>', "<C-Right>", default_opts)
+-- map('i', '<C-CR>', "<ESC>O", default_opts)
 map('n', '<leader>ff', "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }})<cr>", default_opts)
 map('n', '<leader>fr', "<cmd>lua require'telescope.builtin'.buffers({ show_all_buffers = true })<cr>", default_opts)
 map('n', '<leader>fm', "<cmd>lua require'telescope.builtin'.keymaps()<cr>", default_opts)

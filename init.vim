@@ -29,11 +29,10 @@ set smartcase ignorecase
 set scrolloff=4
 set signcolumn=yes
 set cul
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swap//
-set undodir=~/.vim/undo//
+" set backupdir=~/.vim/backup//
+" set directory=~/.vim/swap//
+" set undodir=~/.vim/undo//
 set undofile
-set hidden
 set colorcolumn=80
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 set termguicolors
@@ -57,8 +56,6 @@ augroup END
 " command! -nargs=1 SWT call SaveWithTS( <q-args> )
 set completeopt=menu,menuone,noselect
 let g:cursorhold_updatetime = 500
-" Live preview of Ex commands
-set inccommand=nosplit
 let g:rose_pine_variant = 'moon'
 colorscheme rose-pine
 " nvim-cmp visual studio code dark+ colors 
