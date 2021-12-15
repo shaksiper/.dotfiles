@@ -57,7 +57,6 @@ telescope.setup({
         -- file_sorter = require("telescope.sorters").get_fzy_sorter,
         prompt_prefix = " 🔭>",
         color_devicons = true,
-
         file_previewer = require("telescope.previewers").vim_buffer_cat.new,
         grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
         qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
@@ -66,7 +65,7 @@ telescope.setup({
             i = {
                 ["<C-x>"] = false,
                 ["<C-J>"] = custom_actions.multi_selection_open,
-                ["<CR>"] = custom_actions.multi_selection_open,
+                -- ["<CR>"] = custom_actions.multi_selection_open,
                 ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
                 ["<C-k>"] = actions.toggle_selection,
                 ["<c-v>"] = custom_actions.multi_selection_open_vsplit,
@@ -88,11 +87,6 @@ telescope.setup({
         -- Your special builtin config goes in here
         buffers = {
             -- layout_strategy = 'bottom_pane',
-            path_display = {
-                'smart',
-                -- 'truncate',
-                -- 'shorten',
-            },
             sort_lastused = true,
             theme = "dropdown",
             -- previewer = require("telescope.previewers").vim_buffer_cat.new,
@@ -116,14 +110,6 @@ telescope.setup({
         },
         file_browser = {
             theme = "ivy",
-            -- mappings = {
-            --     ["i"] = {
-            --         -- your custom insert mode mappings
-            --     },
-            --     ["n"] = {
-            --         -- your custom normal mode mappings
-            --     },
-            -- },
         },
         hop = {
             -- the shown `keys` are the defaults, no need to set `keys` if defaults work for you ;)

@@ -1,13 +1,22 @@
--- local has_words_before = function()
---     if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
---         return false
---     end
---     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
---     return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
--- end
 local lspkind = require "lspkind"
 lspkind.init()
 local luasnip = require("luasnip")
+local types = require("luasnip.util.types")
+
+luasnip.config.setup({
+	ext_opts = {
+		[types.choiceNode] = {
+			active = {
+				virt_text = {{"●", "TSString"}}
+			}
+		},
+		[types.insertNode] = {
+			active = {
+				virt_text = {{"●", "TSKeyword"}}
+			}
+		}
+	},
+})
 local cmp = require('cmp')
 local WIDE_HEIGHT = 40
 -- TABNINE setup
@@ -39,11 +48,11 @@ local cmp_settings = {
         }),
         ['<C-J>'] = cmp.mapping({
             i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
-            s = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+            s = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
             c = function(fallback)
                 -- This little snippet will confirm with <C-J>, and if no entry is selected, will *enter* the first item
                 if cmp.visible() then
-                    cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }, fallback)
+                    cmp.confirm({ select = true, behavior = cmp.ConfirmBehavior.Insert }, fallback) -- insert *and* fallback
                 else
                     fallback()
                 end
@@ -72,11 +81,11 @@ local cmp_settings = {
     },
     snippet = {
         expand = function(args)
-            require'luasnip'.lsp_expand(args.body)
+            luasnip.lsp_expand(args.body)
         end
     },
     -- You should specify your *installed* sources.
-    sources = {
+    sources = cmp.config.sources({
         { name = 'nvim_lsp' },
         { name = 'cmp_tabnine', keyword_length = 4},
         -- { name = 'fzy_buffer' },
@@ -86,7 +95,7 @@ local cmp_settings = {
         { name = 'path' },
         { name = 'nvim_lua' },
         { name = 'calc' },
-    },
+    }),
     documentation = {
         border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
         winhighlight = 'NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder',

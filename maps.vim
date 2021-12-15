@@ -1,14 +1,22 @@
 let mapleader=" "
 nnoremap  <silent> <m-]>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 nnoremap  <silent> <m-[>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprev<CR>
-imap <C-Space> <C-Right>
-" Reselect the last pasted text
-nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]' 
+" start new change before deleting an entire line
+inoremap <c-u> <c-g>u<c-u>
+" Some language specific mappings
+au FileType go imap <buffer> <M-;> :=
+au FileType javascript imap <buffer> <M-;> =>
+" imap <C-l> <C-Right>
+" imap <C-Space>h <C-Left>
+" imap <C-Space>l <C-Right>
+inoremap <C-Space> <C-O>
+" Reselect the last pastedtext
+nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 " Reselect visual selection after indenting
 vnoremap < <gv
 vnoremap > >gv
 
-map <silent> <leader>w :lua require('nvim-window').pick()<CR>
+map <silent> <leader>ww :lua require('nvim-window').pick()<CR>
 nnoremap <C-t> :NvimTreeToggle<CR>
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua<<EOF
@@ -17,10 +25,9 @@ local default_opts = {noremap = true}
 
 -- map('i', '<C-Space>', "<C-Right>", default_opts)
 -- map('i', '<C-CR>', "<ESC>O", default_opts)
-map('n', '<leader>ff', "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git' }})<cr>", default_opts)
-map('n', '<leader>fr', "<cmd>lua require'telescope.builtin'.buffers({ show_all_buffers = true })<cr>", default_opts)
+map('n', '<leader>ff', "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git'}, file_ignore_patterns = { 'node%_modules/.*' }})<cr>", default_opts)
+map('n', '<leader>fb', "<cmd>lua require'telescope.builtin'.buffers({ show_all_buffers = true })<cr>", default_opts)
 map('n', '<leader>fm', "<cmd>lua require'telescope.builtin'.keymaps()<cr>", default_opts)
-map('n', '<leader>fb', "<cmd>lua require'telescope.builtin'.buffers()<cr>", default_opts)
 map('n', '<leader>fo', "<cmd>lua require'telescope.builtin'.oldfiles()<cr>", default_opts)
 map('n', '<leader>fh', "<cmd>lua require'telescope.builtin'.help_tags()<cr>", default_opts)
 map('n', '<leader>/', ":silent grep ", default_opts)
@@ -71,3 +78,12 @@ nnoremap <leader>rp viw"_dP
 nnoremap <leader>bb :BufferLinePick<CR>
 let g:winresizer_start_key="<leader>ws"
 nnoremap <leader>sw :ToggleAlternate<CR>
+
+let g:lightspeed_last_motion = ''
+augroup lightspeed_last_motion
+    autocmd!
+    autocmd User LightspeedSxEnter let g:lightspeed_last_motion = 'sx'
+    autocmd User LightspeedFtEnter let g:lightspeed_last_motion = 'ft'
+augroup end
+map <expr> ; g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"
+map <expr> , g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"

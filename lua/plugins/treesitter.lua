@@ -147,17 +147,3 @@ require'nvim-treesitter.configs'.setup {
         lint_events = {"bufwrite", "cursorhold"},
     },
 }
--- local ts_utils = require 'nvim-treesitter.ts_utils'
-require'treesitter-context'.setup{
-    enable = false, -- Enable this plugin (Can be enabled/disabled later via commands)
-    throttle = true, -- Throttles plugin updates (may improve performance)
-}
--- local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
--- parser_config.vimL = {
---   install_info = {
---     url = "~/Documents/tree-sitter-viml", -- local path or git repo
---     files = {"src/parser.c"}
---   },
---   filetype = "vim", -- if filetype does not agrees with parser name
---   -- used_by = {"bar", "baz"} -- additional filetypes that use this parser
--- }

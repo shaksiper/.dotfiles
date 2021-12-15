@@ -28,7 +28,7 @@ require'nvim-tree'.setup {
         enable      = true,
         -- update the root directory of the tree to the one of the folder containing the file if the file is not under the current root directory
         -- only relevant when `update_focused_file.enable` is true
-        update_cwd  = false,
+        update_cwd  = true,
         -- list of buffer names / filetypes that will not update the cwd if the file isn't found under the current root directory
         -- only relevant when `update_focused_file.update_cwd` is true and `update_focused_file.enable` is true
         ignore_list = {}
@@ -40,7 +40,7 @@ require'nvim-tree'.setup {
             custom_only = true,
             -- list of mappings to set on the tree manually
             list = {
-                { key = {"<CR>", "o", "<2-LeftMouse>"}, cb = tree_cb("edit") },
+                { key = {"<CR>", "o", "<2-LeftMouse>", "<C-J>"}, cb = tree_cb("edit") },
                 { key = {"<2-RightMouse>", "<C-]>"},    cb = tree_cb("cd") },
                 { key = "<C-v>",                        cb = tree_cb("vsplit") },
                 { key = "<C-x>",                        cb = tree_cb("split") },

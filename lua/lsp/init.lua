@@ -56,7 +56,7 @@ local on_attach = function(_, bufnr) -- (client, bufnr)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpd', '<cmd>lua require(\'goto-preview\').goto_preview_definition()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gpi', '<cmd>lua require(\'goto-preview\').goto_preview_implementation()<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gp', '<cmd>lua require(\'goto-preview\').close_all_win()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua require(\'lspsaga.hover\').render_hover_doc()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-f>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(1)<CR>', opts)
     -- vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-b>', '<cmd>lua require(\'lspsaga.action\').smart_scroll_with_saga(-1)<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
@@ -65,16 +65,16 @@ local on_attach = function(_, bufnr) -- (client, bufnr)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua require(\'lspsaga.rename\').rename()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua require(\'lspsaga.codeaction\').code_action()<cr>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', ':<C-U>lua require(\'lspsaga.codeaction\').range_code_action()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>Lspsaga code_action<cr>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'v', '<leader>ca', ':<C-U>Lspsaga range_code_action<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gh', '<cmd>lua require(\'lspsaga.provider\').lsp_finder()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>gf', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>e', '<cmd>Lspsaga show_line_diagnostics<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>Lspsaga diagnostic_jump_prev<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>Lspsaga diagnostic_jump_next<CR>', opts)
+    vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>q', '<cmd>lua vim.diagnostic.set_loclist()<CR>', opts)
     vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>so', [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]], opts)
 end
 
@@ -124,9 +124,9 @@ if not nvim_lsp.emmet_ls then
             cmd = {'ls_emmet', '--stdio'};
             filetypes = { 'html', 'css', 'scss', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'haml',
                 'xml', 'xsl', 'pug', 'slim', 'sass', 'stylus', 'less', 'sss'};
-            root_dir = function(fname)
-                return vim.loop.cwd()
-            end;
+            -- root_dir = function(fname)
+            --     return vim.loop.cwd()
+            -- end;
             settings = {};
         };
     }
@@ -228,16 +228,19 @@ require'lspconfig'.jdtls.setup{
 }
 -- NULL_LS setup
 local null_ls = require("null-ls")
-null_ls.config({
-    sources = {
-        null_ls.builtins.formatting.gofmt,
-        null_ls.builtins.formatting.goimports,
-        -- null_ls.builtins.formatting.prettierd,
-        null_ls.builtins.diagnostics.eslint_d,
-        null_ls.builtins.formatting.eslint_d,
-    }
-})
-require("lspconfig")["null-ls"].setup({
+require("null-ls").setup({
     on_attach = on_attach,
     capabilities = capabilities,
+        sources = {
+        null_ls.builtins.formatting.gofmt,
+        null_ls.builtins.formatting.goimports,
+        null_ls.builtins.formatting.prettierd,
+        null_ls.builtins.diagnostics.markdownlint,
+        -- null_ls.builtins.diagnostics.eslint_d,
+        -- null_ls.builtins.formatting.eslint_d,
+        require("null-ls.helpers").conditional(function(utils)
+            local b = null_ls.builtins
+            return utils.root_has_file(".eslintrc.js") and b.formatting.eslint_d --[[ or b.formatting.prettierd ]]
+        end),
+    },
 })
