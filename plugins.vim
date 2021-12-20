@@ -128,7 +128,7 @@ Plug 'ellisonleao/glow.nvim'
 Plug 'kristijanhusak/orgmode.nvim'
 Plug 'lukas-reineke/headlines.nvim'
 Plug 'akinsho/org-bullets.nvim'
-Plug 'wfxr/minimap.vim', {'branch': 'stateful_lines', 'do': ':!cargo install --locked code-minimap'}
+Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 filetype plugin indent on    " required
 

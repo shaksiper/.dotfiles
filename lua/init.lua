@@ -1,2 +1,2 @@
-require('plugins.init')
-require('lsp.init')
+require("plugins.init")
+require("lsp.init")

@@ -1,1 +1,1 @@
-require('pqf').setup()
+require("pqf").setup()

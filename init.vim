@@ -1,7 +1,7 @@
 lua require('impatient.lua.impatient')
 let g:python3_host_prog = '/usr/bin/python3'
 let g:plug_home = stdpath('data').'/plugged' 
-set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h12
+set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h7:50
 " filetype off
 set confirm
 set title titlestring=NeoVim\ 🧠\ %(%{expand(\"%:~:.:h\")}%)/%t

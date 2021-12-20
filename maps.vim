@@ -6,10 +6,6 @@ inoremap <c-u> <c-g>u<c-u>
 " Some language specific mappings
 au FileType go imap <buffer> <M-;> :=
 au FileType javascript imap <buffer> <M-;> =>
-" imap <C-l> <C-Right>
-" imap <C-Space>h <C-Left>
-" imap <C-Space>l <C-Right>
-inoremap <C-Space> <C-O>
 " Reselect the last pastedtext
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 " Reselect visual selection after indenting
