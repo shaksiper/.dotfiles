@@ -16,32 +16,38 @@ map <silent> <leader>ww :lua require('nvim-window').pick()<CR>
 nnoremap <C-t> :NvimTreeToggle<CR>
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua<<EOF
-local map = vim.api.nvim_set_keymap
+-- local map = vim.keymap.set
 local default_opts = {noremap = true}
 
 -- map('i', '<C-Space>', "<C-Right>", default_opts)
 -- map('i', '<C-CR>', "<ESC>O", default_opts)
-map('n', '<leader>ff', "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git'}, file_ignore_patterns = { 'node%_modules/.*' }})<cr>", default_opts)
-map('n', '<leader>fb', "<cmd>lua require'telescope.builtin'.buffers({ show_all_buffers = true })<cr>", default_opts)
-map('n', '<leader>fm', "<cmd>lua require'telescope.builtin'.keymaps()<cr>", default_opts)
-map('n', '<leader>fo', "<cmd>lua require'telescope.builtin'.oldfiles()<cr>", default_opts)
-map('n', '<leader>fh', "<cmd>lua require'telescope.builtin'.help_tags()<cr>", default_opts)
-map('n', '<leader>/', ":silent grep ", default_opts)
-map('n', '<leader>fg', "<cmd>lua require'telescope.builtin'.live_grep()<cr>", default_opts)
-map('n', '<leader>fe', "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>", default_opts)
-map('n', '<leader>fz', "<cmd>lua require'telescope.builtin'.current_buffer_fuzzy_find()<cr>", default_opts)
-map('n', '<leader>fsw', "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", default_opts)
-map('n', '<leader>fsd', "<cmd>lua require'telescope.builtin'.lsp_document_symbols(require('telescope.themes').get_ivy({}))<cr>", default_opts)
-map('n', '<leader>fdd', "<cmd>lua require'telescope.builtin'.lsp_document_diagnostics()<cr>", default_opts)
-map('n', '<leader>fdw', "<cmd>lua require'telescope.builtin'.lsp_workspace_diagnostics()<cr>", default_opts)
-map('n', '<leader>fp', "<cmd>Telescope projects theme=dropdown<cr>", default_opts)
-map('n', '<leader>fl', "<cmd>Telescope resume<cr>", default_opts)
+
+-- TODO make mappings with newly added vim.keymap
+-- See : https://github.com/neovim/neovim/pull/16591
+vim.keymap.set('n', '<leader>ff', "<cmd>lua require'telescope.builtin'.find_files({ find_command = {'rg', '--files', '--hidden', '-g', '!.git'}, file_ignore_patterns = { 'node%_modules/.*' }})<cr>", default_opts)
+vim.keymap.set('n', '<leader>fb', "<cmd>lua require'telescope.builtin'.buffers({ show_all_buffers = true })<cr>", default_opts)
+vim.keymap.set('n', '<leader>fk', "<cmd>lua require'telescope.builtin'.keymaps()<cr>", default_opts)
+vim.keymap.set('n', '<leader>fo', "<cmd>lua require'telescope.builtin'.oldfiles()<cr>", default_opts)
+vim.keymap.set('n', '<leader>fh', "<cmd>lua require'telescope.builtin'.help_tags()<cr>", default_opts)
+vim.keymap.set('n', '<leader>/', ":silent grep ", default_opts)
+vim.keymap.set('n', '<leader>fg', "<cmd>lua require'telescope.builtin'.live_grep()<cr>", default_opts)
+vim.keymap.set('n', '<leader>fe', "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>", default_opts)
+vim.keymap.set('n', '<leader>fz', "<cmd>lua require'telescope.builtin'.current_buffer_fuzzy_find({preview = {hide_on_startup = true, title = 'Fuzzy Find Buffer'}, layout_config={width=0.65}})<cr>", default_opts)
+vim.keymap.set('n', '<leader>fj', "<cmd>lua require'telescope.builtin'.jumplist()<cr>", default_opts)
+-- vim.keymap.set('v', '<leader>fc', "<cmd>Telescope lsp_range_code_actions<cr>", default_opts)
+vim.keymap.set('n', '<leader>fm', "<cmd>lua require'telescope.builtin'.marks()<cr>", default_opts)
+vim.keymap.set('n', '<leader>fsw', "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", default_opts)
+vim.keymap.set('n', '<leader>fsd', "<cmd>lua require'telescope.builtin'.lsp_document_symbols(require('telescope.themes').get_ivy({}))<cr>", default_opts)
+vim.keymap.set('n', '<leader>fdd', "<cmd>Telescope diagnostics bufnr=0<cr>", default_opts)
+vim.keymap.set('n', '<leader>fdw', "<cmd>Telescope diagnostics<cr>", default_opts)
+vim.keymap.set('n', '<leader>fp', "<cmd>Telescope projects theme=dropdown<cr>", default_opts)
+vim.keymap.set('n', '<leader>fl', "<cmd>Telescope resume<cr>", default_opts)
 -- map('n', '<leader>fs', ":SearchSession<cr>", default_opts)
-map('n', '<leader>th', "<cmd>lua require'close_buffers'.delete({type = 'hidden'})<cr>", {noremap = true, silent = true})
-map('n', '<leader>tu', "<cmd>lua require'close_buffers'.delete({type = 'nameless'})<cr>", {noremap = true, silent = true})
-map('n', '<leader>tc', "<cmd>lua require'close_buffers'.delete({type = 'this'})<cr>", {noremap = true, silent = true})
-map('n', '<leader>tt', ":bd<cr>", {noremap = true, silent = true})
-map('n', '<M-t>', "<cmd>lua require('rose-pine.functions').toggle_variant()<cr>", {noremap = true, silent = true})
+vim.keymap.set('n', '<leader>th', "<cmd>lua require'close_buffers'.delete({type = 'hidden'})<cr>", {noremap = true, silent = true})
+vim.keymap.set('n', '<leader>tu', "<cmd>lua require'close_buffers'.delete({type = 'nameless'})<cr>", {noremap = true, silent = true})
+vim.keymap.set('n', '<leader>tc', "<cmd>lua require'close_buffers'.delete({type = 'this'})<cr>", {noremap = true, silent = true})
+vim.keymap.set('n', '<leader>tt', ":bd<cr>", {noremap = true, silent = true})
+-- map('n', '<M-t>', "<cmd>lua require('rose-pine.functions').toggle_variant()<cr>", {noremap = true, silent = true})
 
 -- focus.nvim toggle thingy
 -- map('n', '<m-BS>', ":lua require('focus').focus_toggle()<CR>", default_opts)
