@@ -6,6 +6,7 @@ inoremap <c-u> <c-g>u<c-u>
 " Some language specific mappings
 au FileType go imap <buffer> <M-;> :=
 au FileType javascript imap <buffer> <M-;> =>
+autocmd FileType markdown noremap <leader>p :Glow<CR>
 " Reselect the last pastedtext
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 " Reselect visual selection after indenting
@@ -13,7 +14,7 @@ vnoremap < <gv
 vnoremap > >gv
 
 map <silent> <leader>ww :lua require('nvim-window').pick()<CR>
-nnoremap <C-t> :NvimTreeToggle<CR>
+nnoremap <C-t> :NeoTreeRevealToggle<CR>
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua<<EOF
 -- local map = vim.keymap.set
@@ -49,14 +50,35 @@ vim.keymap.set('n', '<leader>tc', "<cmd>lua require'close_buffers'.delete({type 
 vim.keymap.set('n', '<leader>tt', ":bd<cr>", {noremap = true, silent = true})
 -- map('n', '<M-t>', "<cmd>lua require('rose-pine.functions').toggle_variant()<cr>", {noremap = true, silent = true})
 
+-- TROUBLE
+-- Lua
+vim.keymap.set("n", "<leader>xx", "<cmd>Trouble<cr>",
+  {silent = true, noremap = true}
+)
+vim.keymap.set("n", "<leader>xw", "<cmd>Trouble workspace_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.keymap.set("n", "<leader>xd", "<cmd>Trouble document_diagnostics<cr>",
+  {silent = true, noremap = true}
+)
+vim.keymap.set("n", "<leader>xl", "<cmd>Trouble loclist<cr>",
+  {silent = true, noremap = true}
+)
+vim.keymap.set("n", "<leader>xq", "<cmd>Trouble quickfix<cr>",
+  {silent = true, noremap = true}
+)
+vim.keymap.set("n", "<leader>xr", "<cmd>Trouble lsp_references<cr>",
+  {silent = true, noremap = true}
+)
+
 -- focus.nvim toggle thingy
 -- map('n', '<m-BS>', ":lua require('focus').focus_toggle()<CR>", default_opts)
 -- Outline symbols toggle
-map('n', '<m-o>', ":SymbolsOutline<CR>", default_opts)
-map('n', '<m-u>', ":UndotreeToggle<CR>", default_opts)
+vim.keymap.set('n', '<m-o>', ":SymbolsOutline<CR>", default_opts)
+vim.keymap.set('n', '<m-u>', ":UndotreeToggle<CR>", default_opts)
 -- Sniprun
-vim.api.nvim_set_keymap('n', '<leader>rr', '<Plug>SnipRun', {silent = true})
-vim.api.nvim_set_keymap('v', '<leader>rr', '<Plug>SnipRun', {silent = true})
+vim.keymap.set('n', '<leader>rr', '<Plug>SnipRun', {silent = true})
+vim.keymap.set('v', '<leader>rr', '<Plug>SnipRun', {silent = true})
 
 function _G.set_terminal_keymaps()
   local opts = {noremap = true}
@@ -89,3 +111,19 @@ augroup lightspeed_last_motion
 augroup end
 map <expr> ; g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"
 map <expr> , g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"
+
+nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
+nnoremap <silent> <F10> :lua require'dap'.step_over()<CR>
+nnoremap <silent> <F11> :lua require'dap'.step_into()<CR>
+nnoremap <silent> <F12> :lua require'dap'.step_out()<CR>
+nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
+nnoremap <silent> <leader>B :lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
+nnoremap <silent> <leader>lp :lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
+nnoremap <silent> <leader>dr :lua require'dap'.repl.open()<CR>
+nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
+nmap <silent> <leader>td :lua require('dap-go').debug_test()<CR>
+
+" Pounce
+" nmap <C-s> <cmd>Pounce<CR>
+" vmap <C-S> <cmd>Pounce<CR>
+" omap gs <cmd>Pounce<CR>  " 's' is used by vim-surround

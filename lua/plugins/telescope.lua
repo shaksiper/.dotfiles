@@ -2,6 +2,7 @@ local actions = require("telescope.actions")
 local telescope = require("telescope")
 
 local action_state = require("telescope.actions.state")
+local action_layout = require("telescope.actions.layout")
 local custom_actions = {}
 function custom_actions._multiopen(prompt_bufnr, open_cmd)
 	local picker = action_state.get_current_picker(prompt_bufnr)
@@ -26,7 +27,7 @@ function custom_actions._multiopen(prompt_bufnr, open_cmd)
 		elseif open_cmd == "tabe" then
 			actions.file_tab(prompt_bufnr)
 		else
-			actions.file_edit(prompt_bufnr)
+			actions.select_default(prompt_bufnr)
 		end
 	end
 end
@@ -71,15 +72,22 @@ telescope.setup({
 				["<c-v>"] = custom_actions.multi_selection_open_vsplit,
 				["<c-s>"] = custom_actions.multi_selection_open_split,
 				["<c-t>"] = custom_actions.multi_selection_open_tab,
-				-- ["<C-h>"] = R("telescope").extensions.hop.hop,  -- hop.hop_toggle_selection
+				["<c-b>"] = action_layout.toggle_preview,
+				["<C-h>"] = function(prompt_bufnr)
+					telescope.extensions.hop.hop(prompt_bufnr)
+					actions.select_default(prompt_bufnr)
+				end, -- hop.hop_toggle_selection
 				-- -- custom hop loop to multi selects and sending selected entries to quickfix list
 				["<C-space>"] = function(prompt_bufnr)
 					local opts = {
 						callback = actions.toggle_selection,
-						loop_callback = actions.send_selected_to_qflist,
+						loop_callback = custom_actions.multi_selection_open,
 					}
 					require("telescope").extensions.hop._hop_loop(prompt_bufnr, opts)
 				end,
+			},
+			n = {
+				["<C-J>"] = custom_actions.multi_selection_open,
 			},
 		},
 	},

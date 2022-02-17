@@ -9,7 +9,7 @@ parser_config.org = {
 	filetype = "org",
 }
 require("nvim-treesitter.configs").setup({
-	ensure_installed = "php", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+	ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
 	rainbow = {
 		enable = true,
 		extended_mode = true, -- also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean

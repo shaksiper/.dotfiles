@@ -1,6 +1,12 @@
 require("orgmode").setup({
-	org_agenda_files = { "~/Documents/org/*", "~/my-orgs/**/*" },
-	org_default_notes_file = "~/Documents/org/refile.org",
+	org_agenda_files = { "~/Documents/Org/*" },
+	org_default_notes_file = "~/Documents/Org/refile.org",
+	org_todo_keywords = { "TODO", "WAITING", "|", "DONE", "DELEGATED" },
+	org_todo_keyword_faces = {
+		WAITING = ":foreground blue :weight bold",
+		DELEGATED = ":background #FFFFFF :slant italic :underline on",
+		TODO = ":background #000000 :foreground red", -- overrides builtin color for `TODO` keyword
+	},
 })
 require("headlines").setup()
 require("org-bullets").setup({

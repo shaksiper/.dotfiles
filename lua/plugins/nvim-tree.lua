@@ -1,3 +1,4 @@
+-- require("neo-tree").setup()
 -- following options are the default
 local tree_cb = require("nvim-tree.config").nvim_tree_callback
 require("nvim-tree").setup({

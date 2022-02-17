@@ -1,5 +1,6 @@
 -- LSP settings
 local nvim_lsp = require("lspconfig")
+local util = require("lspconfig.util")
 local cfg = {
 	bind = true, -- This is mandatory, otherwise border config won't get registered.
 	-- If you want to hook lspsaga or other signature handler, pls set to false
@@ -33,7 +34,7 @@ saga.init_lsp_saga({
 		enable = true,
 		sign = true,
 		sign_priority = 20,
-		virtual_text = false,
+		virtual_text = true,
 	},
 })
 
@@ -175,13 +176,13 @@ nvim_lsp.tsserver.setup({
 	capabilities = capabilities,
 	-- Defaults
 })
--- GOPLS
+-- ray-x/go.nvim init
 require("go").setup({
 	max_line_len = 120,
 	tag_transform = false,
 	test_dir = "",
 	comment_placeholder = "   ",
-}) -- ray-x/go.nvim init
+}) -- GOPLS
 nvim_lsp.gopls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
@@ -200,68 +201,186 @@ nvim_lsp.gopls.setup({
 	},
 })
 -- LUA LSP
-local runtime_path = vim.split(package.path, ";")
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
+-- local runtime_path = vim.split(package.path, ";")
+-- table.insert(runtime_path, "lua/?.lua")
+-- table.insert(runtime_path, "lua/?/init.lua")
 nvim_lsp.sumneko_lua.setup({
 	-- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
 	capabilities = capabilities,
 	on_attach = on_attach,
-	settings = {
-		Lua = {
-			runtime = {
-				-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-				version = "LuaJIT",
-				-- Setup your lua path
-				path = runtime_path,
-			},
-			diagnostics = {
-				-- Get the language server to recognize the `vim` global
-				globals = { "vim" },
-			},
-			workspace = {
-				-- Make the server aware of Neovim runtime files
-				library = vim.api.nvim_get_runtime_file("", true),
-			},
-			-- Do not send telemetry data containing a randomized but unique identifier
-			telemetry = {
-				enable = false,
-			},
-		},
-	},
+	-- settings = {
+	-- 	Lua = {
+	-- 		runtime = {
+	-- 			-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+	-- 			version = "LuaJIT",
+	-- 			-- Setup your lua path
+	-- 			path = runtime_path,
+	-- 		},
+	-- 		diagnostics = {
+	-- 			-- Get the language server to recognize the `vim` global
+	-- 			globals = { "vim" },
+	-- 		},
+	-- 		workspace = {
+	-- 			-- Make the server aware of Neovim runtime files
+	-- 			library = vim.api.nvim_get_runtime_file("", true),
+	-- 		},
+	-- 		-- Do not send telemetry data containing a randomized but unique identifier
+	-- 		telemetry = {
+	-- 			enable = false,
+	-- 		},
+	-- 	},
+	-- },
 })
 -- JAVA LS
-nvim_lsp.java_language_server.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	cmd = { "/home/shaksiper/Documents/java-language-server/dist/lang_server_linux.sh" },
-	--[[ filetypes = { "java" },
-    root_dir = function(startpath)
-        return M.search_ancestors(startpath, matcher)
-    end, --]]
-})
+-- It is temporarily out of service due to not being compiled
+-- TODO make it more dynamic
+-- nvim_lsp.java_language_server.setup({
+-- 	capabilities = capabilities,
+-- 	on_attach = on_attach,
+-- 	cmd = { "/home/shaksiper/Downloads/LSP/java-language-server/dist/lang_server_linux.sh" },
+-- 	--[[ filetypes = { "java" },
+--     root_dir = function(startpath)
+--         return M.search_ancestors(startpath, matcher)
+--     end, --]]
+-- })
 -- JDTLS from eclipse
 nvim_lsp.jdtls.setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 })
+-- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
+-- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
+
+-- TODO make everything more dynamic
+-- Everything is too stiff rightnow at the installation
+local workspace_dir = "$WORKSPACE/" .. vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+local config = {
+	-- The command that starts the language server
+	-- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
+	cmd = {
+		-- 💀
+		"java", -- or '/path/to/java11_or_newer/bin/java'
+		-- depends on if `java` is in your $PATH env variable and if it points to the right version.
+
+		"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+		"-Dosgi.bundles.defaultStartLevel=4",
+		"-Declipse.product=org.eclipse.jdt.ls.core.product",
+		"-Dlog.protocol=true",
+		"-Dlog.level=ALL",
+		"-javaagent:$HOME/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-*.jar",
+		"-Xms1g",
+		"--add-modules=ALL-SYSTEM",
+		"--add-opens",
+		"java.base/java.util=ALL-UNNAMED",
+		"--add-opens",
+		"java.base/java.lang=ALL-UNNAMED",
+		-- 💀
+		"-jar",
+		"$JDTLS_HOME/plugins/org.eclipse.equinox.launcher_*.jar",
+		-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^
+		-- Must point to the                                                     Change this to
+		-- eclipse.jdt.ls installation                                           the actual version
+		-- 💀
+		"-configuration",
+		"$JDTLS_HOME/config_linux",
+		-- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
+		-- Must point to the                      Change to one of `linux`, `win` or `mac`
+		-- eclipse.jdt.ls installation            Depending on your system.
+		-- 💀
+		-- See `data directory configuration` section in the README
+		"-data",
+		workspace_dir,
+	},
+	-- 💀
+	-- This is the default if not provided, you can remove it. Or adjust as needed.
+	-- One dedicated LSP server & client will be started per unique root_dir
+	root_dir = require("jdtls.setup").find_root({ ".git", "mvnw", "gradlew" }),
+
+	-- Here you can configure eclipse.jdt.ls specific settings
+	-- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
+	-- for a list of options
+	settings = {
+		java = {},
+	},
+
+	-- Language server `initializationOptions`
+	-- You need to extend the `bundles` with paths to jar files
+	-- if you want to use additional eclipse.jdt.ls plugins.
+	--
+	-- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
+	--
+	-- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
+	init_options = {
+		bundles = {},
+	},
+}
+-- This starts a new client & server,
+-- or attaches to an existing client & server depending on the `root_dir`.
+
+if vim.bo.filetype == "java" then -- Only in java file types, it does't make distinction automatically for some reason.
+	require("jdtls").start_or_attach(config)
+end
+
+-- Python => PyLs
+-- nvim_lsp.pylsp.setup({})
+nvim_lsp.pyright.setup({})
 -- NULL_LS setup
 local null_ls = require("null-ls")
 require("null-ls").setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
 	sources = {
+		null_ls.builtins.formatting.prettierd,
+		-- null_ls.builtins.diagnostics.eslint_d,
+		-- null_ls.builtins.formatting.eslint_d,
+		-- See: [:h vim.lsp.buf.formatting_seq_sync]
+		-- require("null-ls.helpers").conditional(function(utils)
+		-- 	local b = null_ls.builtins
+		-- 	return utils.root_has_file(".eslintrc.js") and b.formatting.eslint_d --[[ or b.formatting.prettierd ]]
+		-- end),
+		-- JAVA
+		-- null_ls.builtins.formatting.google_java_format, -- needs [ https://github.com/google/google-java-format ] installed
+		null_ls.builtins.formatting.eslint_d.with({
+			condition = function(utils)
+				return utils.root_has_file(".eslintrc.js")
+			end,
+		}),
+		-- Go Lang
 		-- null_ls.builtins.formatting.gofmt,
 		null_ls.builtins.formatting.gofumpt, -- alternative to gofmt?
 		null_ls.builtins.formatting.goimports,
+		-- Lua
 		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.prettierd,
+		--Markdown
 		null_ls.builtins.diagnostics.markdownlint,
-		-- null_ls.builtins.diagnostics.eslint_d,
-		-- null_ls.builtins.formatting.eslint_d,
-		require("null-ls.helpers").conditional(function(utils)
-			local b = null_ls.builtins
-			return utils.root_has_file(".eslintrc.js") and b.formatting.eslint_d --[[ or b.formatting.prettierd ]]
-		end),
+		null_ls.builtins.formatting.markdownlint,
+		-- Python related
+		null_ls.builtins.diagnostics.pylint,
+		null_ls.builtins.formatting.black,
+		null_ls.builtins.formatting.djhtml,
+		null_ls.builtins.completion.spell.with({
+			filetypes = { "markdown", "org" },
+		}),
+		null_ls.builtins.diagnostics.proselint.with({
+			filetypes = {
+				"markdown", --[[ "org" ]]
+			},
+		}),
+		null_ls.builtins.code_actions.proselint.with({
+			filetypes = {
+				"markdown", --[[ "org" ]]
+			},
+		}),
 	},
+})
+-- Notetaking related LSP
+nvim_lsp.ltex.setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+})
+nvim_lsp.zeta_note.setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+	cmd = { "zeta-note" },
+	root_dir = util.root_pattern(".zeta.toml", ".git"),
 })

@@ -1,5 +1,4 @@
 local lspkind = require("lspkind")
-lspkind.init()
 local luasnip = require("luasnip")
 local types = require("luasnip.util.types")
 
@@ -47,7 +46,7 @@ local cmp_settings = {
 			c = cmp.mapping.confirm({ select = false }),
 		}),
 		["<C-J>"] = cmp.mapping({
-			i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
+			i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
 			s = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Insert, select = true }),
 			c = function(fallback)
 				-- This little snippet will confirm with <C-J>, and if no entry is selected, will *enter* the first item
@@ -60,9 +59,10 @@ local cmp_settings = {
 		}),
 
 		["<Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
+			--[[ if cmp.visible() then
 				cmp.select_next_item()
-			elseif luasnip and luasnip.expand_or_locally_jumpable() then
+			else ]]
+			if luasnip and luasnip.expand_or_locally_jumpable() then
 				luasnip.expand_or_jump()
 			else
 				fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
@@ -91,6 +91,7 @@ local cmp_settings = {
 		-- { name = 'fzy_buffer' },
 		{ name = "buffer", keyword_length = 4, max_item_count = 15 },
 		{ name = "luasnip" },
+		{ name = "orgmode" },
 		{ name = "treesitter", keyword_length = 5, max_item_count = 10 },
 		{ name = "path" },
 		{ name = "nvim_lua" },
@@ -104,7 +105,7 @@ local cmp_settings = {
 	},
 	formatting = {
 		format = lspkind.cmp_format({
-			with_text = true,
+            -- format = 'default',
 			menu = {
 				buffer = "[buf]",
 				cmp_tabnine = "[T9]",
@@ -113,24 +114,13 @@ local cmp_settings = {
 				path = "[path]",
 				luasnip = "[snip]",
 				treesitter = "[tsit]",
-				spell = "[spl]",
+				calc = "[clc]",
+				orgmode = "[org]",
 				-- fzy_buffer = "[fzy]"
 			},
 		}),
 	},
 }
-if vim.fn.expand("%:e") == "org" then
-	vim.opt.spell = true
-	vim.opt.spelllang = { "en_us" }
-	cmp_settings.sources = {
-		{ name = "orgmode" },
-		{ name = "spell" },
-		{ name = "luasnip" },
-		{ name = "buffer", keyword_length = 4, max_item_count = 15 },
-		{ name = "path" },
-		{ name = "calc" },
-	}
-end
 cmp.setup(cmp_settings)
 cmp.setup.cmdline(":", {
 	sources = cmp.config.sources({
@@ -144,6 +134,6 @@ cmp.setup.cmdline("/", cmp_search_config)
 cmp.setup.cmdline("?", cmp_search_config)
 -- If you want insert `(` after select function or method item
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done({ map_char = { tex = "" } }))
 
 require("luasnip/loaders/from_vscode").load() --friendly-snippts should work after this

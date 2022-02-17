@@ -7,7 +7,7 @@ Plug 'rcarriga/nvim-notify'
 " Plug 'nvim-treesitter/nvim-treesitter', {'branch' : '0.5-compat', 'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-Plug 'Jason-M-Chan/ts-textobjects'
+" Plug 'Jason-M-Chan/ts-textobjects'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'nvim-treesitter/playground'
 Plug 'mfussenegger/nvim-treehopper'
@@ -21,6 +21,7 @@ Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 Plug 'lewis6991/spellsitter.nvim' " Not working for some reason
 Plug 'matze/vim-move'
 Plug 'ggandor/lightspeed.nvim'
+Plug 'rlane/pounce.nvim'
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Plug 'mg979/vim-visual-multi' " There is a learning curve for this and
 " vanilla vim macros and motions *may* suffice as they say
@@ -46,6 +47,7 @@ Plug 'ray-x/cmp-treesitter'
 Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
+Plug 'folke/trouble.nvim'
 " Plug 'octaltree/cmp-look'
 Plug 'hrsh7th/cmp-nvim-lua'
 Plug 'onsails/lspkind-nvim'
@@ -55,6 +57,12 @@ Plug 'quangnguyen30192/cmp-nvim-tags'
 Plug 'L3MON4D3/LuaSnip'
 Plug 'rafamadriz/friendly-snippets'
 Plug 'saadparwaiz1/cmp_luasnip'
+" Debugging
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
+Plug 'leoluz/nvim-dap-go'
+Plug 'mfussenegger/nvim-dap-python'
 " Plug 'tom-doerr/vim_codex'
 " DAP
 " Plug 'mfussenegger/nvim-dap'
@@ -65,16 +73,21 @@ Plug 'kazhala/close-buffers.nvim'
 Plug 'karb94/neoscroll.nvim'
 " Plug 'beauwilliams/focus.nvim' " Causes unwanted side effects with telescope
 " and not useful anymore?
-Plug 'simeji/winresizer' " Would be better orginizer than focus.nvim?
+" Would be better orginizer than focus.nvim?
+Plug 'simeji/winresizer'
 Plug 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
+Plug 'chentau/marks.nvim'
 " Plug 'tversteeg/registers.nvim'
 " Plug 'AckslD/nvim-neoclip.lua'
 " Buffer select. The preview over extends form the borders to window
 Plug 'https://gitlab.com/yorickpeterse/nvim-window.git'
 Plug 'ray-x/lsp_signature.nvim'
 " buffer-like
-Plug 'simrat39/symbols-outline.nvim'
+Plug 'zeertzjq/symbols-outline.nvim', {'branch':'patch-1'}
+" Plug 'ldelossa/litee.nvim'
 Plug 'kyazdani42/nvim-tree.lua'
+Plug 'nvim-neo-tree/neo-tree.nvim'
+Plug 'MunifTanjim/nui.nvim'
 Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
@@ -96,6 +109,7 @@ Plug 'numToStr/Comment.nvim'
 Plug 'tpope/vim-surround'
 " Let there be colorful schemes
 Plug 'rose-pine/neovim'
+Plug 'rebelot/kanagawa.nvim'
 " Plug 'katawful/kat.nvim'
 " Plug 'wuelnerdotexe/vim-enfocado'
 " Plug 'rktjmp/lush.nvim'
@@ -128,6 +142,7 @@ Plug 'ellisonleao/glow.nvim'
 Plug 'kristijanhusak/orgmode.nvim'
 Plug 'lukas-reineke/headlines.nvim'
 Plug 'akinsho/org-bullets.nvim'
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'wfxr/minimap.vim', {'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 filetype plugin indent on    " required
@@ -159,6 +174,7 @@ let g:nvim_tree_window_picker_exclude = {
     \ }
 let g:minimap_git_colors = 1
 let g:minimap_highlight_search = 1
+let g:minimap_auto_start_win_enter = 1
 let g:minimap_diffadd_color = "GitSignsAdd"
 let g:minimap_diffremove_color = 'GitSignsDelete'
 let g:minimap_diff_color = 'GitSignsChange'
@@ -175,7 +191,7 @@ function! s:gitUntracked()
     let files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
     return map(files, "{'line': v:val, 'path': v:val}")
 endfunction
-let g:startify_bookmarks = [ {'c': '~/.config/nvim/'}, '~/.zshrc' ]
+let g:startify_bookmarks = [ {'c': '~/.config/nvim/'}, {'O': '~/Documents/Org/'}, {'N': '~/Documents/Obsidasion/'}, '~/.zshrc' ]
 let g:startify_lists = [
         \ { 'type': 'files',     'header': ['   MRU']            },
         \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
