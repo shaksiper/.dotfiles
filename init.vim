@@ -1,7 +1,5 @@
 let g:did_load_filetypes = 0
-" let g:do_filetype_lua = 1
 lua require('impatient.lua.impatient')
-" let g:python3_host_prog = '/usr/bin/python3'
 let g:plug_home = stdpath('data').'/plugged' 
 set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h6.5
 set confirm

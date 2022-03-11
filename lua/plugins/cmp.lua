@@ -136,4 +136,4 @@ cmp.setup.cmdline("?", cmp_search_config)
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done({ map_char = { tex = "" } }))
 
-require("luasnip/loaders/from_vscode").load() --friendly-snippts should work after this
+require("luasnip/loaders/from_vscode").lazy_load() --friendly-snippts should work after this
