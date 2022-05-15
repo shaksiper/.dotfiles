@@ -17,19 +17,20 @@ luasnip.config.setup({
 	},
 })
 local cmp = require("cmp")
-local WIDE_HEIGHT = 40
 -- TABNINE setup
 local tabnine = require("cmp_tabnine.config")
 tabnine:setup({
 	max_lines = 1000,
-	max_num_results = 20,
+	max_num_results = 10,
 	sort = true,
 	run_on_every_keystroke = true,
 	snippet_placeholder = "..",
+    show_prediction_strength = true
 })
 local cmp_settings = {
 	experimental = {
 		ghost_text = true,
+        native_menu = false,
 	},
 	-- You can set mappings if you want
 	mapping = {
@@ -97,15 +98,12 @@ local cmp_settings = {
 		{ name = "nvim_lua" },
 		{ name = "calc" },
 	}),
-	documentation = {
-		border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-		winhighlight = "NormalFloat:CmpDocumentation,FloatBorder:CmpDocumentationBorder",
-		maxwidth = math.floor((WIDE_HEIGHT * 2) * (vim.o.columns / (WIDE_HEIGHT * 2 * 16 / 9))),
-		maxheight = math.floor(WIDE_HEIGHT * (WIDE_HEIGHT / vim.o.lines)),
+	window = {
+		completion = cmp.config.window.bordered(),
+		documentation = cmp.config.window.bordered(),
 	},
 	formatting = {
 		format = lspkind.cmp_format({
-            -- format = 'default',
 			menu = {
 				buffer = "[buf]",
 				cmp_tabnine = "[T9]",

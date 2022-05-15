@@ -1,7 +1,7 @@
 require("tsht").config.hint_keys = { "h", "j", "f", "d", "n", "v", "s", "l", "a" }
 require('orgmode').setup_ts_grammar()
 require("nvim-treesitter.configs").setup({
-	ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+	ensure_installed = "all",
 	rainbow = {
 		enable = true,
 		extended_mode = true, -- also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean

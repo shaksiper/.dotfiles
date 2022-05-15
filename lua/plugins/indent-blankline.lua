@@ -1,6 +1,7 @@
 vim.opt.list = true
 vim.opt.listchars:append("trail:⋅")
 vim.opt.listchars:append("tab:▸ ")
+-- TODO: add blank indent char => ebedbed53690a53cd15b53c124eb29f9faffc1d2
 require("indent_blankline").setup({
 	enabled = true,
 	filetype_exclude = { "startify" },

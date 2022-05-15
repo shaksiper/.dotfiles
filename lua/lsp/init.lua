@@ -74,7 +74,7 @@ local on_attach = function(_, bufnr) -- (client, bufnr)
 
 	vim.keymap.set("n", "<leader>cla", "V:<C-U>Lspsaga range_code_action<CR>", opts) -- Code line action
 	vim.keymap.set("n", "<leader>gh", "<cmd>lua require('lspsaga.provider').lsp_finder()<CR>", opts)
-	vim.keymap.set("n", "<leader>gf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+	vim.keymap.set("n", "<leader>gf", "<cmd>lua vim.lsp.buf.format{ asyny = true }<CR>", opts)
 	vim.keymap.set("v", "<leader>gf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
 	vim.keymap.set("n", "<leader>glf", "V<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts) -- Code line formatting, for whatever it's worth.
 	vim.keymap.set("n", "<leader>e", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
@@ -182,7 +182,8 @@ require("go").setup({
 	tag_transform = false,
 	test_dir = "",
 	comment_placeholder = "   ",
-}) -- GOPLS
+})
+-- GOPLS
 nvim_lsp.gopls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
@@ -208,28 +209,6 @@ nvim_lsp.sumneko_lua.setup({
 	-- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
 	capabilities = capabilities,
 	on_attach = on_attach,
-	-- settings = {
-	-- 	Lua = {
-	-- 		runtime = {
-	-- 			-- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-	-- 			version = "LuaJIT",
-	-- 			-- Setup your lua path
-	-- 			path = runtime_path,
-	-- 		},
-	-- 		diagnostics = {
-	-- 			-- Get the language server to recognize the `vim` global
-	-- 			globals = { "vim" },
-	-- 		},
-	-- 		workspace = {
-	-- 			-- Make the server aware of Neovim runtime files
-	-- 			library = vim.api.nvim_get_runtime_file("", true),
-	-- 		},
-	-- 		-- Do not send telemetry data containing a randomized but unique identifier
-	-- 		telemetry = {
-	-- 			enable = false,
-	-- 		},
-	-- 	},
-	-- },
 })
 -- JAVA LS
 -- It is temporarily out of service due to not being compiled
@@ -358,6 +337,7 @@ require("null-ls").setup({
 		null_ls.builtins.diagnostics.pylint,
 		null_ls.builtins.formatting.black,
 		null_ls.builtins.formatting.djhtml,
+        -- Spelling
 		null_ls.builtins.completion.spell.with({
 			filetypes = { "markdown", "org" },
 		}),
@@ -374,10 +354,10 @@ require("null-ls").setup({
 	},
 })
 -- Notetaking related LSP
-nvim_lsp.ltex.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-})
+-- nvim_lsp.ltex.setup({
+-- 	capabilities = capabilities,
+-- 	on_attach = on_attach,
+-- })
 nvim_lsp.zeta_note.setup({
 	capabilities = capabilities,
 	on_attach = on_attach,

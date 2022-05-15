@@ -20,8 +20,11 @@ lua<<EOF
 -- local map = vim.keymap.set
 local default_opts = {noremap = true}
 
--- map('i', '<C-Space>', "<C-Right>", default_opts)
--- map('i', '<C-CR>', "<ESC>O", default_opts)
+-- FAILED REMAP FOR ORGMODE
+-- vim.api.nvim_create_autocmd("FileType", {
+--     pattern = "org",
+--     callback = function() vim.keymap.set('i', '<C-CR>', '<ESC><leader><CR>i', defaul_opts) end,-- Or myvimfun
+--     })
 
 -- TODO make mappings with newly added vim.keymap
 -- See : https://github.com/neovim/neovim/pull/16591
@@ -49,7 +52,24 @@ vim.keymap.set('n', '<leader>tu', "<cmd>lua require'close_buffers'.delete({type 
 vim.keymap.set('n', '<leader>tc', "<cmd>lua require'close_buffers'.delete({type = 'this'})<cr>", {noremap = true, silent = true})
 vim.keymap.set('n', '<leader>tt', ":bd<cr>", {noremap = true, silent = true})
 -- map('n', '<M-t>', "<cmd>lua require('rose-pine.functions').toggle_variant()<cr>", {noremap = true, silent = true})
+-- Syntax Tree Surfer
+-- Normal Mode Swapping
+vim.api.nvim_set_keymap("n", "vd", '<cmd>lua require("syntax-tree-surfer").move("n", false)<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "vu", '<cmd>lua require("syntax-tree-surfer").move("n", true)<cr>', {noremap = true, silent = true})
+-- .select() will show you what you will be swapping with .move(), you'll get used to .select() and .move() behavior quite soon!
+vim.api.nvim_set_keymap("n", "vx", '<cmd>lua require("syntax-tree-surfer").select()<cr>', {noremap = true, silent = true})
+-- .select_current_node() will select the current node at your cursor
+vim.api.nvim_set_keymap("n", "vn", '<cmd>lua require("syntax-tree-surfer").select_current_node()<cr>', {noremap = true, silent = true})
 
+-- NAVIGATION: Only change the keymap to your liking. I would not recommend changing anything about the .surf() parameters!
+vim.api.nvim_set_keymap("x", "J", '<cmd>lua require("syntax-tree-surfer").surf("next", "visual")<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("x", "K", '<cmd>lua require("syntax-tree-surfer").surf("prev", "visual")<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("x", "H", '<cmd>lua require("syntax-tree-surfer").surf("parent", "visual")<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("x", "L", '<cmd>lua require("syntax-tree-surfer").surf("child", "visual")<cr>', {noremap = true, silent = true})
+
+-- SWAPPING WITH VISUAL SELECTION: Only change the keymap to your liking. Don't change the .surf() parameters!
+vim.api.nvim_set_keymap("x", "<A-j>", '<cmd>lua require("syntax-tree-surfer").surf("next", "visual", true)<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("x", "<A-k>", '<cmd>lua require("syntax-tree-surfer").surf("prev", "visual", true)<cr>', {noremap = true, silent = true})
 -- TROUBLE
 -- Lua
 vim.keymap.set("n", "<leader>xx", "<cmd>Trouble<cr>",
@@ -92,6 +112,7 @@ EOF
 " mfussenegger/nvim-ts-hint-textobject TreeSitter plugin for highlightingg parts of the code using sytax tree
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 vnoremap <silent> m :lua require('tsht').nodes()<CR>
+nnoremap <silent> <leader>m :lua require('tsht').jump_nodes()<CR>
 nnoremap <M-m> :MinimapToggle<CR>
 " " Experimental insert mode surround functionality
 " imap <C-S> <Plug>Isurround

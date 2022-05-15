@@ -1,7 +1,7 @@
 let g:did_load_filetypes = 0
 lua require('impatient.lua.impatient')
 let g:plug_home = stdpath('data').'/plugged' 
-set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h6.5
+set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h11
 set confirm
 set title titlestring=NeoVim\ 🧠\ %(%{expand(\"%:~:.:h\")}%)/%t
 set encoding=utf-8
@@ -27,6 +27,7 @@ set signcolumn=yes
 set cul
 set undofile
 set colorcolumn=80
+set pumheight=8
 set termguicolors
 runtime plugins.vim
 lua require('init')
@@ -37,5 +38,4 @@ augroup highlight_yank
 augroup END
 set completeopt=menu,menuone,noselect
 let g:cursorhold_updatetime = 500
-let g:rose_pine_variant = 'moon'
 colorscheme kanagawa

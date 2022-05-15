@@ -3,14 +3,13 @@ Plug 'nathom/filetype.nvim'
 Plug 'tpope/vim-repeat'
 Plug 'michaelb/sniprun', {'do': 'bash install.sh'}
 Plug 'rcarriga/nvim-notify'
-" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-" Plug 'nvim-treesitter/nvim-treesitter', {'branch' : '0.5-compat', 'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
 " Plug 'Jason-M-Chan/ts-textobjects'
 Plug 'p00f/nvim-ts-rainbow'
 Plug 'nvim-treesitter/playground'
-Plug 'mfussenegger/nvim-treehopper'
+Plug 'max397574/nvim-treehopper'
+Plug 'ziontee113/syntax-tree-surfer'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
@@ -76,7 +75,7 @@ Plug 'karb94/neoscroll.nvim'
 " Would be better orginizer than focus.nvim?
 Plug 'simeji/winresizer'
 Plug 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
-Plug 'chentau/marks.nvim'
+Plug 'chentoast/marks.nvim'
 " Plug 'tversteeg/registers.nvim'
 " Plug 'AckslD/nvim-neoclip.lua'
 " Buffer select. The preview over extends form the borders to window
@@ -86,7 +85,7 @@ Plug 'ray-x/lsp_signature.nvim'
 Plug 'simrat39/symbols-outline.nvim'
 Plug 'narutoxy/dim.lua'
 " Plug 'ldelossa/litee.nvim'
-Plug 'kyazdani42/nvim-tree.lua'
+" Plug 'kyazdani42/nvim-tree.lua'
 Plug 'nvim-neo-tree/neo-tree.nvim'
 Plug 'MunifTanjim/nui.nvim'
 Plug 'antoinemadec/FixCursorHold.nvim'
@@ -142,6 +141,9 @@ Plug 'mvllow/modes.nvim'
 Plug 'mbbill/undotree'
 Plug 'mhinz/vim-startify'
 Plug 'akinsho/toggleterm.nvim'
+" Markdown
+Plug 'jakewvincent/mkdnflow.nvim'
+Plug 'iamcco/markdown-preview.nvim'
 Plug 'ellisonleao/glow.nvim'
 Plug 'kristijanhusak/orgmode.nvim'
 Plug 'lukas-reineke/headlines.nvim'
@@ -158,33 +160,19 @@ let g:VM_maps['Find Under']         = '<M-d>'
 let g:VM_maps['Find Subword Under'] = '<M-d>'
 
 let g:surround_no_insert_mappings = 1 " No insert mode surround
-
 let g:winresizer_vert_resize = 5
 
-let g:nvim_tree_quit_on_open = 1 " There is a loop in nvim tree if I open a file wiht telescope in start page
-let g:nvim_tree_git_hl = 1
-let g:nvim_tree_highlight_opened_files = 1
-let g:nvim_tree_group_empty = 1
-let g:nvim_tree_indent_markers = 1
-let g:nvim_tree_window_picker_exclude = {
-    \   'filetype': [
-    \     'packer',
-    \     'minimap',
-    \     'qf'
-    \   ],
-    \   'buftype': [
-    \     'terminal'
-    \   ]
-    \ }
+" let g:minimap_auto_start = 1
 let g:minimap_git_colors = 1
 let g:minimap_highlight_search = 1
-let g:minimap_auto_start_win_enter = 1
+" let g:minimap_auto_start_win_enter = 1
 let g:minimap_diffadd_color = "GitSignsAdd"
 let g:minimap_diffremove_color = 'GitSignsDelete'
 let g:minimap_diff_color = 'GitSignsChange'
 hi MinimapCurrentLine ctermfg=Green guifg=#50FA7B guibg=#32302f
 let g:minimap_highlight = 'MinimapCurrentLine'
-let g:minimap_block_filetypes = ['NerdTree', 'startify']
+let g:minimap_block_filetypes = ['neo-tree', 'startify']
+let minimap_close_buftypes = ["nofile"]
 
 function! s:gitModified()
     let files = systemlist('git ls-files -m 2>/dev/null')

@@ -7,36 +7,49 @@ require("gitsigns").setup({
 	on_attach = function(bufnr)
 		local gs = package.loaded.gitsigns
 
+		local function map(mode, l, r, opts)
+			opts = opts or {}
+			opts.buffer = bufnr
+			vim.keymap.set(mode, l, r, opts)
+		end
+
 		-- Navigation
-		vim.keymap.set("n", "]c", "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
-		vim.keymap.set("n", "[c", "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true })
+		map("n", "]c", function()
+			if vim.wo.diff then
+				return "]c"
+			end
+			vim.schedule(function()
+				gs.next_hunk()
+			end)
+			return "<Ignore>"
+		end, { expr = true })
+
+		map("n", "[c", function()
+			if vim.wo.diff then
+				return "[c"
+			end
+			vim.schedule(function()
+				gs.prev_hunk()
+			end)
+			return "<Ignore>"
+		end, { expr = true })
 
 		-- Actions
-		vim.keymap.set({ "n", "v" }, "<leader>hs", gs.stage_hunk)
-		vim.keymap.set({ "n", "v" }, "<leader>hr", gs.reset_hunk)
-		vim.keymap.set("n", "<leader>hS", gs.stage_buffer)
-		vim.keymap.set("n", "<leader>hu", gs.undo_stage_hunk)
-		vim.keymap.set("n", "<leader>hR", gs.reset_buffer)
-		vim.keymap.set("n", "<leader>hp", gs.preview_hunk)
-		vim.keymap.set("n", "<leader>hb", function()
-			gs.blame_line({ full = true })
-		end)
-		vim.keymap.set("n", "<leader>tb", gs.toggle_current_line_blame)
-		vim.keymap.set("n", "<leader>hd", gs.diffthis)
-		vim.keymap.set("n", "<leader>hD", function()
-			gs.diffthis("~")
-		end)
-		vim.keymap.set("n", "<leader>td", gs.toggle_deleted)
+		map({ "n", "v" }, "<leader>hs", ":Gitsigns stage_hunk<CR>")
+		map({ "n", "v" }, "<leader>hr", ":Gitsigns reset_hunk<CR>")
+		map("n", "<leader>hS", ":Gitsigns stage_buffer<CR>")
+		map("n", "<leader>hu", ":Gitsigns undo_stage_hunk<CR>")
+		map("n", "<leader>hR", ":Gitsigns reset_hunk<CR>")
+		map("n", "<leader>hp", ":Gitsigns preview_hunk<CR>")
+		map("n", "<leader>hb", ":Gitsigns blame_line<CR>")
+		-- map("n", "<leader>tb", gs.toggle_current_line_blame)
+		-- map("n", "<leader>hd", ":Gitsigns diffthis<CR>")
+		-- map("n", "<leader>hD", function()
+		-- 	gs.diffthis("~")
+		-- end)
+		map("n", "<leader>td", ":Gitsigns toggle_deleted<CR>")
 
 		-- Text object
-		vim.keymap.set({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+		map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
 	end,
-	-- status_formatter = function(status)
-	--       local added, changed, removed = status.added, status.changed, status.removed
-	--       local status_txt = {}
-	--       if added   and added   > 0 then table.insert(status_txt, ' '..added  ) end
-	--       if changed and changed > 0 then table.insert(status_txt, ' '..changed) end
-	--       if removed and removed > 0 then table.insert(status_txt, ' '..removed) end
-	--       return table.concat(status_txt, ' ')
-	-- end
 })

@@ -8,7 +8,14 @@ require("orgmode").setup({
 		TODO = ":background #000000 :foreground red", -- overrides builtin color for `TODO` keyword
 	},
 })
-require("headlines").setup()
+require("headlines").setup({
+	markdown = {
+		fat_headlines = false,
+	},
+	org = {
+		fat_headlines = false,
+	},
+})
 require("org-bullets").setup({
 	symbols = { "◉", "○", "✸", "✿" },
 	-- or a function that receives the defaults and returns a list
