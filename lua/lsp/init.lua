@@ -205,11 +205,14 @@ nvim_lsp.gopls.setup({
 -- local runtime_path = vim.split(package.path, ";")
 -- table.insert(runtime_path, "lua/?.lua")
 -- table.insert(runtime_path, "lua/?/init.lua")
-nvim_lsp.sumneko_lua.setup({
-	-- cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+local luadev = require("lua-dev").setup({
+  -- add any options here, or leave empty to use the default settings
+  lspconfig = {
 	capabilities = capabilities,
 	on_attach = on_attach,
+  },
 })
+nvim_lsp.sumneko_lua.setup(luadev)
 -- JAVA LS
 -- It is temporarily out of service due to not being compiled
 -- TODO make it more dynamic
@@ -358,9 +361,4 @@ require("null-ls").setup({
 -- 	capabilities = capabilities,
 -- 	on_attach = on_attach,
 -- })
-nvim_lsp.zeta_note.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-	cmd = { "zeta-note" },
-	root_dir = util.root_pattern(".zeta.toml", ".git"),
-})
+nvim_lsp.marksman.setup{}

@@ -49,6 +49,7 @@ Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
 Plug 'folke/trouble.nvim'
 " Plug 'octaltree/cmp-look'
 Plug 'hrsh7th/cmp-nvim-lua'
+Plug 'folke/lua-dev.nvim'
 Plug 'onsails/lspkind-nvim'
 Plug 'hrsh7th/cmp-calc'
 Plug 'f3fora/cmp-spell'
@@ -184,6 +185,7 @@ function! s:gitUntracked()
     return map(files, "{'line': v:val, 'path': v:val}")
 endfunction
 let g:startify_bookmarks = [ {'c': '~/.config/nvim/'}, {'O': '~/Documents/Org/'}, {'N': '~/Documents/Obsidasion/'}, '~/.zshrc' ]
+let g:startify_session_dir = stdpath('data').'/sessions'
 let g:startify_lists = [
         \ { 'type': 'files',     'header': ['   MRU']            },
         \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
