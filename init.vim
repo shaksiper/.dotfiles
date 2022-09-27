@@ -1,6 +1,5 @@
-let g:did_load_filetypes = 0
 lua require('impatient.lua.impatient')
-let g:plug_home = stdpath('data').'/plugged' 
+let g:plug_home = stdpath('data') . '/plugged'
 set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h11
 set confirm
 set title titlestring=NeoVim\ 🧠\ %(%{expand(\"%:~:.:h\")}%)/%t
@@ -24,7 +23,7 @@ set breakindent
 set smartcase ignorecase
 set scrolloff=4
 set signcolumn=yes
-set cul
+set cursorline
 set undofile
 set colorcolumn=80
 set pumheight=8
@@ -37,5 +36,6 @@ augroup highlight_yank
     au TextYankPost * silent! lua vim.highlight.on_yank { higroup='IncSearch', timeout=200 }
 augroup END
 set completeopt=menu,menuone,noselect
-let g:cursorhold_updatetime = 500
+" let g:cursorhold_updatetime = 500
+set updatetime=500
 colorscheme kanagawa

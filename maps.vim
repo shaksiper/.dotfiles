@@ -1,29 +1,36 @@
-let mapleader=" "
+let mapleader=' '
 nnoremap  <silent> <m-]>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 nnoremap  <silent> <m-[>  :if &modifiable && !&readonly && &modified <CR> :write<CR> :endif<CR>:bprev<CR>
 " start new change before deleting an entire line
 inoremap <c-u> <c-g>u<c-u>
 " Some language specific mappings
-au FileType go imap <buffer> <M-;> :=
-au FileType javascript imap <buffer> <M-;> =>
-autocmd FileType markdown noremap <leader>p :Glow<CR>
+" au FileType go imap <buffer> <M-;> :=
+" au FileType javascript imap <buffer> <M-;> =>
+" autocmd FileType markdown noremap <leader>p :Glow<CR>
 " Reselect the last pastedtext
 nnoremap <expr> gp '`[' . strpart(getregtype(), 0, 1) . '`]'
 " Reselect visual selection after indenting
 vnoremap < <gv
 vnoremap > >gv
 
-map <silent> <leader>ww :lua require('nvim-window').pick()<CR>
+" map <silent> <leader>ww :lua require('nvim-window').pick()<CR>
 nnoremap <C-t> :NeoTreeRevealToggle<CR>
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
-lua<<EOF
+lua << EOF
+
 -- local map = vim.keymap.set
 local default_opts = {noremap = true}
 
+vim.api.nvim_create_autocmd({"FileType"}, {
+    pattern = "markdown",
+    callback = function()
+        vim.keymap.set('n', '<leader>p', '<cmd>Glow<CR>', default_opts)
+    end,
+})
 -- FAILED REMAP FOR ORGMODE
 -- vim.api.nvim_create_autocmd("FileType", {
 --     pattern = "org",
---     callback = function() vim.keymap.set('i', '<C-CR>', '<ESC><leader><CR>i', defaul_opts) end,-- Or myvimfun
+--     callback = function() vim.keymap.set('i', '<C-CR>', '<ESC><leader><CR>i', default_opts) end,-- Or myvimfun
 --     })
 
 -- TODO make mappings with newly added vim.keymap
@@ -40,10 +47,10 @@ vim.keymap.set('n', '<leader>fz', "<cmd>lua require'telescope.builtin'.current_b
 vim.keymap.set('n', '<leader>fj', "<cmd>lua require'telescope.builtin'.jumplist()<cr>", default_opts)
 -- vim.keymap.set('v', '<leader>fc', "<cmd>Telescope lsp_range_code_actions<cr>", default_opts)
 vim.keymap.set('n', '<leader>fm', "<cmd>lua require'telescope.builtin'.marks()<cr>", default_opts)
-vim.keymap.set('n', '<leader>fsw', "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", default_opts)
-vim.keymap.set('n', '<leader>fsd', "<cmd>lua require'telescope.builtin'.lsp_document_symbols(require('telescope.themes').get_ivy({}))<cr>", default_opts)
+vim.keymap.set('n', '<leader>fws', "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", default_opts)
+vim.keymap.set('n', '<leader>fds', "<cmd>lua require'telescope.builtin'.lsp_document_symbols(require('telescope.themes').get_ivy({}))<cr>", default_opts)
 vim.keymap.set('n', '<leader>fdd', "<cmd>Telescope diagnostics bufnr=0<cr>", default_opts)
-vim.keymap.set('n', '<leader>fdw', "<cmd>Telescope diagnostics<cr>", default_opts)
+vim.keymap.set('n', '<leader>fwd', "<cmd>Telescope diagnostics<cr>", default_opts)
 vim.keymap.set('n', '<leader>fp', "<cmd>Telescope projects theme=dropdown<cr>", default_opts)
 vim.keymap.set('n', '<leader>fl', "<cmd>Telescope resume<cr>", default_opts)
 -- map('n', '<leader>fs', ":SearchSession<cr>", default_opts)
@@ -108,30 +115,32 @@ end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://*toggleterm#* lua set_terminal_keymaps()')
+vim.keymap.set("n", "<leader>sl", require('session-lens').search_session, default_opts)
+vim.keymap.set("n", "<leader>ss", "<cmd>SaveSession<CR>", default_opts)
+
+vim.keymap.set("n", "<leader>ee", "<cmd>FeMaco<CR>", default_opts)
 EOF
-" mfussenegger/nvim-ts-hint-textobject TreeSitter plugin for highlightingg parts of the code using sytax tree
+" mfussenegger/nvim-ts-hint-textobject TreeSitter plugin for highlighting parts of the code using sytax tree
 omap     <silent> m :<C-U>lua require('tsht').nodes()<CR>
 vnoremap <silent> m :lua require('tsht').nodes()<CR>
 nnoremap <silent> <leader>m :lua require('tsht').jump_nodes()<CR>
 nnoremap <M-m> :MinimapToggle<CR>
-" " Experimental insert mode surround functionality
-" imap <C-S> <Plug>Isurround
 " Replace word without affecting buffer.
 vnoremap <leader>rp "_dP
 nnoremap <leader>rp viw"_dP
 " Buffer pick
 nnoremap <leader>bb :BufferLinePick<CR>
-let g:winresizer_start_key="<leader>ws"
+" let g:winresizer_start_key="<leader>ws"
 nnoremap <leader>sw :ToggleAlternate<CR>
 
-let g:lightspeed_last_motion = ''
-augroup lightspeed_last_motion
-    autocmd!
-    autocmd User LightspeedSxEnter let g:lightspeed_last_motion = 'sx'
-    autocmd User LightspeedFtEnter let g:lightspeed_last_motion = 'ft'
-augroup end
-map <expr> ; g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"
-map <expr> , g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"
+" let g:lightspeed_last_motion = ''
+" augroup lightspeed_last_motion
+"     autocmd!
+"     autocmd User LightspeedSxEnter let g:lightspeed_last_motion = 'sx'
+"     autocmd User LightspeedFtEnter let g:lightspeed_last_motion = 'ft'
+" augroup end
+" map <expr> ; g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"
+" map <expr> , g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"
 
 nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
 nnoremap <silent> <F10> :lua require'dap'.step_over()<CR>
@@ -145,6 +154,7 @@ nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
 nmap <silent> <leader>td :lua require('dap-go').debug_test()<CR>
 
 " Pounce
-" nmap <C-s> <cmd>Pounce<CR>
-" vmap <C-S> <cmd>Pounce<CR>
-" omap gs <cmd>Pounce<CR>  " 's' is used by vim-surround
+nmap <leader><C-f> <cmd>Pounce<CR>
+vmap <leader><C-f> <cmd>Pounce<CR>
+" nmap <C-l> <cmd>PounceRepeat<CR>
+omap gs <cmd>Pounce<CR>  " 's' is used by vim-surround

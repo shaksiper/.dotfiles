@@ -21,7 +21,7 @@ Hydra({
 			border = "rounded",
 			-- position = "bottom",
 		},
-        invoke_on_body = true,
+		invoke_on_body = true,
 	},
 	mode = "n",
 	body = " ww", -- <leader> won't work for some reason
@@ -79,3 +79,49 @@ Hydra({
 		{ "<Esc>", nil, { exit = true, desc = false } },
 	},
 })
+-- TODO: summon hydra from within another hydra
+-- Hydra({
+-- 	name = "TS Text Objects Promenade",
+-- 	config = {
+-- 		timeout = 4000,
+-- 		hint = {
+-- 			border = "rounded",
+-- 			-- position = "bottom",
+-- 		},
+-- 		-- color = "pink",
+-- 	},
+-- 	mode = "n",
+-- 	body = " [", -- <leader> won't work for some reason
+-- 	heads = {
+-- 		{ "e", cmd("TSTextobjectGotoPreviousStart " .. "@parameter.inner") },
+-- 		{ "c", cmd("TSTextobjectGotoPreviousStart " .. "@class.outer") },
+-- 		{ "f", cmd("TSTextobjectGotoPreviousStart " .. "@function.outer") },
+-- 		{ "]", " ]", opts = { exit = true, desc = false } },
+-- 		-- { "s", cmd("TSTextobjectGotoNextStart " .. "@statement.outer") },
+-- 		{ "q", cmd([[try | close | catch /^Vim\%((\a\+)\)\=:E444:/ | endtry]]) },
+-- 		-- { "<Esc>", nil, { exit = true, desc = false } },
+-- 	},
+-- })
+-- Hydra({
+-- 	name = "Tree-sitter Text Objects Promenade",
+-- 	config = {
+-- 		timeout = 4000,
+-- 		hint = {
+-- 			border = "rounded",
+-- 			-- position = "bottom",
+-- 		},
+-- 		color = "pink",
+--         invoke_on_body = true,
+-- 	},
+-- 	mode = "n",
+-- 	body = " ]", -- <leader> won't work for some reason
+-- 	heads = {
+-- 		{ "e", cmd("TSTextobjectGotoNextStart " .. "@parameter.inner") },
+-- 		{ "c", cmd("TSTextobjectGotoNextStart " .. "@class.outer") },
+-- 		{ "f", cmd("TSTextobjectGotoNextStart " .. "@function.outer") },
+-- 		-- { "s", cmd("TSTextobjectGotoNextStart " .. "@statement.outer") },
+-- 		{ "q", cmd([[try | close | catch /^Vim\%((\a\+)\)\=:E444:/ | endtry]]) },
+-- 		{ "[", " [", opts = { exit = true, desc = false } },
+-- 		-- { "<Esc>", nil, { exit = true, desc = false } },
+-- 	},
+-- })

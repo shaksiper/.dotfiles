@@ -33,7 +33,7 @@ require("neo-tree").setup({
 		-- },
 		follow_current_file = true, -- This will find and focus the file in the active buffer every
 		-- time the current file is changed while the tree is open.
-		use_libuv_file_watcher = false, -- This will use the OS level file watchers
+		use_libuv_file_watcher = true, -- This will use the OS level file watchers
 		-- to detect changes instead of relying on nvim autocmd events.
 		hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
 		-- in whatever position is specified in window.position

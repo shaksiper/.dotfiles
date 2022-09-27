@@ -31,15 +31,19 @@ function custom_actions._multiopen(prompt_bufnr, open_cmd)
 		end
 	end
 end
+
 function custom_actions.multi_selection_open_vsplit(prompt_bufnr)
 	custom_actions._multiopen(prompt_bufnr, "vsplit")
 end
+
 function custom_actions.multi_selection_open_split(prompt_bufnr)
 	custom_actions._multiopen(prompt_bufnr, "split")
 end
+
 function custom_actions.multi_selection_open_tab(prompt_bufnr)
 	custom_actions._multiopen(prompt_bufnr, "tabe")
 end
+
 function custom_actions.multi_selection_open(prompt_bufnr)
 	custom_actions._multiopen(prompt_bufnr, "edit")
 end
@@ -73,6 +77,7 @@ telescope.setup({
 				["<c-s>"] = custom_actions.multi_selection_open_split,
 				["<c-t>"] = custom_actions.multi_selection_open_tab,
 				["<c-b>"] = action_layout.toggle_preview,
+				["<C-/>"] = "which_key",
 				["<C-h>"] = function(prompt_bufnr)
 					telescope.extensions.hop.hop(prompt_bufnr)
 					actions.select_default(prompt_bufnr)

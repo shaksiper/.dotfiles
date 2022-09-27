@@ -18,7 +18,7 @@ luasnip.config.setup({
 })
 local cmp = require("cmp")
 -- TABNINE setup
-local tabnine = require("cmp_tabnine.config")
+--[[ local tabnine = require("cmp_tabnine.config")
 tabnine:setup({
 	max_lines = 1000,
 	max_num_results = 10,
@@ -26,11 +26,12 @@ tabnine:setup({
 	run_on_every_keystroke = true,
 	snippet_placeholder = "..",
     show_prediction_strength = true
-})
+}) ]]
 local cmp_settings = {
+
 	experimental = {
 		ghost_text = true,
-        native_menu = false,
+		native_menu = false,
 	},
 	-- You can set mappings if you want
 	mapping = {
@@ -88,11 +89,11 @@ local cmp_settings = {
 	-- You should specify your *installed* sources.
 	sources = cmp.config.sources({
 		{ name = "nvim_lsp" },
-		{ name = "cmp_tabnine", keyword_length = 4 },
+		-- { name = "cmp_tabnine", keyword_length = 4 },
 		-- { name = 'fzy_buffer' },
 		{ name = "buffer", keyword_length = 4, max_item_count = 15 },
 		{ name = "luasnip" },
-		{ name = "orgmode" },
+		-- { name = "orgmode" },
 		{ name = "treesitter", keyword_length = 5, max_item_count = 10 },
 		{ name = "path" },
 		{ name = "nvim_lua" },
@@ -102,18 +103,34 @@ local cmp_settings = {
 		completion = cmp.config.window.bordered(),
 		documentation = cmp.config.window.bordered(),
 	},
+	-- formatting = {
+	-- 	format = function(entry, vim_item)
+	-- 		if entry.source.name == "buffer" then
+	-- 			vim_item.menu = "[Buffer]"
+	-- 		elseif entry.source.name == "nvim_lsp" then
+	-- 			vim_item.menu = "{" .. entry.source.source.client.name .. "}"
+	-- 		else
+	-- 			vim_item.menu = "[" .. entry.source.name .. "]"
+	-- 		end
+
+	-- 		return vim_item
+	-- 	end,
+	-- },
 	formatting = {
+		fields = { "kind", "abbr", "menu" },
 		format = lspkind.cmp_format({
+			mode = "symbol",
+			maxwidth = 50,
 			menu = {
 				buffer = "[buf]",
-				cmp_tabnine = "[T9]",
+				-- cmp_tabnine = "[T9]",
 				nvim_lsp = "[lsp]",
 				nvim_lua = "[nlua]",
 				path = "[path]",
 				luasnip = "[snip]",
 				treesitter = "[tsit]",
 				calc = "[clc]",
-				orgmode = "[org]",
+				-- orgmode = "[org]",
 				-- fzy_buffer = "[fzy]"
 			},
 		}),

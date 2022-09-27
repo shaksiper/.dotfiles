@@ -1,5 +1,5 @@
 require("tsht").config.hint_keys = { "h", "j", "f", "d", "n", "v", "s", "l", "a" }
-require('orgmode').setup_ts_grammar()
+require("orgmode").setup_ts_grammar()
 require("nvim-treesitter.configs").setup({
 	ensure_installed = "all",
 	rainbow = {
@@ -13,7 +13,7 @@ require("nvim-treesitter.configs").setup({
 		-- set this to `true` if you depend on 'syntax' being enabled (like for indentation).
 		-- using this option may slow down your editor, and you may see some duplicate highlights.
 		-- instead of true it can also be a list of languages
-		additional_vim_regex_highlighting = { "org" }, -- for org mode treesitter highlight
+		additional_vim_regex_highlighting = false,
 	},
 	context_commentstring = {
 		enable = true,
@@ -38,10 +38,10 @@ require("nvim-treesitter.configs").setup({
 		navigation = {
 			enable = true,
 			keymaps = {
-				list_definitions = "gld",
-				list_definitions_toc = "go",
-				goto_next_usage = "<a-*>",
-				goto_previous_usage = "<a-#>",
+				-- list_definitions = "gld",
+				-- list_definitions_toc = "go",
+				goto_next_usage = "<leader>*",
+				goto_previous_usage = "<leader>#",
 			},
 		},
 		smart_rename = {
@@ -50,12 +50,13 @@ require("nvim-treesitter.configs").setup({
 				smart_rename = "grr",
 			},
 		},
-		highlight_definitions = { enable = true },
+		-- highlight_current_scope = { enable = true },
+		-- highlight_definitions = { enable = true }, -- highligh the word under cursor
 	},
 	textobjects = {
 		select = {
 			enable = true,
-
+			include_surrounding_whitespace = true,
 			-- automatically jump forward to textobj, similar to targets.vim
 			lookahead = true,
 

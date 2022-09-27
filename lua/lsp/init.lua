@@ -1,6 +1,19 @@
 -- LSP settings
 local nvim_lsp = require("lspconfig")
-local util = require("lspconfig.util")
+vim.diagnostic.config({
+	virtual_text = true,
+	signs = true,
+	underline = true,
+	update_in_insert = false,
+	severity_sort = false,
+})
+
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+	local hl = "DiagnosticSign" .. type
+	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
+-- local util = require("lspconfig.util")
 local cfg = {
 	bind = true, -- This is mandatory, otherwise border config won't get registered.
 	-- If you want to hook lspsaga or other signature handler, pls set to false
@@ -16,11 +29,7 @@ local cfg = {
 	handler_opts = {
 		border = "single", -- double, single, shadow, none
 	},
-
 	trigger_on_newline = false, -- set to true if you need multiple line parameter, sometime show signature on new line can be confusing, set it to false for #58
-	extra_trigger_chars = {}, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
-	-- deprecate !!
-	-- decorator = {"`", "`"}  -- this is no longer needed as nvim give me a handler and it allow me to highlight active parameter in floating_window
 	zindex = 200, -- by default it will be on top of all floating windows, set to 50 send it to bottom
 
 	padding = "", -- character to pad on left and right of signature can be ' ', or '|'  etc
@@ -30,24 +39,72 @@ local cfg = {
 require("lsp_signature").setup(cfg)
 local saga = require("lspsaga")
 saga.init_lsp_saga({
-	code_action_prompt = {
+	diagnostic_header = { " ", " ", " ", "ﴞ " },
+	-- show_diagnostic_source = true,
+	saga_winblend = 15,
+	symbol_in_winbar = {
+		in_custom = false,
 		enable = true,
-		sign = true,
-		sign_priority = 20,
-		virtual_text = true,
+		separator = " ",
+		show_file = true,
+		click_support = false,
 	},
+	-- diagnostic_header_icon = "   ",
+	-- code_action_icon = " ",
+	code_action_num_shortcut = false,
+	code_action_lightbulb = {
+		enable = false,
+		--[[ sign = true,
+		sign_priority = 20,
+		virtual_text = false, ]]
+	},
+	-- preview lines of lsp_finder and definition preview
+	max_preview_lines = 10,
+	finder_action_keys = {
+		open = "o",
+		vsplit = "<c-v>",
+		split = "<c-s>",
+		tabe = "t",
+		quit = "<ESC>",
+		scroll_down = "<C-f>",
+		scroll_up = "<C-b>", -- quit can be a table
+	},
+	code_action_keys = {
+		quit = "<ESC>",
+		exec = "<CR>",
+	},
+	rename_action_quit = "<ECS>",
+	-- definition_preview_icon = "  ",
 })
+--[[ local navic = require("nvim-navic")
+navic.setup({
+	highlight = false,
+	separator = " ",
+	depth_limit = 5,
+	depth_limit_indicator = "..",
+}) ]]
 
--- go to preview plugin setup to show a floating window for def/imp preview
--- require('goto-preview').setup {
---     width = 100; -- Width of the floating window
---     height = 15; -- Height of the floating window
---     default_mappings = false; -- Bind default mappings
---     debug = false; -- Print debug information
---     opacity = nil; -- 0-100 opacity level of the floating window where 100 is fully transparent.
---     post_open_hook = nil -- A function taking two arguments, a buffer and a window to be ran as a hook.
--- }
-local on_attach = function(_, bufnr) -- (client, bufnr)
+local on_attach = function(client, bufnr) -- (client, bufnr)
+	-- used to use tree-sitter-refactor for highlighting definitions under cursor
+	if client.server_capabilities.documentHighlightProvider then
+		vim.api.nvim_create_augroup("lsp_document_highlight", {
+			clear = false,
+		})
+		vim.api.nvim_clear_autocmds({
+			buffer = bufnr,
+			group = "lsp_document_highlight",
+		})
+		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+			group = "lsp_document_highlight",
+			buffer = bufnr,
+			callback = vim.lsp.buf.document_highlight,
+		})
+		vim.api.nvim_create_autocmd("CursorMoved", {
+			group = "lsp_document_highlight",
+			buffer = bufnr,
+			callback = vim.lsp.buf.clear_references,
+		})
+	end
 	-- require'lsp_signature'.on_attach(cfg, bufnr)
 	-- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc') -- why was it here anyways??
 
@@ -73,7 +130,7 @@ local on_attach = function(_, bufnr) -- (client, bufnr)
 	vim.keymap.set("v", "<leader>ca", ":Telescope range_code_action<CR>", opts)
 
 	vim.keymap.set("n", "<leader>cla", "V:<C-U>Lspsaga range_code_action<CR>", opts) -- Code line action
-	vim.keymap.set("n", "<leader>gh", "<cmd>lua require('lspsaga.provider').lsp_finder()<CR>", opts)
+	vim.keymap.set("n", "gh", "<cmd>Lspsaga lsp_finder<CR>", opts)
 	vim.keymap.set("n", "<leader>gf", "<cmd>lua vim.lsp.buf.format{ asyny = true }<CR>", opts)
 	vim.keymap.set("v", "<leader>gf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
 	vim.keymap.set("n", "<leader>glf", "V<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts) -- Code line formatting, for whatever it's worth.
@@ -86,6 +143,10 @@ end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+-- capabilities.textDocument.foldingRange = { -- set as such for nvim.ufo
+-- 	dynamicRegistration = false,
+-- 	lineFoldingOnly = true,
+-- }
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
 	properties = {
@@ -93,6 +154,10 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 		"detail",
 		"additionalTextEdits",
 	},
+}
+capabilities.textDocument.foldingRange = {
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
 }
 nvim_lsp.intelephense.setup({
 	-- cmd = { "phpactor", "-vvv", "language-server" },
@@ -206,11 +271,11 @@ nvim_lsp.gopls.setup({
 -- table.insert(runtime_path, "lua/?.lua")
 -- table.insert(runtime_path, "lua/?/init.lua")
 local luadev = require("lua-dev").setup({
-  -- add any options here, or leave empty to use the default settings
-  lspconfig = {
-	capabilities = capabilities,
-	on_attach = on_attach,
-  },
+	-- add any options here, or leave empty to use the default settings
+	lspconfig = {
+		capabilities = capabilities,
+		on_attach = on_attach,
+	},
 })
 nvim_lsp.sumneko_lua.setup(luadev)
 -- JAVA LS
@@ -312,7 +377,16 @@ require("null-ls").setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
 	sources = {
+		null_ls.builtins.diagnostics.vint,
 		null_ls.builtins.formatting.prettierd,
+		null_ls.builtins.formatting.rome,
+		-- C-like
+		null_ls.builtins.formatting.uncrustify,
+		null_ls.builtins.formatting.clang_format,
+		-- TODO: install/setup the following tools
+		-- null_ls.builtins.diagnostics.semgrep,
+		-- null_ls.builtins.diagnostics.golangci_lint,
+		--
 		-- null_ls.builtins.diagnostics.eslint_d,
 		-- null_ls.builtins.formatting.eslint_d,
 		-- See: [:h vim.lsp.buf.formatting_seq_sync]
@@ -331,16 +405,20 @@ require("null-ls").setup({
 		-- null_ls.builtins.formatting.gofmt,
 		null_ls.builtins.formatting.gofumpt, -- alternative to gofmt?
 		null_ls.builtins.formatting.goimports,
+		null_ls.builtins.diagnostics.buf, -- protocol buffer
+		null_ls.builtins.formatting.buf,
 		-- Lua
 		null_ls.builtins.formatting.stylua,
 		--Markdown
+		-- null_ls.builtins.formatting.cbfmt, -- FeMaco to edit/format codeblocks on separate buffer suffices.
 		null_ls.builtins.diagnostics.markdownlint,
 		null_ls.builtins.formatting.markdownlint,
+		-- null_ls.builtins.formatting.mdformat,
 		-- Python related
 		null_ls.builtins.diagnostics.pylint,
 		null_ls.builtins.formatting.black,
 		null_ls.builtins.formatting.djhtml,
-        -- Spelling
+		-- Spelling
 		null_ls.builtins.completion.spell.with({
 			filetypes = { "markdown", "org" },
 		}),
@@ -356,9 +434,29 @@ require("null-ls").setup({
 		}),
 	},
 })
--- Notetaking related LSP
--- nvim_lsp.ltex.setup({
--- 	capabilities = capabilities,
+nvim_lsp.marksman.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+nvim_lsp.csharp_ls.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})
+
+-- local pid = vim.fn.getpid() -- not a good LS
+-- nvim_lsp.omnisharp.setup({
+-- 	cmd = { "OmniSharp", "--languageserver", "--hostPID", tostring(pid) },
 -- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
 -- })
-nvim_lsp.marksman.setup{}
+-- local util = require 'lspconfig.util'
+nvim_lsp.graphql.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	-- root_dir =  util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*', '.git'),
+})
+
+nvim_lsp.gdscript.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+})

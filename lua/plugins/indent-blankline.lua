@@ -7,8 +7,9 @@ require("indent_blankline").setup({
 	filetype_exclude = { "startify" },
 	buftype_exclude = { "terminal", "nofile" },
 	use_treesitter = true,
+	use_treesitter_scope = true,
 	show_current_context = true,
-	show_trailing_blankline_indent = true,
+	show_trailing_blankline_indent = false,
 	char_list = { "│", "┊", "┆", "¦", "|", "⋅" },
 	show_current_context_start = true,
 	context_highlight_list = {
@@ -19,7 +20,7 @@ require("indent_blankline").setup({
 		"IndentBlanklineIndent5",
 		"IndentBlanklineIndent6",
 	},
-	context_patterns = {
+	--[[ context_patterns = {
 		"class",
 		"function",
 		"method",
@@ -34,8 +35,10 @@ require("indent_blankline").setup({
 		"argument_list",
 		"object",
 		"element",
-	},
+	}, ]]
 })
+
+-- vim.cmd([[highlight IndentBlanklineContextSpaceChar guifg=#ffd1dc gui=nocombine]])
 vim.cmd([[highlight IndentBlanklineIndent1 guifg=#56B6C2 gui=nocombine]])
 vim.cmd([[highlight IndentBlanklineIndent2 guifg=#E5C07B gui=nocombine]])
 vim.cmd([[highlight IndentBlanklineIndent3 guifg=#98C379 gui=nocombine]])
