@@ -159,18 +159,22 @@ capabilities.textDocument.foldingRange = {
 	dynamicRegistration = false,
 	lineFoldingOnly = true,
 }
+
+nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.default_config, {
+	on_attach = on_attach,
+	capabilities = capabilities,
+	flags = {
+		debounce_text_changes = 150,
+	},
+})
 nvim_lsp.intelephense.setup({
 	-- cmd = { "phpactor", "-vvv", "language-server" },
 	cmd = { "intelephense", "--stdio" },
-	on_attach = on_attach,
-	capabilities = capabilities,
 	filetypes = { "php" },
 	-- root_dir = root_pattern("composer.json", ".git"),
 })
 nvim_lsp.html.setup({
 	cmd = { "vscode-html-language-server", "--stdio" },
-	on_attach = on_attach,
-	capabilities = capabilities,
 	filetypes = { "html" },
 	init_options = {
 		configurationSection = { "html", "css", "javascript" },
@@ -185,9 +189,7 @@ nvim_lsp.html.setup({
 	settings = {},
 })
 -- CSS Language Server
-nvim_lsp.cssls.setup({
-	capabilities = capabilities,
-})
+nvim_lsp.cssls.setup({})
 local configs = require("lspconfig/configs")
 if not nvim_lsp.emmet_ls then
 	configs.emmet_ls = {
@@ -218,27 +220,17 @@ if not nvim_lsp.emmet_ls then
 		},
 	}
 end
-nvim_lsp.emmet_ls.setup({ capabilities = capabilities })
+nvim_lsp.emmet_ls.setup({})
 
-nvim_lsp.cssls.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-})
-nvim_lsp.jsonls.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-})
+nvim_lsp.cssls.setup({})
+nvim_lsp.jsonls.setup({})
 
 -- Vim LSP
 nvim_lsp.vimls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
 	-- Defaults
 })
 -- TSSERVER
 nvim_lsp.tsserver.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
 	-- Defaults
 })
 -- ray-x/go.nvim init
@@ -250,8 +242,6 @@ require("go").setup({
 })
 -- GOPLS
 nvim_lsp.gopls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
 	cmd = { "gopls", "serve" },
 	settings = {
 		gopls = {
@@ -272,12 +262,16 @@ nvim_lsp.gopls.setup({
 -- table.insert(runtime_path, "lua/?/init.lua")
 local luadev = require("lua-dev").setup({
 	-- add any options here, or leave empty to use the default settings
-	lspconfig = {
-		capabilities = capabilities,
-		on_attach = on_attach,
+})
+nvim_lsp.sumneko_lua.setup({
+	settings = {
+		Lua = {
+			completion = {
+				callSnippet = "Replace",
+			},
+		},
 	},
 })
-nvim_lsp.sumneko_lua.setup(luadev)
 -- JAVA LS
 -- It is temporarily out of service due to not being compiled
 -- TODO make it more dynamic
@@ -291,10 +285,7 @@ nvim_lsp.sumneko_lua.setup(luadev)
 --     end, --]]
 -- })
 -- JDTLS from eclipse
-nvim_lsp.jdtls.setup({
-	capabilities = capabilities,
-	on_attach = on_attach,
-})
+nvim_lsp.jdtls.setup({})
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 -- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
@@ -382,7 +373,9 @@ require("null-ls").setup({
 		null_ls.builtins.formatting.rome,
 		-- C-like
 		null_ls.builtins.formatting.uncrustify,
-		null_ls.builtins.formatting.clang_format,
+		-- null_ls.builtins.formatting.clang_format,
+		-- C#
+		null_ls.builtins.formatting.csharpier,
 		-- TODO: install/setup the following tools
 		-- null_ls.builtins.diagnostics.semgrep,
 		-- null_ls.builtins.diagnostics.golangci_lint,
@@ -432,15 +425,19 @@ require("null-ls").setup({
 				"markdown", --[[ "org" ]]
 			},
 		}),
+		null_ls.builtins.diagnostics.commitlint,
 	},
 })
-nvim_lsp.marksman.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
-nvim_lsp.csharp_ls.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
+nvim_lsp.marksman.setup({})
+
+nvim_lsp.rust_analyzer.setup({})
+
+-- nvim_lsp.csharp_ls.setup({
+
+-- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
+-- })
+
 })
 
 -- local pid = vim.fn.getpid() -- not a good LS
@@ -451,12 +448,7 @@ nvim_lsp.csharp_ls.setup({
 -- })
 -- local util = require 'lspconfig.util'
 nvim_lsp.graphql.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
 	-- root_dir =  util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*', '.git'),
 })
 
-nvim_lsp.gdscript.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-})
+nvim_lsp.gdscript.setup({})
