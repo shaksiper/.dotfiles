@@ -8,6 +8,6 @@ require("bufferline").setup({
 			local icon = level:match("error") and " " or " "
 			return " " .. icon .. count
 		end,
-		separator_style = "slant",
+		separator_style = "slope",
 	},
 })
