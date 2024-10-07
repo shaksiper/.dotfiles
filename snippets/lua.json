@@ -1,0 +1,1 @@
+{"reqplg":{"prefix":"reqplg","body":"require(\"plugins.$0\")"}}
