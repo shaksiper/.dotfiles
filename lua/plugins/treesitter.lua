@@ -1,22 +1,10 @@
 require("tsht").config.hint_keys = { "h", "j", "f", "d", "n", "v", "s", "l", "a" }
-require("orgmode").setup_ts_grammar()
+--require("orgmode").setup_ts_grammar()
 require("nvim-treesitter.configs").setup({
 	ensure_installed = "all",
-	rainbow = {
-		enable = true,
-		extended_mode = true, -- also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-		max_file_lines = 1000, -- do not enable for files with more than 1000 lines, int
-	},
 	highlight = {
-		enable = true, -- false will disable the whole extension
-		-- setting this to true will run `:h syntax` and tree-sitter at the same time.
-		-- set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-		-- using this option may slow down your editor, and you may see some duplicate highlights.
-		-- instead of true it can also be a list of languages
-		additional_vim_regex_highlighting = false,
-	},
-	context_commentstring = {
 		enable = true,
+		additional_vim_regex_highlighting = false,
 	},
 	autotag = {
 		enable = true,
@@ -26,9 +14,9 @@ require("nvim-treesitter.configs").setup({
 		enable = true,
 		keymaps = {
 			init_selection = "<leader>v",
-			node_incremental = "<cr>",
+			node_incremental = "v",
+			node_decremental = "V",
 			scope_incremental = "<tab>",
-			node_decremental = "<s-tab>",
 		},
 	},
 	indent = {
@@ -51,7 +39,7 @@ require("nvim-treesitter.configs").setup({
 			},
 		},
 		-- highlight_current_scope = { enable = true },
-		-- highlight_definitions = { enable = true }, -- highligh the word under cursor
+		-- highlight_definitions = { enable = true }, -- highlight the word under cursor
 	},
 	textobjects = {
 		select = {
@@ -62,57 +50,62 @@ require("nvim-treesitter.configs").setup({
 
 			keymaps = {
 				-- you can use the capture groups defined in textobjects.scm
-				["ae"] = "@parameter.outer",
-				["ie"] = "@parameter.inner",
-				["af"] = "@function.outer",
-				["if"] = "@function.inner",
-				["ac"] = "@class.outer",
-				["ic"] = "@class.inner",
+				["ae"] = { query = "@parameter.outer", desc = "Select around parameter" },
+				["ie"] = { query = "@parameter.inner", desc = "Select inside parameter" },
+				["af"] = { query = "@function.outer", desc = "Select around function" },
+				["if"] = { query = "@function.inner", desc = "Select inside function" },
+				["ac"] = { query = "@class.outer", desc = "Select around class" },
+				["ic"] = { query = "@class.inner", desc = "Select inside class" },
+
+				["a="] = { query = "@assignment.outer", desc = "Select outer part of an assignment" },
+				["i="] = { query = "@assignment.inner", desc = "Select inner part of an assignment" },
+				["l="] = { query = "@assignment.lhs", desc = "Select left hand side of an assignment" },
+				["r="] = { query = "@assignment.rhs", desc = "Select right hand side of an assignment" },
 			},
 		},
 		swap = {
 			enable = true,
 			swap_next = {
-				["<leader>a"] = "@parameter.inner",
+				["<leader>a"] = { query = "@parameter.inner", desc = "Swap parameter with the next" },
 			},
 			swap_previous = {
-				["<leader>A"] = "@parameter.inner",
+				["<leader>A"] = { query = "@parameter.inner", desc = "Swap parameter with the previous" },
 			},
 		},
 		move = {
 			enable = true,
 			set_jumps = true, -- whether to set jumps in the jumplist
 			goto_next_start = {
-				["]m"] = "@function.outer",
-				["]e"] = "@parameter.inner",
-				["]s"] = "@statement.outer",
-				["]]"] = "@class.outer",
+				["]m"] = { query = "@function.outer", desc = "Move to next func. start" },
+				["]e"] = { query = "@parameter.inner", desc = "Move to next param. start" },
+				["]s"] = { query = "@statement.outer", desc = "Move to next state. start" },
+				["]]"] = { query = "@class.outer", desc = "Move to next class start" },
 			},
 			goto_next_end = {
-				["]M"] = "@function.outer",
-				["]E"] = "@parameter.inner",
-				["]S"] = "@statement.outer",
-				["]["] = "@class.outer",
+				["]M"] = { query = "@function.outer", desc = "Move to next func. end" },
+				["]E"] = { query = "@parameter.inner", desc = "Move to next param. end" },
+				["]S"] = { query = "@statement.outer", desc = "Move to next state. end" },
+				["]["] = { query = "@class.outer", desc = "Move to next class end" },
 			},
 			goto_previous_start = {
-				["[m"] = "@function.outer",
-				["[e"] = "@parameter.inner",
-				["[s"] = "@statement.outer",
-				["[["] = "@class.outer",
+				["[m"] = { query = "@function.outer", desc = "Move to prev. func. start" },
+				["[e"] = { query = "@parameter.inner", desc = "Move to prev. param. start" },
+				["[s"] = { query = "@statement.outer", desc = "Move to prev. state. start" },
+				["[["] = { query = "@class.outer", desc = "Move to prev. class start" },
 			},
 			goto_previous_end = {
-				["[M"] = "@function.outer",
-				["[E"] = "@parameter.inner",
-				["[S"] = "@statement.outer",
-				["[]"] = "@class.outer",
+				["[M"] = { query = "@function.outer", desc = "Move to prev. func. end" },
+				["[E"] = { query = "@parameter.inner", desc = "Move to prev. param. end" },
+				["[S"] = { query = "@statement.outer", desc = "Move to prev. state. end" },
+				["[]"] = { query = "@class.outer", desc = "Move to prev. class end" },
 			},
 		},
 		lsp_interop = {
 			enable = false,
 			border = "single",
 			peek_definition_code = {
-				["<leader>df"] = "@function.outer",
-				["<leader>dp"] = "@class.outer",
+				["<leader>df"] = { query = "@function.outer", desc = "Peek definition of function" },
+				["<leader>dp"] = { query = "@class.outer", desc = "Peek definition of class" },
 			},
 		},
 	},
@@ -140,3 +133,18 @@ require("nvim-treesitter.configs").setup({
 		lint_events = { "bufwrite", "cursorhold" },
 	},
 })
+local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+-- example: make gitsigns.nvim movement repeatable with ; and , keys.
+local gs = require("gitsigns")
+
+-- make sure forward function comes first
+local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
+-- Or, use `make_repeatable_move` or `set_last_move` functions for more control. See the code for instructions.
+
+vim.keymap.set({ "n", "x", "o" }, "]h", next_hunk_repeat, { desc = "Next hunk" })
+vim.keymap.set({ "n", "x", "o" }, "[h", prev_hunk_repeat, { desc = "Previous hunk" })
+
+-- Repeat movement with ; and ,
+-- ensure ; goes forward and , goes backward regardless of the last direction
+vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
+vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)

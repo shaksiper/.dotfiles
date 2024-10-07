@@ -1,9 +1,9 @@
 require("gitsigns").setup({
     current_line_blame = true,
     numhl = true,
-    current_line_blame_formatter_opts = {
-        relative_time = true,
-    },
+    -- current_line_blame_formatter_opts = {
+    --     relative_time = true,
+    -- },
     on_attach = function(bufnr)
         local gs = package.loaded.gitsigns
 
@@ -16,25 +16,25 @@ require("gitsigns").setup({
         end
 
         -- Navigation
-        map("n", "]c", function()
-            if vim.wo.diff then
-                return "]c"
-            end
-            vim.schedule(function()
-                gs.next_hunk()
-            end)
-            return "<Ignore>"
-        end, { expr = true })
+        -- map("n", "]h", function()
+        --     if vim.wo.diff then
+        --         return "]h"
+        --     end
+        --     vim.schedule(function()
+        --         gs.next_hunk()
+        --     end)
+        --     return "<Ignore>"
+        -- end, { expr = true, desc = "Next Hunk" })
 
-        map("n", "[c", function()
-            if vim.wo.diff then
-                return "[c"
-            end
-            vim.schedule(function()
-                gs.prev_hunk()
-            end)
-            return "<Ignore>"
-        end, { expr = true })
+        -- map("n", "[h", function()
+        --     if vim.wo.diff then
+        --         return "[h"
+        --     end
+        --     vim.schedule(function()
+        --         gs.prev_hunk()
+        --     end)
+        --     return "<Ignore>"
+        -- end, { expr = true, desc = "Previous Hunk" })
 
         -- Actions
         map({ "n", "v" }, "<leader>hs", ":Gitsigns stage_hunk<CR>", { desc = "Stage hunk" })
