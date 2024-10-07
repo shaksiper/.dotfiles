@@ -18,6 +18,20 @@ nnoremap <C-t> :NeoTreeRevealToggle<CR>
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua << EOF
 
+-- LEAP
+vim.keymap.set({'n', 'o'}, '<leader>gs', function ()
+  require('leap.remote').action()
+end)
+vim.keymap.set({ "n", "x", "o" }, "<leader><leader>s", function()
+    require("leap-ast").leap()
+end, {})
+vim.keymap.set("n", "<leader>ss", function()
+    require("leap").leap({
+        target_windows = vim.tbl_filter(function(win)
+            return vim.api.nvim_win_get_config(win).focusable
+        end, vim.api.nvim_tabpage_list_wins(0)),
+    })
+end)
 -- local map = vim.keymap.set
 local default_opts = {noremap = true}
 
@@ -132,15 +146,6 @@ nnoremap <leader>rp viw"_dP
 nnoremap <leader>bb :BufferLinePick<CR>
 " let g:winresizer_start_key="<leader>ws"
 nnoremap <leader>sw :ToggleAlternate<CR>
-
-" let g:lightspeed_last_motion = ''
-" augroup lightspeed_last_motion
-"     autocmd!
-"     autocmd User LightspeedSxEnter let g:lightspeed_last_motion = 'sx'
-"     autocmd User LightspeedFtEnter let g:lightspeed_last_motion = 'ft'
-" augroup end
-" map <expr> ; g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_;_sx" : "<Plug>Lightspeed_;_ft"
-" map <expr> , g:lightspeed_last_motion == 'sx' ? "<Plug>Lightspeed_,_sx" : "<Plug>Lightspeed_,_ft"
 
 nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
 nnoremap <silent> <F10> :lua require'dap'.step_over()<CR>

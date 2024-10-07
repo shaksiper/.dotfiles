@@ -19,7 +19,12 @@ Plug 'romgrk/nvim-treesitter-context' " seems not very useful, gps and
 " languages
 " Plug 'lewis6991/spellsitter.nvim' " merged to nvim core
 Plug 'matze/vim-move'
-Plug 'ggandor/lightspeed.nvim'
+" Plug 'ggandor/lightspeed.nvim'
+Plug 'ggandor/leap.nvim'
+Plug 'ggandor/leap-spooky.nvim'
+Plug 'ggandor/flit.nvim'
+Plug 'ggandor/leap-ast.nvim'
+" Plug 'folke/flash.nvim'
 Plug 'rlane/pounce.nvim'
 Plug 'mg979/vim-visual-multi', { 'branch': 'master'}
 " Plug 'mg979/vim-visual-multi' " There is a learning curve for this and
