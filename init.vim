@@ -1,4 +1,3 @@
-lua require('impatient.lua.impatient')
 let g:plug_home = stdpath('data') . '/plugged'
 set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h11
 set confirm

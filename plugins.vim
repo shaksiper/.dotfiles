@@ -18,7 +18,8 @@ Plug 'romgrk/nvim-treesitter-context' " seems not very useful, gps and
 " Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 " languages
 " Plug 'lewis6991/spellsitter.nvim' " merged to nvim core
-Plug 'matze/vim-move'
+" Plug 'matze/vim-move'
+" Plug 'nvim-pack/nvim-spectre'
 " Plug 'ggandor/lightspeed.nvim'
 Plug 'ggandor/leap.nvim'
 Plug 'ggandor/leap-spooky.nvim'
@@ -26,20 +27,18 @@ Plug 'ggandor/flit.nvim'
 Plug 'ggandor/leap-ast.nvim'
 " Plug 'folke/flash.nvim'
 Plug 'rlane/pounce.nvim'
-Plug 'mg979/vim-visual-multi', { 'branch': 'master'}
+" Plug 'mg979/vim-visual-multi', { 'branch': 'master'}
 " Plug 'mg979/vim-visual-multi' " There is a learning curve for this and
 " vanilla vim macros and motions *may* suffice as they say
 " plug 'chrisbra/NrrwRgn' " Again it might be useful to edit a region in a
 " narrow window of its own
 Plug 'abecodes/tabout.nvim'
 Plug 'neovim/nvim-lspconfig'
-Plug 'jose-elias-alvarez/null-ls.nvim'
+" Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'nvimtools/none-ls.nvim'
 " Plug 'jose-elias-alvarez/nvim-lsp-ts-utils'
-Plug 'ray-x/go.nvim'
+"Plug 'ray-x/go.nvim'
 Plug 'mfussenegger/nvim-jdtls'
-Plug 'habamax/vim-godot'
-Plug 'glepnir/lspsaga.nvim' " Changed from glepnir to a more active fork
-" Plug 'SmiteshP/nvim-navic'
 Plug 'stevearc/dressing.nvim'
 " Install nvim-cmp
 Plug 'hrsh7th/nvim-cmp'
@@ -54,7 +53,7 @@ Plug 'hrsh7th/cmp-nvim-lsp-document-symbol'
 Plug 'folke/trouble.nvim'
 " Plug 'octaltree/cmp-look'
 Plug 'hrsh7th/cmp-nvim-lua'
-Plug 'folke/lua-dev.nvim'
+Plug 'folke/neodev.nvim'
 Plug 'onsails/lspkind-nvim'
 Plug 'hrsh7th/cmp-calc'
 Plug 'f3fora/cmp-spell'
@@ -86,11 +85,11 @@ Plug 'chentoast/marks.nvim'
 " Buffer select. The preview over extends form the borders to window
 Plug 'ray-x/lsp_signature.nvim'
 " buffer-like
-Plug 'simrat39/symbols-outline.nvim'
+Plug 'hedyhli/outline.nvim'
 " Plug 'narutoxy/dim.lua'
 Plug 'zbirenbaum/neodim'
 " Plug 'kyazdani42/nvim-tree.lua'
-Plug 'nvim-neo-tree/neo-tree.nvim'
+" Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'main' }
 Plug 'mong8se/actually.nvim'
 " TODO: one of this is redundant
 Plug 's1n7ax/nvim-window-picker'
@@ -99,9 +98,8 @@ Plug 'sindrets/winshift.nvim'
 Plug 'mrjones2014/smart-splits.nvim'
 Plug 'kwkarlwang/bufresize.nvim'
 Plug 'MunifTanjim/nui.nvim'
-" Plug 'antoinemadec/FixCursorHold.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 " Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-telescope/telescope-hop.nvim'
@@ -115,7 +113,7 @@ Plug 'rmagatti/session-lens'
 Plug 'windwp/nvim-autopairs'
 " TODO: change this for monaqa/dial.nvim or zegervdv/nrpattern.nvim for more
 " versatile alternations
-Plug 'rmagatti/alternate-toggler'
+"Plug 'rmagatti/alternate-toggler'
 " Plug 'kevinhwang91/promise-async'
 " Plug 'kevinhwang91/nvim-ufo'
 " Plug 'lewis6991/satellite.nvim'
@@ -123,8 +121,8 @@ Plug 'folke/which-key.nvim'
 Plug 'anuvyklack/hydra.nvim'
 Plug 'NvChad/nvim-colorizer.lua'
 " Plug 'axlebedev/footprints'
-Plug 'tweekmonster/startuptime.vim'
-Plug 'numToStr/Comment.nvim'
+" Plug 'tweekmonster/startuptime.vim'
+" Plug 'numToStr/Comment.nvim'
 " Plug 'tpope/vim-surround' " TODO: change for kylechui/nvim-surround
 Plug 'kylechui/nvim-surround'
 " Let there be colorful schemes
@@ -143,18 +141,17 @@ Plug 'jakewvincent/mkdnflow.nvim'
 Plug 'AckslD/nvim-FeMaco.lua'
 " Plug 'iamcco/markdown-preview.nvim'
 Plug 'ellisonleao/glow.nvim'
-Plug 'kristijanhusak/orgmode.nvim'
-Plug 'lukas-reineke/headlines.nvim'
-Plug 'akinsho/org-bullets.nvim', { 'for': 'org'}
+" Plug 'kristijanhusak/orgmode.nvim'
+" Plug 'lukas-reineke/headlines.nvim'
 " Plug 'dhruvasagar/vim-table-mode' "we can use mkdnflow's build in table-mode
 Plug 'wfxr/minimap.vim', { 'do': ':!cargo install --locked code-minimap'}
 call plug#end()
 
-" Multi Cursor Plugin Configs
-let g:VM_leader = {'default': '\', 'visual': '\', 'buffer': 'z'}
-let g:VM_maps = {}
-let g:VM_maps['Find Under']         = '<M-d>'
-let g:VM_maps['Find Subword Under'] = '<M-d>'
+"" Multi Cursor Plugin Configs
+"let g:VM_leader = {'default': '\', 'visual': '\', 'buffer': 'z'}
+"let g:VM_maps = {}
+"let g:VM_maps['Find Under']         = '<M-d>'
+"let g:VM_maps['Find Subword Under'] = '<M-d>'
 
 " let g:minimap_auto_start = 1
 let g:minimap_git_colors = 1
@@ -180,9 +177,9 @@ endfunction
 let g:startify_bookmarks = [ {'c': '~/.config/nvim/'}, {'O': '~/Documents/Org/'}, {'N': '~/Documents/Obsidasion/'}, '~/.zshrc' ]
 let g:startify_session_dir = stdpath('data') . '/sessions'
 let g:startify_lists = [
+        \ { 'type': 'sessions',  'header': ['   Sessions']       },
         \ { 'type': 'files',     'header': ['   MRU']            },
         \ { 'type': 'dir',       'header': ['   MRU ' . getcwd()] },
-        \ { 'type': 'sessions',  'header': ['   Sessions']       },
         \ { 'type': 'bookmarks', 'header': ['   Configs']      },
         \ { 'type': function('s:gitModified'),  'header': ['   git modified']},
         \ { 'type': function('s:gitUntracked'), 'header': ['   git untracked']},

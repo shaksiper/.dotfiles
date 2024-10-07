@@ -18,6 +18,7 @@ nnoremap <C-t> :NeoTreeRevealToggle<CR>
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua << EOF
 
+require("maps.hydras")
 -- LEAP
 vim.keymap.set({'n', 'o'}, '<leader>gs', function ()
   require('leap.remote').action()
