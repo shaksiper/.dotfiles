@@ -16,9 +16,79 @@ vnoremap > >gv
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua << EOF
 
+--LSP
 
 vim.keymap.set("n", "<leader>ot", "<CMD>ObsidianToday<CR>", {desc = "Obsidian Today"})
 vim.keymap.set("n", "<C-w>gt", "<CMD>tab split<CR>", {desc = "Open current buffer in new tab"})
+local opts = { noremap = true, silent = true }
+vim.keymap.set("n", "<leader>fsw", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", opts)
+vim.keymap.set(
+    "n",
+    "<leader>fsd",
+    "<cmd>lua require'telescope.builtin'.lsp_document_symbols(require('telescope.themes').get_ivy({}))<cr>",
+    opts
+)
+vim.keymap.set("n", "<leader>fdd", "<cmd>Telescope diagnostics bufnr=0<cr>", opts)
+vim.keymap.set("n", "<leader>fwd", "<cmd>Telescope diagnostics<cr>", opts)
+-- vim.keymap.set("n", "<leader>fso", "<cmd>Telescope lsp_workspace_symbols<cr>", opts)
+vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, opts)
+vim.keymap.set("n", "<leader>gdd", "<cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
+vim.keymap.set("n", "<leader>gdf", "<cmd>DetourCurrentWindow<CR><cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
+vim.keymap.set("n", "<leader>gds", "<C-w>s<cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
+vim.keymap.set("n", "<leader>gdv", "<C-w>v<cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
+vim.keymap.set("n", "<leader>gtd", "<Cmd>Telescope lsp_type_definitions theme=ivy<CR>", opts)
+vim.keymap.set("n", "<leader>g>", "<Cmd>Telescope lsp_outgoing_calls theme=ivy<CR>", opts)
+vim.keymap.set("n", "<leader>g<", "<Cmd>Telescope lsp_incoming_calls theme=ivy<CR>", opts)
+
+vim.keymap.set("n", "K", function()
+    vim.lsp.buf.hover({ border = "rounded" })
+end, opts)
+vim.keymap.set("n", "<leader>gi", "<cmd>Telescope lsp_implementations theme=ivy<CR>", opts)
+vim.keymap.set({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, opts)
+vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
+vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
+vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
+-- vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
+vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+
+vim.keymap.set("n", "<leader>gr", "<cmd>Telescope lsp_references theme=ivy<CR>", opts)
+vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+vim.keymap.set("v", "<leader>ca", ":Telescope range_code_action<CR>", opts)
+
+-- vim.keymap.set("n", "<leader>cla", "V:<C-U>Lspsaga range_code_action<CR>", opts) -- Code line action
+vim.keymap.set("n", "gh", "<cmd>Lspsaga finder<CR>", opts)
+vim.keymap.set("n", "\\p", "<cmd>Lspsaga peek_definition<CR>", opts)
+vim.keymap.set("n", "\\P", "<cmd>Lspsaga peek_type_definition<CR>", opts)
+-- Only jump to error
+vim.keymap.set("n", "[D", function()
+    require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
+end, { silent = true })
+vim.keymap.set("n", "]D", function()
+    require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
+end, { silent = true })
+vim.keymap.set("n", "<leader>gf", "<cmd>lua vim.lsp.buf.format{ asyny = true }<CR>", opts)
+vim.keymap.set("v", "<leader>gf", "<cmd>lua vim.lsp.buf.format()<CR>", opts)
+-- vim.keymap.set("n", "<leader>glf", "V<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts) -- Code line formatting, for whatever it's worth.
+vim.keymap.set("n", "<leader>e", function()
+    vim.diagnostic.open_float({ border = "rounded" })
+end, opts)
+vim.keymap.set("n", "<leader>ce", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
+vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
+vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
+vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>", opts)
+-- vim.keymap.set("n", "<leader>so", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
+-- TROUBLE
+vim.keymap.set("n", "<leader>xx", "<cmd>Trouble<cr>", { desc = "Trouble" })
+vim.keymap.set("n", "<leader>xw", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Trouble WP Diagnostics" })
+vim.keymap.set(
+    "n",
+    "<leader>xd",
+    "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+    { desc = "Trouble WP Diagnostics" }
+)
+vim.keymap.set("n", "<leader>xl", "<cmd>Trouble loclist toggle<cr>", { desc = "Trouble Buffer Diagnostics" })
+vim.keymap.set("n", "<leader>xq", "<cmd>Trouble quickfix toggle<cr>", { desc = "Trouble Quickfix" })
+vim.keymap.set("n", "<leader>xr", "<cmd>Trouble lsp_references toggle<cr>", { desc = "Trouble LSP Ref." })
 
 require("maps.detour")
 require("maps.hydras")

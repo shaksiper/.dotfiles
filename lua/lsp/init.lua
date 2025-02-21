@@ -1,102 +1,105 @@
 -- LSP settings
 local nvim_lsp = require("lspconfig")
+-- require('tiny-inline-diagnostic').setup({
+-- })
 vim.diagnostic.config({
-	virtual_text = true,
-	-- https://github.com/neovim/neovim/commit/8122470f8310ae34bcd5e436e8474f9255eb16f2
-	signs = {
-		text = {
-			[vim.diagnostic.severity.ERROR] = "",
-			[vim.diagnostic.severity.WARN] = "",
-			[vim.diagnostic.severity.HINT] = "",
-			[vim.diagnostic.severity.INFO] = "",
-		},
-	},
-	underline = true,
-	update_in_insert = false,
-	severity_sort = false,
+    virtual_text = true,
+    -- https://github.com/neovim/neovim/commit/8122470f8310ae34bcd5e436e8474f9255eb16f2
+    signs = {
+        text = {
+            [vim.diagnostic.severity.ERROR] = "",
+            [vim.diagnostic.severity.WARN] = "",
+            [vim.diagnostic.severity.HINT] = "",
+            [vim.diagnostic.severity.INFO] = "",
+        },
+    },
+    underline = true,
+    update_in_insert = false,
+    severity_sort = false,
 })
+
 
 -- local util = require("lspconfig.util")
 local signature_config = {
-	bind = true, -- This is mandatory, otherwise border config won't get registered.
-	-- If you want to hook lspsaga or other signature handler, pls set to false
+    bind = true, -- This is mandatory, otherwise border config won't get registered.
+    -- If you want to hook lspsaga or other signature handler, pls set to false
 
-	floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
-	hint_enable = true, -- virtual hint enable
-	hint_prefix = "🐼 ", -- Panda for parameter
-	hint_scheme = "String",
-	max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
-	-- to view the hiding contents
-	max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-	transparency = 25, -- disabled by default, allow floating win transparent value 1~100
-	handler_opts = {
-		border = "single", -- double, single, shadow, none
-	},
-	-- hint_inline = function()
-	-- 	return true
-	-- end,
-	trigger_on_newline = false, -- set to true if you need multiple line parameter, sometime show signature on new line can be confusing, set it to false for #58
-	zindex = 200, -- by default it will be on top of all floating windows, set to 50 send it to bottom
-	padding = "", -- character to pad on left and right of signature can be ' ', or '|'  etc
-	toggle_key = "<M-x>", -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
-	select_signature_key = "<M-n>", -- cycle to next signature, e.g. '<M-n>' function overloading
+    floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
+    hint_enable = true, -- virtual hint enable
+    hint_prefix = "🐼 ", -- Panda for parameter
+    hint_scheme = "String",
+    max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
+    -- to view the hiding contents
+    max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
+    transparency = 25, -- disabled by default, allow floating win transparent value 1~100
+    handler_opts = {
+        border = "single", -- double, single, shadow, none
+    },
+    -- hint_inline = function()
+    -- 	return true
+    -- end,
+    trigger_on_newline = false,     -- set to true if you need multiple line parameter, sometime show signature on new line can be confusing, set it to false for #58
+    zindex = 200,                   -- by default it will be on top of all floating windows, set to 50 send it to bottom
+    padding = "",                   -- character to pad on left and right of signature can be ' ', or '|'  etc
+    toggle_key = "<M-x>",           -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
+    select_signature_key = "<M-n>", -- cycle to next signature, e.g. '<M-n>' function overloading
 }
-require("lsp_signature").setup(signature_config)
+-- require("lsp_signature").setup(signature_config)
 local lspsaga_conf = {
-	-- diagnostic_header = { " ", " ", " ", "ﴞ " },
-	-- show_diagnostic_source = true,
-	ui = {
-		-- currently only round theme
-		theme = "round",
-		-- border type can be single,double,rounded,solid,shadow.
-		border = "rounded",
-		winblend = 15,
-	},
-	-- beacon = {
-	--     enable = true,
-	--     frequency = 7
-	-- },
-	symbol_in_winbar = { enable = false },
-	diagnostic = {
-		-- on_insert_follow = true,
-		show_code_action = true,
-		show_source = true,
-		jump_num_shortcut = true,
-		keys = {
-			exec_action = "o",
-			-- expand_or_jump = "<CR>",
-			quit = "<ESC>",
-		},
-	},
-	code_action = {
-		num_shortcut = true,
-		keys = {
-			quit = "<ESC>",
-			exec = "<CR>",
-		},
-	},
-	lightbulb = {
-		enable = false,
-		enable_in_insert = true,
-		sign = true,
-		sign_priority = 40,
-		virtual_text = true,
-	},
-	finder = {
-		open = "o",
-		vsplit = "<c-v>",
-		split = "<c-s>",
-		tabe = "t",
-		quit = "<ESC>",
-		scroll_down = "<C-f>",
-		scroll_up = "<C-b>", -- quit can be a table
-	},
-	rename = {
-		quit = "<ESC>",
-		exec = "<CR>",
-		in_select = true,
-	},
-	-- definition_preview_icon = "  ",
+    -- diagnostic_header = { " ", " ", " ", "ﴞ " },
+    -- show_diagnostic_source = true,
+    ui = {
+        -- currently only round theme
+        theme = "round",
+        -- border type can be single,double,rounded,solid,shadow.
+        border = "rounded",
+        winblend = 15,
+    },
+    -- beacon = {
+    --     enable = true,
+    --     frequency = 7
+    -- },
+    symbol_in_winbar = { enable = false },
+    diagnostic = {
+        -- on_insert_follow = true,
+        show_code_action = true,
+        show_source = true,
+        jump_num_shortcut = true,
+        keys = {
+            exec_action = "o",
+            -- expand_or_jump = "<CR>",
+            quit = "<ESC>",
+        },
+    },
+    code_action = {
+        num_shortcut = true,
+        keys = {
+            quit = "<ESC>",
+            exec = "<CR>",
+        },
+    },
+    lightbulb = {
+        enable = false,
+        enable_in_insert = true,
+        sign = true,
+        sign_priority = 40,
+        virtual_text = true,
+    },
+    finder = {
+        open = "o",
+        vsplit = "<c-v>",
+        split = "<c-s>",
+        tabe = "t",
+        quit = "<ESC>",
+        scroll_down = "<C-f>",
+        scroll_up = "<C-b>", -- quit can be a table
+    },
+    rename = {
+        quit = "<ESC>",
+        exec = "<CR>",
+        in_select = true,
+    },
+    -- definition_preview_icon = "  ",
 }
 require("lspsaga").setup(lspsaga_conf)
 --[[ local navic = require("nvim-navic")
@@ -107,136 +110,67 @@ navic.setup({
 	depth_limit_indicator = "..",
 }) ]]
 require("nvim-navbuddy").setup({
-	lsp = {
-		auto_attach = true, -- If set to true, you don't need to manually use attach function
-	},
+    lsp = {
+        auto_attach = true, -- If set to true, you don't need to manually use attach function
+    },
 })
 local on_attach = function(client, bufnr)
-	-- if client.server_capabilities.inlayHintProvider then
-	--     vim.lsp.inlay_hint.enable(bufnr, true)
-	-- end
-	-- This methods considers dynamic registration as per neovim/neovim/pull/23681
-	-- Instead use `client.supports_method(<method>)`. It considers both the dynamic capabilities and static `server_capabilities`.
-	if client.supports_method("inlayHintProvider") then
-		vim.lsp.inlay_hint.enable(true)
-	end
-	-- used to use tree-sitter-refactor for highlighting definitions under cursor
-	if client.server_capabilities.documentHighlightProvider then
-		-- if client.supports_method("documentHighlightProvider") then -- jsonls + biome cause problems with json files
-		vim.api.nvim_create_augroup("lsp_document_highlight", {
-			clear = false,
-		})
-		vim.api.nvim_clear_autocmds({
-			buffer = bufnr,
-			group = "lsp_document_highlight",
-		})
-		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-			group = "lsp_document_highlight",
-			buffer = bufnr,
-			callback = vim.lsp.buf.document_highlight,
-		})
-		vim.api.nvim_create_autocmd("CursorMoved", {
-			group = "lsp_document_highlight",
-			buffer = bufnr,
-			callback = vim.lsp.buf.clear_references,
-		})
-	end
-	-- require'lsp_signature'.on_attach(cfg, bufnr)
-	-- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc') -- why was it here anyways??
-
-	-- vim.lsp.buf.inlay_hint(0, true)
-	local opts = { noremap = true, silent = true }
-	vim.keymap.set("n", "<leader>fsw", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", opts)
-	vim.keymap.set(
-		"n",
-		"<leader>fsd",
-		"<cmd>lua require'telescope.builtin'.lsp_document_symbols(require('telescope.themes').get_ivy({}))<cr>",
-		opts
-	)
-	vim.keymap.set("n", "<leader>fdd", "<cmd>Telescope diagnostics bufnr=0<cr>", opts)
-	vim.keymap.set("n", "<leader>fwd", "<cmd>Telescope diagnostics<cr>", opts)
-	-- vim.keymap.set("n", "<leader>fso", "<cmd>Telescope lsp_workspace_symbols<cr>", opts)
-	vim.keymap.set("n", "<leader>gD", vim.lsp.buf.declaration, opts)
-	vim.keymap.set("n", "<leader>gdd", "<cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<leader>gdf", "<cmd>DetourCurrentWindow<CR><cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<leader>gds", "<C-w>s<cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<leader>gdv", "<C-w>v<cmd>Telescope lsp_definitions theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<leader>gtd", "<Cmd>Telescope lsp_type_definitions theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<leader>g>", "<Cmd>Telescope lsp_outgoing_calls theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<leader>g<", "<Cmd>Telescope lsp_incoming_calls theme=ivy<CR>", opts)
-
-	vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", opts)
-	vim.keymap.set("n", "<leader>gi", "<cmd>Telescope lsp_implementations theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-	vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
-	vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
-	vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
-	-- vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
-	vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-
-	vim.keymap.set("n", "<leader>gr", "<cmd>Telescope lsp_references theme=ivy<CR>", opts)
-	vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
-	vim.keymap.set("v", "<leader>ca", ":Telescope range_code_action<CR>", opts)
-
-	-- vim.keymap.set("n", "<leader>cla", "V:<C-U>Lspsaga range_code_action<CR>", opts) -- Code line action
-	vim.keymap.set("n", "gh", "<cmd>Lspsaga finder<CR>", opts)
-	vim.keymap.set("n", "\\p", "<cmd>Lspsaga peek_definition<CR>", opts)
-	vim.keymap.set("n", "\\P", "<cmd>Lspsaga peek_type_definition<CR>", opts)
-	-- Only jump to error
-	vim.keymap.set("n", "[D", function()
-		require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
-	end, { silent = true })
-	vim.keymap.set("n", "]D", function()
-		require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
-	end, { silent = true })
-	vim.keymap.set("n", "<leader>gf", "<cmd>lua vim.lsp.buf.format{ asyny = true }<CR>", opts)
-	vim.keymap.set("v", "<leader>gf", "<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts)
-	vim.keymap.set("n", "<leader>glf", "V<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts) -- Code line formatting, for whatever it's worth.
-	vim.keymap.set("n", "<leader>e", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
-	vim.keymap.set("n", "<leader>ce", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
-	vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", opts)
-	vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", opts)
-	vim.keymap.set("n", "<leader>q", "<cmd>lua vim.diagnostic.set_loclist()<CR>", opts)
-	-- vim.keymap.set("n", "<leader>so", "<cmd>lua vim.lsp.buf.document_symbol()<CR>", opts)
-	-- TROUBLE
-	vim.keymap.set("n", "<leader>xx", "<cmd>Trouble<cr>", { desc = "Trouble" })
-	vim.keymap.set("n", "<leader>xw", "<cmd>Trouble diagnostics toggle<cr>", { desc = "Trouble WP Diagnostics" })
-	vim.keymap.set(
-		"n",
-		"<leader>xd",
-		"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-		{ desc = "Trouble WP Diagnostics" }
-	)
-	vim.keymap.set("n", "<leader>xl", "<cmd>Trouble loclist toggle<cr>", { desc = "Trouble Buffer Diagnostics" })
-	vim.keymap.set("n", "<leader>xq", "<cmd>Trouble quickfix toggle<cr>", { desc = "Trouble Quickfix" })
-	vim.keymap.set("n", "<leader>xr", "<cmd>Trouble lsp_references toggle<cr>", { desc = "Trouble LSP Ref." })
+    -- if client.server_capabilities.inlayHintProvider then
+    --     vim.lsp.inlay_hint.enable(bufnr, true)
+    -- end
+    -- This methods considers dynamic registration as per neovim/neovim/pull/23681
+    -- Instead use `client.supports_method(<method>)`. It considers both the dynamic capabilities and static `server_capabilities`.
+    if client:supports_method("inlayHintProvider") then
+        vim.lsp.inlay_hint.enable(true)
+    end
+    -- used to use tree-sitter-refactor for highlighting definitions under cursor
+    if client.server_capabilities.documentHighlightProvider then
+        vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+        vim.api.nvim_clear_autocmds { buffer = bufnr, group = "lsp_document_highlight" }
+        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+            callback = vim.lsp.buf.document_highlight,
+            buffer = bufnr,
+            group = "lsp_document_highlight",
+            desc = "Document Highlight",
+        })
+        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+            callback = vim.lsp.buf.clear_references,
+            buffer = bufnr,
+            group = "lsp_document_highlight",
+            desc = "Clear All the References",
+        })
+    end
 end
 
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+-- local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+-- capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
 
 capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), capabilities)
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
-	properties = {
-		"documentation",
-		"detail",
-		"additionalTextEdits",
-	},
+    properties = {
+        "documentation",
+        "detail",
+        "additionalTextEdits",
+    },
 }
--- capabilities.textDocument.foldingRange = {
--- 	dynamicRegistration = false,
--- 	lineFoldingOnly = true,
--- }
+capabilities.textDocument.foldingRange = {
+    dynamicRegistration = true,
+    lineFoldingOnly = true,
+}
 
 nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.default_config, {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = {
-		debounce_text_changes = 150,
-	},
+    on_attach = on_attach,
+    capabilities = capabilities,
+    flags = {
+        debounce_text_changes = 150,
+    },
 })
+
 nvim_lsp.intelephense.setup({
 	-- cmd = { "phpactor", "-vvv", "language-server" },
 	cmd = { "intelephense", "--stdio" },
