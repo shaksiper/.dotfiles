@@ -1,3 +1,3 @@
 require("persisted").setup({
-  autosave = false,
+  autostart = false,
 })
