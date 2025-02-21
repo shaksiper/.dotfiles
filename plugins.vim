@@ -93,12 +93,12 @@ Plug 'chrisgrieser/nvim-scissors'
 Plug 'Saghen/blink.cmp', { 'do': ':!cargo build --release'}
 Plug 'saghen/blink.compat'
 " AI
-Plug 'zbirenbaum/copilot.lua'
-Plug 'zbirenbaum/copilot-cmp'
-Plug 'AndreM222/copilot-lualine'
-Plug 'Bryley/neoai.nvim' " alternative: jackMort/ChatGPT.nvim
-Plug 'jackMort/ChatGPT.nvim'
-Plug 'David-Kunz/gen.nvim'
+"Plug 'zbirenbaum/copilot.lua'
+"Plug 'zbirenbaum/copilot-cmp'
+"Plug 'AndreM222/copilot-lualine'
+"Plug 'Bryley/neoai.nvim' " alternative: jackMort/ChatGPT.nvim
+"Plug 'jackMort/ChatGPT.nvim'
+"Plug 'David-Kunz/gen.nvim'
 
 " Debugging
 Plug 'mfussenegger/nvim-dap'

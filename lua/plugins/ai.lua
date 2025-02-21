@@ -25,8 +25,8 @@
 -- 		model = "gpt-4-1106-preview",
 -- 	},
 -- })
-require("gen").setup({
-	display_mode = "float", -- The display mode. Can be "float" or "split".
-	show_prompt = true, -- Shows the Prompt submitted to Ollama.
-	show_model = true, -- Displays which model you are using at the beginning of your chat session.
-})
+-- require("gen").setup({
+-- 	display_mode = "float", -- The display mode. Can be "float" or "split".
+-- 	show_prompt = true, -- Shows the Prompt submitted to Ollama.
+-- 	show_model = true, -- Displays which model you are using at the beginning of your chat session.
+-- })

@@ -4,7 +4,7 @@ require("lualine").setup({
 		section_separators = { left = "", right = "" },
 	},
 	sections = {
-		lualine_x = { "copilot", "encoding", "fileformat", "filetype" },
+		lualine_x = { "encoding", "fileformat", "filetype" },
 	},
 	--[[ sections = {
 		lualine_c = {
