@@ -1,6 +1,8 @@
 require("plugins.devicons")
 require("plugins.treesitter")
 require("plugins.cmp")
+-- require("plugins.cmp")
+require("plugins.blink")
 require("plugins.telescope")
 require("plugins.nvim-colorizer")
 require("plugins.which-key")
