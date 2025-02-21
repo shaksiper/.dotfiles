@@ -1,5 +1,18 @@
 local dap = require("dap")
-require("nvim-dap-virtual-text").setup()
+require("nvim-dap-virtual-text").setup(
+    {
+        display_callback = function(variable, _, _, _, options)
+            if #variable.value > 40 then
+               variable.value = string.sub(variable.value, 1, 40) .. "..." 
+            end
+            if options.virt_text_pos == 'inline' then
+                return ' = ' .. variable.value:gsub("%s+", " ")
+            else
+                return variable.name .. ' = ' .. variable.value:gsub("%s+", " ")
+            end
+        end,
+    }
+)
 require("dapui").setup()
 require("nvim-dap-repl-highlights").setup()
 require("dap-go").setup()
@@ -13,14 +26,14 @@ dap.adapters.node2 = {
 	args = { os.getenv("HOME") .. "/Downloads/LSP/Debug/vscode-node-debug2/out/src/nodeDebug.js" },
 }
 dap.configurations.lua = {
-	{
-		type = "nlua",
-		request = "attach",
-		name = "Attach to running Neovim instance",
-	},
+    {
+        type = "nlua",
+        request = "attach",
+        name = "Attach to running Neovim instance",
+    },
 }
 dap.adapters.nlua = function(callback, config)
-	callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
+    callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
 end
 dap.configurations.javascript = {
 	{
@@ -47,12 +60,12 @@ require("dap-python").setup("~/Downloads/LSP/Debug/venv/debugpy/bin/python")
 
 --C#
 dap.adapters.coreclr = {
-	type = "executable",
-	command = "netcoredbg",
-	args = { "--interpreter=vscode" },
+    type = "executable",
+    command = "netcoredbg",
+    args = { "--interpreter=vscode" },
 }
 -- TODO: implement this file search in telescope, preferably with project name recognition
-require("dap.ext.vscode").load_launchjs(nil, { coreclr = { "cs" } })
+-- require("dap.ext.vscode").load_launchjs(nil, { coreclr = { "cs" } })
 -- dap.configurations.cs = {
 -- 	{
 -- 		type = "coreclr",

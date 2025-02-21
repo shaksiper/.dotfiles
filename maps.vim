@@ -92,6 +92,22 @@ vim.keymap.set("n", "<leader>xr", "<cmd>Trouble lsp_references toggle<cr>", { de
 
 require("maps.detour")
 require("maps.hydras")
+-- DAP
+local dap = require('dap')
+vim.keymap.set("n", "<F5>", function() dap.continue() end, {desc = "DAP Continue"})
+vim.keymap.set("n", "<F10>", function() dap.step_over() end, {desc = "DAP Step Over"})
+vim.keymap.set("n", "<M-Right>", function() dap.step_over() end, {desc = "DAP Step Over"})
+vim.keymap.set("n", "<F11>", function() dap.step_into() end, {desc = "DAP Step Into"})
+vim.keymap.set("n", "<M-Down>", function() dap.step_into() end, {desc = "DAP Step Into"})
+vim.keymap.set("n", "<F12>", function() dap.step_out() end, {desc = "DAP Step Out"})
+vim.keymap.set("n", "<M-Up>", function() dap.step_out() end, {desc = "DAP Step Out"})
+vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end, {desc = "DAP Toggle Breakpoint"})
+vim.keymap.set("n", "<leader>B", function() dap.set_breakpoint(vim.fn.input('Breakpoint condition: ')) end, {desc = "DAP Conditional Breakpoint"})
+vim.keymap.set("n", "<leader>lp", function() dap.set_breakpoint(nil, nil, vim.fn.input('Log point message: ')) end, {desc = "DAP Log Breakpoint"})
+vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, {desc = "DAP REPL"})
+vim.keymap.set("n", "<leader>dl", function() dap.run_last() end, {desc = "DAP Run Last"})
+vim.keymap.set("n", "<leader>dt", function() require'dapui'.toggle() end, {desc = "DAP Toggle UI"})
+
 
 -- LEAP
 vim.keymap.set({'n', 'o'}, '<leader>gs', function ()
