@@ -15,7 +15,7 @@ Plug 'ziontee113/syntax-tree-surfer'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
-Plug 'romgrk/nvim-treesitter-context' " seems not very useful, gps and
+Plug 'nvim-treesitter/nvim-treesitter-context' " seems not very useful, gps and
 " outline works better for its purpose
 " Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 " languages
