@@ -1,25 +1,25 @@
 local lspkind = require("lspkind")
 local luasnip = require("luasnip")
-local types = require("luasnip.util.types")
+-- local types = require("luasnip.util.types")
 require("cmp_luasnip_choice").setup({
 	auto_open = true, -- Automatically open nvim-cmp on choice node (default: true)
 })
 
-luasnip.config.setup({
-	-- Remember the last snippet I was in
-	ext_opts = {
-		[types.choiceNode] = {
-			active = {
-				virt_text = { { "●", "TSString" } },
-			},
-		},
-		[types.insertNode] = {
-			active = {
-				virt_text = { { "●", "TSKeyword" } },
-			},
-		},
-	},
-})
+-- luasnip.config.setup({
+-- 	-- Remember the last snippet I was in
+-- 	ext_opts = {
+-- 		[types.choiceNode] = {
+-- 			active = {
+-- 				virt_text = { { "●", "TSString" } },
+-- 			},
+-- 		},
+-- 		[types.insertNode] = {
+-- 			active = {
+-- 				virt_text = { { "●", "TSKeyword" } },
+-- 			},
+-- 		},
+-- 	},
+-- })
 local cmp = require("cmp")
 -- TABNINE setup
 --[[ local tabnine = require("cmp_tabnine.config")

@@ -85,7 +85,7 @@ Plug 'onsails/lspkind-nvim'
 Plug 'hrsh7th/cmp-calc'
 Plug 'f3fora/cmp-spell'
 Plug 'quangnguyen30192/cmp-nvim-tags'
-Plug 'L3MON4D3/LuaSnip'
+Plug 'L3MON4D3/LuaSnip', {'do': 'make install_jsregexp'}
 Plug 'rafamadriz/friendly-snippets'
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/cmp-luasnip-choice'
