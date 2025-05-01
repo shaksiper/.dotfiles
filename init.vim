@@ -1,7 +1,7 @@
 lua vim.loader.enable()
 let g:plug_home = stdpath('data') . '/plugged'
 set guifont=JetBrainsMono\ NFM:h11
-" set conceallevel=2 " no need for this globally
+set conceallevel=2 " no need for this globally
 set confirm
 set encoding=utf-8
 set spelllang=en_us
