@@ -85,7 +85,7 @@ local cmp_settings = {
 	-- You should specify your *installed* sources.
 	sources = cmp.config.sources({
 		{ name = "nvim_lsp", group_index = 2 },
-		{ name = "copilot", keyword_length = 2, group_index = 2 },
+		-- { name = "copilot", keyword_length = 2, group_index = 2 },
 		-- { name = "cmp_tabnine", keyword_length = 4 },
 		{ name = "buffer", keyword_length = 4, max_item_count = 15 },
 		{ name = "luasnip" },
