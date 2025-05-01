@@ -213,7 +213,8 @@ Plug 'olimorris/persisted.nvim'
 " Plug 'akinsho/toggleterm.nvim'
 Plug 'willothy/flatten.nvim'
 " Markdown/Org-mode
-Plug 'epwalsh/obsidian.nvim'
+"Plug 'epwalsh/obsidian.nvim'
+Plug 'obsidian-nvim/obsidian.nvim'
 Plug 'jakewvincent/mkdnflow.nvim'
 Plug 'AckslD/nvim-FeMaco.lua'
 Plug 'toppair/peek.nvim', { 'do': 'deno task --quiet build:fast'}
