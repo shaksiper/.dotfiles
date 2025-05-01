@@ -226,8 +226,8 @@ Plug 'MeanderingProgrammer/markdown.nvim'
 Plug 'theKnightsOfRohan/csvlens.nvim'
 " Plug 'akinsho/org-bullets.nvim', { 'for': 'org'}
 " Plug 'dhruvasagar/vim-table-mode' "we can use mkdnflow's build in table-mode
-Plug 'wfxr/minimap.vim', { 'do': ':!cargo install --locked code-minimap'}
-Plug 'gorbit99/codewindow.nvim'
+"Plug 'wfxr/minimap.vim', { 'do': ':!cargo install --locked code-minimap'}
+"Plug 'gorbit99/codewindow.nvim'
 Plug 'gennaro-tedesco/nvim-jqx'
 call plug#end()
 
@@ -238,15 +238,15 @@ call plug#end()
 "let g:VM_maps['Find Subword Under'] = '<M-d>'
 
 " let g:minimap_auto_start = 1
-let g:minimap_git_colors = 1
-let g:minimap_highlight_search = 1
-" let g:minimap_auto_start_win_enter = 1
-let g:minimap_diffadd_color = 'GitSignsAdd'
-let g:minimap_diffremove_color = 'GitSignsDelete'
-let g:minimap_diff_color = 'GitSignsChange'
-hi MinimapCurrentLine ctermfg=Green guifg=#50FA7B guibg=#32302f
-let g:minimap_highlight = 'MinimapCurrentLine'
-let g:minimap_block_filetypes = ['neo-tree', 'startify']
+"let g:minimap_git_colors = 1
+"let g:minimap_highlight_search = 1
+"" let g:minimap_auto_start_win_enter = 1
+"let g:minimap_diffadd_color = 'GitSignsAdd'
+"let g:minimap_diffremove_color = 'GitSignsDelete'
+"let g:minimap_diff_color = 'GitSignsChange'
+"hi MinimapCurrentLine ctermfg=Green guifg=#50FA7B guibg=#32302f
+"let g:minimap_highlight = 'MinimapCurrentLine'
+"let g:minimap_block_filetypes = ['neo-tree', 'startify']
 " let minimap_close_buftypes = ["nofile"]
 
 function! s:gitModified()
