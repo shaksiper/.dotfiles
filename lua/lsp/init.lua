@@ -170,65 +170,66 @@ nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.defaul
         debounce_text_changes = 150,
     },
 })
-
-nvim_lsp.intelephense.setup({
-	-- cmd = { "phpactor", "-vvv", "language-server" },
-	cmd = { "intelephense", "--stdio" },
-	filetypes = { "php" },
-	-- root_dir = root_pattern("composer.json", ".git"),
-})
+-- PHP
+-- nvim_lsp.intelephense.setup({
+--     -- cmd = { "phpactor", "-vvv", "language-server" },
+--     cmd = { "intelephense", "--stdio" },
+--     filetypes = { "php" },
+--     -- root_dir = root_pattern("composer.json", ".git"),
+-- })
+-- Styling
+nvim_lsp.ls_emmet.setup({})
+nvim_lsp.cssls.setup({})
+nvim_lsp.jsonls.setup({})
+nvim_lsp.biome.setup({}) -- instead of rome (unmaintained)
+nvim_lsp.eslint.setup({})
 nvim_lsp.html.setup({
-	cmd = { "vscode-html-language-server", "--stdio" },
-	filetypes = { "html" },
-	init_options = {
-		configurationSection = { "html", "css", "javascript" },
-		embeddedLanguages = {
-			css = true,
-			javascript = true,
-		},
-	},
-	-- root_dir = function(fname)
-	--       return util.root_pattern('package.json', '.git')(fname) or util.path.dirname(fname)
-	--     end,
-	settings = {},
+    cmd = { "vscode-html-language-server", "--stdio" },
+    filetypes = { "html" },
+    init_options = {
+        configurationSection = { "html", "css", "javascript" },
+        embeddedLanguages = {
+            css = true,
+            javascript = true,
+        },
+    },
+    -- root_dir = function(fname)
+    --       return util.root_pattern('package.json', '.git')(fname) or util.path.dirname(fname)
+    --     end,
+    settings = {},
 })
 -- CSS Language Server
 nvim_lsp.cssls.setup({})
 local configs = require("lspconfig.configs")
 if not configs.ls_emmet then
-	configs.ls_emmet = {
-		default_config = {
-			cmd = { "ls_emmet", "--stdio" },
-			filetypes = {
-				"html",
-				"css",
-				"scss",
-				"javascript",
-				"javascriptreact",
-				"typescript",
-				"typescriptreact",
-				"haml",
-				"xml",
-				"xsl",
-				"pug",
-				"slim",
-				"sass",
-				"stylus",
-				"less",
-				"sss",
-			},
-			root_dir = function(_)
-				return vim.loop.cwd()
-			end,
-			settings = {},
-		},
-	}
+    configs.ls_emmet = {
+        default_config = {
+            cmd = { "ls_emmet", "--stdio" },
+            filetypes = {
+                "html",
+                "css",
+                "scss",
+                "javascript",
+                "javascriptreact",
+                "typescript",
+                "typescriptreact",
+                "haml",
+                "xml",
+                "xsl",
+                "pug",
+                "slim",
+                "sass",
+                "stylus",
+                "less",
+                "sss",
+            },
+            root_dir = function(_)
+                return vim.loop.cwd()
+            end,
+            settings = {},
+        },
+    }
 end
-nvim_lsp.ls_emmet.setup({})
-
-nvim_lsp.cssls.setup({})
-nvim_lsp.jsonls.setup({})
-
 -- Vim LSP
 nvim_lsp.vimls.setup({
 	-- Defaults
@@ -295,11 +296,11 @@ nvim_lsp.lua_ls.setup({
 --     end, --]]
 -- })
 
-nvim_lsp.kotlin_language_server.setup({})
+-- nvim_lsp.kotlin_language_server.setup({})
 
 -- Python => PyLs
 -- nvim_lsp.pylsp.setup({})
-nvim_lsp.pyright.setup({})
+-- nvim_lsp.pyright.setup({})
 -- nvim_lsp.pylyzer.setup({}) -- a lot error raised
 -- NULL_LS setup
 local null_ls = require("null-ls")
@@ -387,10 +388,8 @@ require("null-ls").setup({
 		null_ls.builtins.formatting.yamlfmt,
 	},
 })
-nvim_lsp.marksman.setup({})
-nvim_lsp.vale_ls.setup({})
 
-nvim_lsp.rust_analyzer.setup({})
+-- nvim_lsp.rust_analyzer.setup({})
 
 -- nvim_lsp.csharp_ls.setup({
 -- 	-- on_attach = on_attach,
@@ -479,16 +478,19 @@ require("roslyn").setup({
 -- })
 
 -- local util = require 'lspconfig.util'
-nvim_lsp.graphql.setup({
-	-- root_dir =  util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*', '.git'),
-})
 nvim_lsp.gdscript.setup({})
 nvim_lsp.clangd.setup({}) -- ~/.clang-format has indentation settings
+-- Markup
+nvim_lsp.yamlls.setup({})
 nvim_lsp.dockerls.setup({})
 nvim_lsp.docker_compose_language_service.setup({})
-nvim_lsp.biome.setup({}) -- instead of rome (unmaintained)
-nvim_lsp.eslint.setup({})
-nvim_lsp.yamlls.setup({})
+-- DB
+nvim_lsp.sqls.setup({ cmd = { "sqls", "-config", "~/sqls/config.yml" } })
+nvim_lsp.graphql.setup({
+    -- root_dir =  util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*', '.git'),
+})
+-- TEXT
 nvim_lsp.typos_lsp.setup({})
 nvim_lsp.markdown_oxide.setup({})
-nvim_lsp.sqls.setup({ cmd = { "sqls", "-config", "~/sqls/config.yml" } })
+nvim_lsp.marksman.setup({})
+nvim_lsp.vale_ls.setup({ cmd = { "vale" } })
