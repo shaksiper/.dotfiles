@@ -7,7 +7,11 @@ set encoding=utf-8
 set spelllang=en_us
 set spell " we need this now?
 set spelloptions=noplainbuffer,camel
-set foldtext=
+"set foldtext=
+"set foldenable
+"set foldcolumn=1
+"set foldlevel=99
+"set foldlevelstart=99
 set number relativenumber
 set clipboard+=unnamedplus
 set noerrorbells
