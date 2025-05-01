@@ -305,88 +305,89 @@ nvim_lsp.lua_ls.setup({
 -- NULL_LS setup
 local null_ls = require("null-ls")
 require("null-ls").setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-	sources = {
-		null_ls.builtins.formatting.uncrustify,
-		null_ls.builtins.diagnostics.vint, -- vim
-		-- null_ls.builtins.formatting.prettierd,
-		-- null_ls.builtins.formatting.rome, -- unmaintained -> Replaced by biome
-		null_ls.builtins.formatting.biome, -- patched rome to use biome as cmd
-		-- null_ls.builtins.diagnostics.cspell,
-		-- null_ls.builtins.code_actions.cspell,
-		-- C-like
-		-- null_ls.builtins.formatting.uncrustify,
-		-- null_ls.builtins.formatting.clang_format,
+    on_attach = on_attach,
+    capabilities = capabilities,
+    sources = {
+        null_ls.builtins.formatting.uncrustify,
+        null_ls.builtins.diagnostics.vint, -- vim
+        -- null_ls.builtins.formatting.prettierd,
+        -- null_ls.builtins.formatting.rome, -- unmaintained -> Replaced by biome
+        null_ls.builtins.formatting.biome, -- patched rome to use biome as cmd
+        -- null_ls.builtins.diagnostics.cspell,
+        -- null_ls.builtins.code_actions.cspell,
+        -- C-like
+        -- null_ls.builtins.formatting.uncrustify,
+        -- null_ls.builtins.formatting.clang_format,
 
-		-- C#
-		null_ls.builtins.formatting.csharpier,
-		-- TODO: install/setup the following tools
-		-- null_ls.builtins.diagnostics.semgrep,
-		-- null_ls.builtins.diagnostics.golangci_lint,
-		--
-		-- null_ls.builtins.diagnostics.eslint_d,
-		-- null_ls.builtins.formatting.eslint_d,
-		-- See: [:h vim.lsp.buf.formatting_seq_sync]
-		-- require("null-ls.helpers").conditional(function(utils)
-		-- 	local b = null_ls.builtins
-		-- 	return utils.root_has_file(".eslintrc.js") and b.formatting.eslint_d --[[ or b.formatting.prettierd ]]
-		-- end),
+        -- C#
+        null_ls.builtins.formatting.csharpier,
+        -- TODO: install/setup the following tools
+        -- null_ls.builtins.diagnostics.semgrep,
+        -- null_ls.builtins.diagnostics.golangci_lint,
+        --
+        -- null_ls.builtins.diagnostics.eslint_d,
+        -- null_ls.builtins.formatting.eslint_d,
+        -- See: [:h vim.lsp.buf.formatting_seq_sync]
+        -- require("null-ls.helpers").conditional(function(utils)
+        -- 	local b = null_ls.builtins
+        -- 	return utils.root_has_file(".eslintrc.js") and b.formatting.eslint_d --[[ or b.formatting.prettierd ]]
+        -- end),
 
-		-- JAVA
-		-- null_ls.builtins.formatting.google_java_format, -- needs [ https://github.com/google/google-java-format ] installed
+        -- JAVA
+        -- null_ls.builtins.formatting.google_java_format, -- needs [ https://github.com/google/google-java-format ] installed
 
-		-- JS
-		-- null_ls.builtins.diagnostics.eslint_d,
-		-- null_ls.builtins.code_actions.eslint_d,
-		-- null_ls.builtins.formatting.eslint_d, .with({
-		-- 	condition = function(utils)
-		-- 		return utils.root_has_file(".eslintrc.js")
-		-- 	end,
-		-- })
+        -- JS
+        -- null_ls.builtins.diagnostics.eslint_d,
+        -- null_ls.builtins.code_actions.eslint_d,
+        -- null_ls.builtins.formatting.eslint_d, .with({
+        -- 	condition = function(utils)
+        -- 		return utils.root_has_file(".eslintrc.js")
+        -- 	end,
+        -- })
 
-		-- Go Lang
-		-- null_ls.builtins.formatting.gofmt,
-		null_ls.builtins.formatting.gofumpt, -- alternative to gofmt?
-		null_ls.builtins.formatting.goimports,
-		null_ls.builtins.diagnostics.buf, -- protocol buffer
-		null_ls.builtins.formatting.buf,
+        -- Go Lang
+        -- null_ls.builtins.formatting.gofmt,
+        null_ls.builtins.formatting.gofumpt, -- alternative to gofmt?
+        null_ls.builtins.formatting.goimports,
+        null_ls.builtins.diagnostics.buf,    -- protocol buffer
+        null_ls.builtins.formatting.buf,
 
-		-- Lua
-		null_ls.builtins.formatting.stylua,
+        -- Lua
+        null_ls.builtins.formatting.stylua,
 
-		--Markdown
-		-- null_ls.builtins.formatting.cbfmt, -- FeMaco to edit/format codeblocks on separate buffer suffices.
-		null_ls.builtins.diagnostics.markdownlint,
-		null_ls.builtins.formatting.markdownlint,
-		-- null_ls.builtins.formatting.mdformat,
+        --Markdown
+        -- null_ls.builtins.formatting.cbfmt, -- FeMaco to edit/format codeblocks on separate buffer suffices.
+        null_ls.builtins.diagnostics.markdownlint, --.with({ args = { "--stdin", "-c", "~/.markdownlint.yml" } }),
+        null_ls.builtins.formatting.markdownlint,
+        -- null_ls.builtins.formatting.mdformat,
 
-		-- Python related
-		null_ls.builtins.diagnostics.pylint,
-		null_ls.builtins.formatting.black,
-		null_ls.builtins.formatting.djhtml,
+        -- Python related
+        null_ls.builtins.diagnostics.pylint,
+        null_ls.builtins.formatting.black,
+        null_ls.builtins.formatting.djhtml,
 
-		-- Spelling
-		-- null_ls.builtins.completion.spell.with({
-		-- 	filetypes = { "markdown", "org" },
-		-- }),
-		-- null_ls.builtins.diagnostics.typos,
-		null_ls.builtins.diagnostics.proselint,
-		null_ls.builtins.code_actions.proselint,
-		null_ls.builtins.diagnostics.commitlint.with({ filetypes = { "NeogitCommitMessage", "gitcommit" } }),
-		-- null_ls.builtins.diagnostics.textlint,
-		-- null_ls.builtins.formatting.tidy,
-		-- null_ls.builtins.diagnostics.codespell,
+        -- Spelling
+        -- null_ls.builtins.completion.spell.with({
+        -- 	filetypes = { "markdown", "org" },
+        -- }),
+        -- null_ls.builtins.diagnostics.typos,
+        null_ls.builtins.diagnostics.proselint,
+        null_ls.builtins.code_actions.proselint,
+        null_ls.builtins.diagnostics.commitlint.with({ filetypes = { "NeogitCommitMessage", "gitcommit" } }),
+        null_ls.builtins.diagnostics.codespell,
+        -- null_ls.builtins.diagnostics.textlint,
+        -- null_ls.builtins.formatting.tidy,
+        -- null_ls.builtins.diagnostics.codespell,
 
-		--XML - HTML
-		null_ls.builtins.formatting.tidy,
-		null_ls.builtins.diagnostics.tidy,
-		-- YML
-		-- null_ls.builtins.formatting.yamlfix,
-		-- null_ls.builtins.formatting.yq,
-		null_ls.builtins.diagnostics.yamllint,
-		null_ls.builtins.formatting.yamlfmt,
-	},
+        --XML - HTML
+        null_ls.builtins.formatting.tidy,
+        null_ls.builtins.diagnostics.tidy,
+        -- YML
+        -- null_ls.builtins.formatting.yamlfix,
+        -- null_ls.builtins.formatting.yq,
+        null_ls.builtins.diagnostics.yamllint,
+        null_ls.builtins.formatting.yamlfmt,
+    },
 })
 
 -- nvim_lsp.rust_analyzer.setup({})
