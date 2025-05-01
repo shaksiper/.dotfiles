@@ -199,6 +199,7 @@ Plug 'folke/tokyonight.nvim'
 Plug 'rktjmp/lush.nvim'
 " Plug 'hardhackerlabs/oh-my-nvim'
 
+Plug 'leath-dub/snipe.nvim'", {'branch': 'snipe2'}
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'akinsho/bufferline.nvim'
 Plug 'lukas-reineke/indent-blankline.nvim'
