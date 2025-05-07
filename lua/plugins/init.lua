@@ -49,8 +49,8 @@ require("hlslens").setup()
 require("scrollview.contrib.gitsigns").setup()
 require("git-conflict").setup()
 -- require("plugins.ai")
-require("pretty_hover").setup()
 require("plugins.neotest")
+-- require("pretty_hover").setup()
 require("plugins.lsp-lens")
 require("plugins.overseer")
 require("plugins.container")
@@ -72,49 +72,51 @@ vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 require("window-picker").setup()
 -- require("plugins.hydras")
 -- require("satellite").setup()
-require("nvim-surround").setup()
+require("nvim-surround").setup({
+    move_cursor = "sticky"
+})
 require("outline").setup()
 require("plugins.trouble")
 require("syntax-tree-surfer").setup()
 require("fidget").setup({})
 require("plugins.config-local")
 require("neogen").setup({
-	snippet_engine = "luasnip",
-	languages = {
-		cs = {
-			template = {
-				annotation_convention = "xmldoc",
-			},
-		},
-	},
+    snippet_engine = "luasnip",
+    languages = {
+        cs = {
+            template = {
+                annotation_convention = "xmldoc",
+            },
+        },
+    },
 })
 require("obsidian").setup({
-	dir = "~/Documents/Obsidasion",
-	completion = {
-		nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
-	},
-	templates = {
-		subdir = "templates",
-		date_format = "%Y-%m-%d-%a",
-		time_format = "%H:%M",
-	},
-	daily_notes = {
-		-- Optional, if you keep daily notes in a separate directory.
-		folder = "Personal/Daily",
-		-- Optional, if you want to change the date format for the ID of daily notes.
-		date_format = "%Y-%m-%d",
-		-- Optional, if you want to change the date format of the default alias of daily notes.
-		alias_format = "%B %-d, %Y",
-	},
-	mappings = {
-		["gf"] = vim.keymap.set("n", "gf", function()
-			if require("obsidian").util.cursor_on_markdown_link() then
-				return "<cmd>ObsidianFollowLink<CR>"
-			else
-				return "gf"
-			end
-		end, { noremap = false, expr = true }),
-	},
+    dir = "/mnt/c/Users/CanBerkCetin/Documents/Obsidian/Vispera/",
+    completion = {
+        nvim_cmp = true, -- if using nvim-cmp, otherwise set to false
+    },
+    templates = {
+        subdir = "templates",
+        date_format = "%Y-%m-%d-%a",
+        time_format = "%H:%M",
+    },
+    daily_notes = {
+        -- Optional, if you keep daily notes in a separate directory.
+        folder = "Personal/Daily",
+        -- Optional, if you want to change the date format for the ID of daily notes.
+        date_format = "%Y-%m-%d",
+        -- Optional, if you want to change the date format of the default alias of daily notes.
+        alias_format = "%B %-d, %Y",
+    },
+    mappings = {
+        ["gf"] = vim.keymap.set("n", "gf", function()
+            if require("obsidian").util.cursor_on_markdown_link() then
+                return "<cmd>ObsidianFollowLink<CR>"
+            else
+                return "gf"
+            end
+        end, { noremap = false, expr = true }),
+    },
 })
 -- require("headlines").setup({
 -- 	markdown = {
@@ -122,13 +124,11 @@ require("obsidian").setup({
 -- 		bullets = nil,
 -- 	},
 -- })
-require("render-markdown").setup({})
-require("highlight-undo").setup({
-	duration = 300,
-	keymaps = {
-		Undo = { mode = "n", lhs = "u", rhs = "u", desc = "undo", hlgroup = "HighlightUndo", opts = {} },
-		Redo = { mode = "n", lhs = "<C-r>", rhs = "<C-r>", desc = "redo", hlgroup = "HighlightUndo", opts = {} },
-	},
+require("render-markdown").setup({
+    completions = {
+        blink = { enabled = true },
+        lsp = { enabled = true }
+    },
 })
 -- require("highlight-undo").setup({
 --     duration = 300,
@@ -139,7 +139,6 @@ require("highlight-undo").setup({
 -- })
 require("yanky").setup({})
 require("plugins.scissors")
--- require("plugins.rainbow-delimiters")
 -- require("projections").setup({})
 -- require("sentiment").setup({})
 -- local codewindow = require("codewindow")
