@@ -6,6 +6,12 @@ require("blink.cmp").setup({
         preset = 'enter',
     },
     cmdline = {
+        -- enabled = true,
+        completion = {
+            menu = {
+                auto_show = true
+            }
+        },
         keymap = {
             preset = "default",
             -- ['<CR>'] = { 'accept', 'fallback' },
@@ -13,10 +19,6 @@ require("blink.cmp").setup({
             -- ['<S-TAB>'] = { 'select_prev', 'fallback' },
         },
     },
-    -- appearance = {
-    --     use_nvim_cmp_as_default = true,
-    --     nerd_font_variant = 'mono',
-    -- },
 
     -- Experimental signature help support
     signature = {
@@ -102,7 +104,12 @@ require("blink.cmp").setup({
         },
         accept = {
             dot_repeat = true, -- causes bug, drops to background when snippet completion
-            auto_brackets = { enabled = true }
+            auto_brackets = {
+                enabled = true,
+                semantic_token_resolution = {
+                    enabled = true,
+                },
+            }
         },
     },
     -- experimental auto-brackets support
@@ -111,17 +118,8 @@ require("blink.cmp").setup({
     -- trigger = { signature_help = { enabled = true } },
     snippets = { preset = 'luasnip' },
     sources = {
-        default = { 'lsp', 'path', 'snippets', 'luasnip_choice', 'buffer', 'nvim_lua' },
+        default = { 'lsp', 'path', 'snippets', 'luasnip_choice', 'buffer', 'nvim_lua', 'markdown' },
         providers = {
-            -- create provider
-            -- luasnip = {
-            --     name = 'luasnip', -- IMPORTANT: use the same name as you would for nvim-cmp
-            --     module = 'blink.compat.source',
-            --     async = true,
-            --     min_keyword_length = 1,
-            --     -- all blink.cmp source config options work as normal:
-            --     score_offset = -3,
-            -- },
             nvim_lua = {
                 name = 'nvim_lua',
                 async = true,
@@ -141,8 +139,12 @@ require("blink.cmp").setup({
             buffer = {
                 min_keyword_length = 2,
                 async = true,
-            }
-
+            },
+            markdown = {
+                name = 'RenderMarkdown',
+                module = 'render-markdown.integ.blink',
+                fallbacks = { 'lsp' },
+            },
         }
     }
 }
