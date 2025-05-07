@@ -37,8 +37,6 @@ end, { noremap = true, desc = "Toggle Test Summary" })
 
 --LSP
 
-vim.keymap.set("n", "<leader>ot", "<CMD>ObsidianToday<CR>", {desc = "Obsidian Today"})
-vim.keymap.set("n", "<C-w>gt", "<CMD>tab split<CR>", {desc = "Open current buffer in new tab"})
 local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<leader>fsw", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<cr>", opts)
 vim.keymap.set(
@@ -109,8 +107,6 @@ vim.keymap.set("n", "<leader>xl", "<cmd>Trouble loclist toggle<cr>", { desc = "T
 vim.keymap.set("n", "<leader>xq", "<cmd>Trouble quickfix toggle<cr>", { desc = "Trouble Quickfix" })
 vim.keymap.set("n", "<leader>xr", "<cmd>Trouble lsp_references toggle<cr>", { desc = "Trouble LSP Ref." })
 
-require("maps.detour")
-require("maps.hydras")
 -- DAP
 local dap = require('dap')
 vim.keymap.set("n", "<F5>", function() dap.continue() end, { desc = "DAP Continue" })
@@ -153,7 +149,11 @@ vim.keymap.set('n', '\\dl', function()
   require"osv".launch({port = 8086})
 end, { noremap = true })
 
+vim.keymap.set("n", "<leader>ot", "<CMD>ObsidianToday<CR>", { desc = "Obsidian Today" })
+vim.keymap.set("n", "<C-w>gt", "<CMD>tab split<CR>", { desc = "Open current buffer in new tab" })
 
+-- require("maps.detour")
+-- require("maps.hydras")
 
 -- LEAP
 vim.keymap.set({'n', 'o'}, '<leader>gs', function ()
@@ -372,7 +372,7 @@ vim.keymap.set("n", "<c-p>", "<Plug>(YankyCycleBackward)")
 vim.keymap.set("n", "<leader>fy", "<CMD>YankyRingHistory<CR>")
 vim.keymap.set("n", "<leader>ls", function()
     require("dropbar.api").pick()
-end,  { desc = "Select symbol from drop bar" })
+end, { desc = "Select symbol from drop bar" })
 
 -- Markdown
 vim.keymap.set("n", "\\mir", "<cmd>MkdnTableNewRowAbove<CR>", { desc = "Insert Row Before" })
@@ -402,21 +402,10 @@ nnoremap <leader>bb :BufferLinePick<CR>
 " let g:winresizer_start_key="<leader>ws"
 nnoremap <leader>sw :ToggleAlternate<CR>
 
-nnoremap <silent> <F5> :lua require'dap'.continue()<CR>
-nnoremap <silent> <F10> :lua require'dap'.step_over()<CR>
-nnoremap <silent> <F11> :lua require'dap'.step_into()<CR>
-nnoremap <silent> <F12> :lua require'dap'.step_out()<CR>
-nnoremap <silent> <leader>b :lua require'dap'.toggle_breakpoint()<CR>
-nnoremap <silent> <leader>B :lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>
-nnoremap <silent> <leader>lp :lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>
-nnoremap <silent> <leader>dr :lua require'dap'.repl.open()<CR>
-nnoremap <silent> <leader>dl :lua require'dap'.run_last()<CR>
-nnoremap <silent> <leader>dt :lua require'dapui'.toggle()<CR>
-
-" nmap <silent> <leader>td :lua require('dap-go').debug_test()<CR>
-
 " Pounce
-nmap <leader><C-f> <cmd>Pounce<CR>
-vmap <leader><C-f> <cmd>Pounce<CR>
-" nmap <C-l> <cmd>PounceRepeat<CR>
-omap gs <cmd>Pounce<CR>  " 's' is used by vim-surround
+"nmap <leader><C-f> <cmd>Pounce<CR>
+"vmap <leader><C-f> <cmd>Pounce<CR>
+"" nmap <C-l> <cmd>PounceRepeat<CR>
+"omap gs <cmd>Pounce<CR>  " 's' is used by vim-surround
+
+
