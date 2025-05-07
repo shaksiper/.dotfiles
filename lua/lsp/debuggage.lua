@@ -15,15 +15,13 @@ require("nvim-dap-virtual-text").setup(
 )
 require("dapui").setup()
 require("nvim-dap-repl-highlights").setup()
-require("dap-go").setup()
-
-vim.api.nvim_set_keymap("n", "<leader>td", "<CMD>lua require('dap-go').debug_test()<CR>", { noremap = true })
+-- require("dap-go").setup()
 
 -- Javascript
 dap.adapters.node2 = {
-	type = "executable",
-	command = "node",
-	args = { os.getenv("HOME") .. "/Downloads/LSP/Debug/vscode-node-debug2/out/src/nodeDebug.js" },
+    type = "executable",
+    command = "node",
+    args = { os.getenv("HOME") .. "/Downloads/LSP/Debug/vscode-node-debug2/out/src/nodeDebug.js" },
 }
 dap.configurations.lua = {
     {
@@ -36,23 +34,23 @@ dap.adapters.nlua = function(callback, config)
     callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 })
 end
 dap.configurations.javascript = {
-	{
-		name = "Launch",
-		type = "node2",
-		request = "launch",
-		program = "${file}",
-		cwd = vim.fn.getcwd(),
-		sourceMaps = true,
-		protocol = "inspector",
-		console = "integratedTerminal",
-	},
-	{
-		-- For this to work you need to make sure the node process is started with the `--inspect` flag.
-		name = "Attach to process",
-		type = "node2",
-		request = "attach",
-		processId = require("dap.utils").pick_process,
-	},
+    {
+        name = "Launch",
+        type = "node2",
+        request = "launch",
+        program = "${file}",
+        cwd = vim.fn.getcwd(),
+        sourceMaps = true,
+        protocol = "inspector",
+        console = "integratedTerminal",
+    },
+    {
+        -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+        name = "Attach to process",
+        type = "node2",
+        request = "attach",
+        processId = require("dap.utils").pick_process,
+    },
 }
 
 -- Python
