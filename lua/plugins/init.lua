@@ -1,5 +1,6 @@
 require("plugins.dressing")
 require("plugins.treesitter")
+require("plugins.treesitter-context")
 require("plugins.neotest")
 require("plugins.devicons")
 -- require("plugins.cmp")
@@ -156,3 +157,4 @@ require("kanagawa").setup({
     end,
 })
 require("plugins.multicursor")
+require("snipe").setup()
