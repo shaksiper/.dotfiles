@@ -165,7 +165,7 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'NeogitOrg/neogit', {'branch': 'master'}
 Plug 'isakbm/gitgraph.nvim'
 Plug 'akinsho/git-conflict.nvim'
-Plug 'ahmedkhalf/project.nvim'
+Plug 'DrKJeff16/project.nvim'
 " Plug 'GnikDroy/projections.nvim'
 Plug 'klen/nvim-config-local'
 " Plug 'rmagatti/auto-session'
