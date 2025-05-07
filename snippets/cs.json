@@ -1,0 +1,18 @@
+{
+	"nmsc": {
+		"body": "namespace ${1:Namespace};",
+		"prefix": "nmsc"
+	},
+	"pinf-1": {
+		"body": ["public interface I$1 : $2", "{", "    $3", "}"],
+		"prefix": "pinf"
+	},
+	"notimplemented": {
+		"body": "throw new NotImplementedException();",
+		"prefix": "notimplemented"
+	},
+	"pinf": {
+		"body": ["public interface I$1", "{", "    $2", "}"],
+		"prefix": "pinf"
+	}
+}
