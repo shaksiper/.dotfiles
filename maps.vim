@@ -15,6 +15,25 @@ vnoremap > >gv
 " nnoremap <C-t> :NeoTreeRevealToggle<CR>
 " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 lua << EOF
+-- TESTING
+vim.keymap.set("n", "\\td", function()
+    require("neotest").run.run({ strategy = "dap" })
+end, { noremap = true, desc = "Test Debug" })
+vim.keymap.set("n", "\\tt", function()
+    require("neotest").run.run(vim.fn.expand("%"))
+end, { noremap = true, desc = "Test Current Test File" })
+vim.keymap.set("n", "\\ts", function()
+    require("neotest").run.stop()
+end, { noremap = true, desc = "Stop Test" })
+vim.keymap.set("n", "\\T", function()
+    require("neotest").run.run()
+end, { noremap = true, desc = "Test Nearest" })
+vim.keymap.set("n", "\\to", function()
+    require("neotest").output.open({ enter = true })
+end, { noremap = true, desc = "Test Output" })
+vim.keymap.set("n", "<M-t>", function()
+    require("neotest").summary.toggle()
+end, { noremap = true, desc = "Toggle Test Summary" })
 
 --LSP
 
