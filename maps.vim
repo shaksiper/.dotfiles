@@ -76,8 +76,8 @@ vim.keymap.set("v", "<leader>ca", ":Telescope range_code_action<CR>", opts)
 
 -- vim.keymap.set("n", "<leader>cla", "V:<C-U>Lspsaga range_code_action<CR>", opts) -- Code line action
 vim.keymap.set("n", "gh", "<cmd>Lspsaga finder<CR>", opts)
-vim.keymap.set("n", "\\p", "<cmd>Lspsaga peek_definition<CR>", opts)
-vim.keymap.set("n", "\\P", "<cmd>Lspsaga peek_type_definition<CR>", opts)
+vim.keymap.set("n", "<leader>gdp", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek definition" })
+vim.keymap.set("n", "<leader>gdP", "<cmd>Lspsaga peek_type_definition<CR>", { desc = "Peek type definition" })
 -- Only jump to error
 vim.keymap.set("n", "[D", function()
     require("lspsaga.diagnostic"):goto_prev({ severity = vim.diagnostic.severity.ERROR })
