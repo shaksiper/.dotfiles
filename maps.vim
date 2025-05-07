@@ -212,7 +212,7 @@ vim.keymap.set("n", "<leader>fgs", "<cmd>lua require'telescope.builtin'.git_stat
 vim.keymap.set("n", "<M-g>", "<cmd>Neogit<cr>", { desc = "Neogit" })
 vim.keymap.set(
     "n",
-    "<leader>F",
+    "<leader><leader>",
     "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>",
     default_opts
 )
