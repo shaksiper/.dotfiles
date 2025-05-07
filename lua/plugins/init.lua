@@ -1,5 +1,7 @@
-require("plugins.devicons")
+require("plugins.dressing")
 require("plugins.treesitter")
+require("plugins.neotest")
+require("plugins.devicons")
 -- require("plugins.cmp")
 require("plugins.blink")
 require("plugins.luasnip")
@@ -55,13 +57,10 @@ require("plugins.container")
 -- require("plugins.rest")
 require("plugins.neogit")
 -- require("plugins.detour")
-require("flatten").setup()
--- require("ufo").setup()
--- vim.o.foldcolumn = "1"
--- vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
--- vim.o.foldlevelstart = -1
--- vim.o.foldenable = true
--- vim.o.fillchars = [[fold: ,foldopen:⏷,foldsep: ,foldclose:⏵]]
+-- require("flatten").setup()
+require("plugins.ufo")
+-- vim.o.foldmethod = "expr"
+vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 -- TODO: replace this plugin with usercmd
 -- require("auto-session").setup({
@@ -143,18 +142,19 @@ require("plugins.scissors")
 -- require("plugins.rainbow-delimiters")
 -- require("projections").setup({})
 -- require("sentiment").setup({})
-local codewindow = require("codewindow")
-codewindow.setup()
-codewindow.apply_default_keybinds()
+-- local codewindow = require("codewindow")
+-- codewindow.setup()
+-- codewindow.apply_default_keybinds()
 require("plugins.custom-usercommands")
 -- require("plugins.various-textobj")
 require("kanagawa").setup({
-	overrides = function(colors) -- add/modify highlights
-		return {
-			NormalFloat = { bg = "none" },
-			FloatBorder = { bg = "none" },
-			FloatTitle = { bg = "none" },
-		}
-	end,
+    overrides = function(colors) -- add/modify highlights
+        return {
+            -- BlinkCmpLabelMatch = { fg = colors.theme.syn.fun },
+            NormalFloat = { bg = "none" },
+            FloatBorder = { bg = "none" },
+            FloatTitle = { bg = "none" },
+        }
+    end,
 })
 require("plugins.multicursor")
