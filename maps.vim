@@ -178,6 +178,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
         vim.keymap.set("n", "<leader>p", "<cmd>Glow<CR>", default_opts)
     end,
 })
+vim.keymap.set("n", "\\<TAB>", function() require("snipe").open_buffer_menu() end, { desc = "Snipe Buffers" })
 -- FAILED REMAP FOR ORGMODE
 -- vim.api.nvim_create_autocmd("FileType", {
 --     pattern = "org",
