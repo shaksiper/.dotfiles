@@ -208,7 +208,7 @@ Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'levouh/specs.nvim'
 Plug 'mvllow/modes.nvim'
 Plug 'mbbill/undotree' " TODO: Change for simnalamburt/vim-mundo
-Plug 'tzachar/highlight-undo.nvim'
+"Plug 'tzachar/highlight-undo.nvim'
 " Plug 'mhinz/vim-startify'
 Plug 'nvimdev/dashboard-nvim'
 Plug 'olimorris/persisted.nvim'

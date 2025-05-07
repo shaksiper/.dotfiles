@@ -131,6 +131,13 @@ require("highlight-undo").setup({
 		Redo = { mode = "n", lhs = "<C-r>", rhs = "<C-r>", desc = "redo", hlgroup = "HighlightUndo", opts = {} },
 	},
 })
+-- require("highlight-undo").setup({
+--     duration = 300,
+--     keymaps = {
+--         Undo = { mode = "n", lhs = "u", rhs = "u", desc = "undo", hlgroup = "HighlightUndo", opts = {} },
+--         Redo = { mode = "n", lhs = "<C-r>", rhs = "<C-r>", desc = "redo", hlgroup = "HighlightUndo", opts = {} },
+--     },
+-- })
 require("yanky").setup({})
 require("plugins.scissors")
 -- require("plugins.rainbow-delimiters")
