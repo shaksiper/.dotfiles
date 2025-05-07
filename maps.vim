@@ -156,10 +156,10 @@ vim.keymap.set("n", "<C-w>gt", "<CMD>tab split<CR>", { desc = "Open current buff
 -- require("maps.hydras")
 
 -- LEAP
-vim.keymap.set({'n', 'o'}, '<leader>gs', function ()
-  require('leap.remote').action()
+vim.keymap.set({ 'n', 'o' }, '<leader>gs', function()
+    require('leap.remote').action()
 end)
-vim.keymap.set({ "n", "x", "o" }, "<leader><leader>s", function()
+vim.keymap.set({ "n", "x", "o" }, "<M-s>", function()
     require("leap-ast").leap()
 end, {})
 vim.keymap.set("n", "<leader>ss", function()
