@@ -1,4 +1,3 @@
-lua vim.loader.enable()
 "let g:editorconfig = v:true
 let g:plug_home = stdpath('data') . '/plugged'
 set guifont=JetBrainsMono\ NFM:h11
