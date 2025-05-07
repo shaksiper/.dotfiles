@@ -232,11 +232,11 @@ if not configs.ls_emmet then
 end
 -- Vim LSP
 nvim_lsp.vimls.setup({
-	-- Defaults
+    -- Defaults
 })
 -- TSSERVER
 nvim_lsp.ts_ls.setup({
-	-- Defaults
+    -- Defaults
 })
 nvim_lsp.quick_lint_js.setup({})
 -- ray-x/go.nvim init
@@ -250,38 +250,58 @@ nvim_lsp.quick_lint_js.setup({})
 -- })
 -- GOPLS
 nvim_lsp.gopls.setup({
-	cmd = { "gopls", "serve" },
-	settings = {
-		gopls = {
-			gofumpt = true,
-			analyses = {
-				unusedparams = true,
-				shadow = true,
-				fieldalignment = true,
-				nilness = true,
-			},
-			staticcheck = true,
-		},
-	},
+    cmd = { "gopls", "serve" },
+    settings = {
+        gopls = {
+            gofumpt = true,
+            analyses = {
+                unusedparams = true,
+                shadow = true,
+                fieldalignment = true,
+                nilness = true,
+            },
+            staticcheck = true,
+        },
+    },
 })
 -- LUA LSP
 -- local runtime_path = vim.split(package.path, ";")
 -- table.insert(runtime_path, "lua/?.lua")
 -- table.insert(runtime_path, "lua/?/init.lua")
 require("neodev").setup({
-	-- add any options here, or leave empty to use the default settings
+    -- add any options here, or leave empty to use the default settings
 })
 nvim_lsp.lua_ls.setup({
-	settings = {
-		Lua = {
-			completion = {
-				callSnippet = "Replace",
-			},
-			hint = {
-				enable = true,
-			},
-		},
-	},
+    on_init = function(client)
+        if client.workspace_folders then
+            local path = client.workspace_folders[1].name
+            if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc')) then
+                return
+            end
+        end
+
+        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+            runtime = {
+                version = 'LuaJIT'
+            },
+            workspace = {
+                checkThirdParty = false,
+                library = {
+                    vim.env.VIMRUNTIME
+                }
+            }
+        })
+    end,
+    settings = {
+        Lua = {
+            completion = {
+                callSnippet = "Replace",
+            },
+            hint = {
+                enable = true,
+            },
+        },
+    },
 })
 -- JAVA LS
 -- It is temporarily out of service due to not being compiled
