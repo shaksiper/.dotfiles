@@ -425,8 +425,8 @@ require("roslyn").setup({
         -- end,                         -- required
         -- on_attach = monkey_patch_semantic_tokens,
         cmd = {
-            "dotnet",
-            "/home/can/LSP/roslyn/content/LanguageServer/linux-x64/Microsoft.CodeAnalysis.LanguageServer.dll",
+            -- "dotnet",
+            "roslyn-ls",
             "--logLevel=Debug", "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
             "--stdio"
         },
