@@ -1,4 +1,11 @@
 local dap = require("dap")
+require("dap-view").setup({
+    winbar = {
+        controls = {
+            enabled = true,
+        }
+    }
+})
 require("nvim-dap-virtual-text").setup(
     {
         display_callback = function(variable, _, _, _, options)

@@ -104,6 +104,7 @@ Plug 'saghen/blink.compat'
 " Debugging
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
+Plug 'igorlfs/nvim-dap-view'
 "Plug 'rcarriga/cmp-dap'
 Plug 'theHamsta/nvim-dap-virtual-text'
 "Plug 'leoluz/nvim-dap-go'
