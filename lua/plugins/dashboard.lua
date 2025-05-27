@@ -55,6 +55,12 @@ require("dashboard").setup({
                 key = "f",
             },
             {
+                desc = " Oil",
+                group = "Boolean",
+                action = "Oil --float",
+                key = "O",
+            },
+            {
                 icon = " ",
                 icon_hl = "@variable",
                 desc = "Brows",
