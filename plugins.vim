@@ -5,7 +5,7 @@ Plug 'michaelb/sniprun', { 'do': 'bash install.sh'}
 Plug 'rcarriga/nvim-notify'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects'
-" Plug 'chrisgrieser/nvim-various-textobjs' " not what i wantted
+ Plug 'chrisgrieser/nvim-various-textobjs' " not what i wantted
 " Plug 'Jason-M-Chan/ts-textobjects'
 " Plug 'https://gitlab.com/HiPhish/nvim-ts-rainbow2/'
 Plug 'HiPhish/rainbow-delimiters.nvim'

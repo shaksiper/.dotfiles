@@ -114,7 +114,7 @@ require("nvim-treesitter.configs").setup({
     playground = {
         enable = true,
         disable = {},
-        updatetime = 25,   -- debounced time for highlighting nodes in the playground from source code
+        updatetime = 25,         -- debounced time for highlighting nodes in the playground from source code
         persist_queries = false, -- whether the query persists across vim sessions
         keybindings = {
             toggle_query_editor = "o",
@@ -150,3 +150,9 @@ vim.keymap.set({ "n", "x", "o" }, "[h", prev_hunk_repeat, { desc = "Previous hun
 -- ensure ; goes forward and , goes backward regardless of the last direction
 vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
 vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
+
+require("various-textobjs").setup({
+    keymaps = {
+        useDefaults = true
+    }
+})
