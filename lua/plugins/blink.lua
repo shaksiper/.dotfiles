@@ -145,6 +145,9 @@ require("blink.cmp").setup({
                 module = 'render-markdown.integ.blink',
                 fallbacks = { 'lsp' },
             },
+            snippets = {
+                enabled = function() return vim.bo.filetype ~= "DressingInput" end,
+            }
         }
     }
 }
