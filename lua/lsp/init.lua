@@ -178,7 +178,8 @@ nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.defaul
 --     -- root_dir = root_pattern("composer.json", ".git"),
 -- })
 -- Styling
-nvim_lsp.ls_emmet.setup({})
+-- nvim_lsp.ls_emmet.setup({})
+vim.lsp.enable('emmet_language_server') -- https://github.com/olrtg/emmet-language-server
 nvim_lsp.cssls.setup({})
 nvim_lsp.jsonls.setup({})
 nvim_lsp.biome.setup({}) -- instead of rome (unmaintained)
