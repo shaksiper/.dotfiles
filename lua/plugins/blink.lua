@@ -16,6 +16,8 @@ require("blink.cmp").setup({
             preset = "default",
             -- ['<CR>'] = { 'accept', 'fallback' },
             ['<TAB>'] = { 'select_and_accept', 'fallback' },
+            ['<C-p>'] = { 'select_prev', 'fallback' },
+            ['<C-n>'] = { 'select_next', 'fallback' },
             -- ['<S-TAB>'] = { 'select_prev', 'fallback' },
         },
     },
@@ -28,6 +30,7 @@ require("blink.cmp").setup({
             show_on_insert_on_trigger_character = true,
         },
         window = {
+            -- show_documentation = true,
             -- winblend = 60,
             border = 'single'
         }
@@ -131,7 +134,7 @@ require("blink.cmp").setup({
             {
                 name = 'luasnip_choice',
                 async = true,
-                min_keyword_length = 0,
+                min_keyword_length = 1,
                 module = 'blink.compat.source',
                 score_offset = -3,
 
