@@ -1,18 +1,1 @@
-{
-	"nmsc": {
-		"body": "namespace ${1:Namespace};",
-		"prefix": "nmsc"
-	},
-	"pinf-1": {
-		"body": ["public interface I$1 : $2", "{", "    $3", "}"],
-		"prefix": "pinf"
-	},
-	"notimplemented": {
-		"body": "throw new NotImplementedException();",
-		"prefix": "notimplemented"
-	},
-	"pinf": {
-		"body": ["public interface I$1", "{", "    $2", "}"],
-		"prefix": "pinf"
-	}
-}
+{"nmsc":{"body":"namespace ${1:Namespace};","prefix":"nmsc"},"pinf":{"body":["public interface I$1","{","    $2","}"],"prefix":"pinf"},"prec":{"body":"${1:public} record ${2:$TM_FILENAME_BASE}($3);","prefix":"rec"},"notimplemented":{"body":"throw new NotImplementedException();","prefix":"notimplemented"},"pinf-1":{"body":["public interface I$1 : $2","{","    $3","}"],"prefix":"pinf"},"cls":{"body":["${1:public} class ${2:$TM_FILENAME_BASE} : $3","{","    $0","}"],"prefix":"cls"}}
