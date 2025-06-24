@@ -243,6 +243,9 @@ telescope.setup({
         persisted = {
             layout_config = { width = 0.55, height = 0.55 },
         },
+        ["ui-select"] = {
+            require("telescope.themes").get_dropdown{}
+        }
     },
 })
 telescope.load_extension("fzf")
@@ -274,3 +277,4 @@ telescope.load_extension("persisted")
 -- 		end
 -- 	end,
 -- })
+telescope.load_extension("ui-select")

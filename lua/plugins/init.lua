@@ -1,4 +1,11 @@
-require("plugins.dressing")
+-- require("plugins.dressing")
+-- require("noice").setup(
+--     {
+--         cmdline = { enabled = false }
+--     }
+-- )
+-- vim.notify = require("notify")
+require("plugins.snacks")
 require("plugins.treesitter")
 require("plugins.treesitter-context")
 require("plugins.neotest")
@@ -14,7 +21,7 @@ require("plugins.tabout")
 require("plugins.indent-blankline")
 require("plugins.close-buffers")
 require("plugins.gitsigns")
-require("plugins.neoscroll")
+-- require("plugins.neoscroll")
 -- require("plugins.specs")
 -- require("plugins.spellsitter")
 require("ts_context_commentstring").setup({})
