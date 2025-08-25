@@ -424,7 +424,6 @@ vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 -- nvim_lsp.rust_analyzer.setup({})
 
-require("roslyn").setup()
 vim.lsp.config("roslyn", {
     -- on_attach = function(client, bufnr)
     --     monkey_patch_semantic_tokens(client)
@@ -434,7 +433,7 @@ vim.lsp.config("roslyn", {
     cmd = {
         -- "dotnet",
         "roslyn-ls",
-        "--logLevel=Debug", "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.get_log_path()),
+        "--logLevel=Information", "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
         "--stdio"
     },
     on_attach = on_attach,
@@ -474,6 +473,37 @@ vim.lsp.config("roslyn", {
         }
     },
 })
+require("roslyn").setup()
+
+-- TODO: improve neotest discovery
+vim.lsp.commands["dotnet.test.run"] = function(command)
+    local args = command.arguments or {}
+    local data = args[1]
+    if not data then
+        vim.notify("No test information in CodeLens args", vim.log.levels.WARN)
+        return
+    end
+
+    local uri = data.textDocument and data.textDocument.uri
+    if not uri then
+        vim.notify("Missing URI in CodeLens data", vim.log.levels.WARN)
+        return
+    end
+
+    local file = vim.uri_to_fname(uri)
+    local row = data.range.start.line + 1 -- Lua is 1-based, LSP is 0-based
+
+    -- Use Neotest to run the test at the given line
+    require("neotest").run.run({
+        path = file,
+        -- You can use `pos` to target line more directly
+        pos = {
+            path = file,
+            row = row,
+            col = data.range.start.character,
+        },
+    })
+end
 
 -- nvim_lsp.razor.setup({
 -- 	cmd = { "rzls" },
