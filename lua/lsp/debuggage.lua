@@ -4,13 +4,13 @@ require("dap-view").setup({
         controls = {
             enabled = true,
         }
-    }
+    },
 })
 require("nvim-dap-virtual-text").setup(
     {
         display_callback = function(variable, _, _, _, options)
             if #variable.value > 40 then
-               variable.value = string.sub(variable.value, 1, 40) .. "..." 
+                variable.value = string.sub(variable.value, 1, 40) .. "..."
             end
             if options.virt_text_pos == 'inline' then
                 return ' = ' .. variable.value:gsub("%s+", " ")
