@@ -95,23 +95,38 @@ local on_attach = function(client, bufnr)
     -- end
     -- This methods considers dynamic registration as per neovim/neovim/pull/23681
     -- Instead use `client.supports_method(<method>)`. It considers both the dynamic capabilities and static `server_capabilities`.
-    if client:supports_method("inlayHintProvider") then
-        vim.lsp.inlay_hint.enable(true)
+    if client:supports_method("textDocument/inlayHint") then
+        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) -- include bufnr for safety
+    end
+
+    if client:supports_method("textDocument/codeLens") then
+        vim.lsp.codelens.refresh()
+
+
+        vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+            buffer = bufnr,
+            callback = function()
+                vim.lsp.codelens.refresh()
+            end,
+            desc = "Auto-refresh CodeLens",
+        })
     end
     -- used to use tree-sitter-refactor for highlighting definitions under cursor
-    if client.server_capabilities.documentHighlightProvider then
-        vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
-        vim.api.nvim_clear_autocmds { buffer = bufnr, group = "lsp_document_highlight" }
+    if client:supports_method("textDocument/documentHighlight") then
+        -- vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+        local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+        vim.api.nvim_clear_autocmds { buffer = bufnr, group = group }
+
         vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
             callback = vim.lsp.buf.document_highlight,
             buffer = bufnr,
-            group = "lsp_document_highlight",
+            group = group,
             desc = "Document Highlight",
         })
         vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
             callback = vim.lsp.buf.clear_references,
             buffer = bufnr,
-            group = "lsp_document_highlight",
+            group = group,
             desc = "Clear All the References",
         })
     end
@@ -125,6 +140,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), capabilities)
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 capabilities.textDocument.diagnostic.dynamicRegistration = true
+-- capabilities.textDocument.codeLens.dynamicRegistration = true
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
     properties = {
