@@ -134,7 +134,9 @@ Plug 'kevinhwang91/nvim-hlslens'
 " and not useful anymore?
 " Would be better orginizer than focus.nvim?
 " Plug 'simeji/winresizer' " ditched for hydrafied solution
-Plug 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
+"Plug 'https://gitlab.com/yorickpeterse/nvim-pqf.git'
+Plug 'stevearc/quicker.nvim'
+Plug 'kevinhwang91/nvim-bqf'
 Plug 'chentoast/marks.nvim'
 " Plug 'tversteeg/registers.nvim'
 " Plug 'AckslD/nvim-neoclip.lua'
