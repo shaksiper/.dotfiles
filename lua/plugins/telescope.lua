@@ -206,10 +206,10 @@ telescope.setup({
     },
     extensions = {
         fzf = {
-            fuzzy = true,          -- false will only do exact matching
+            fuzzy = true,                   -- false will only do exact matching
             override_generic_sorter = true, -- override the generic sorter
-            override_file_sorter = true, -- override the file sorter
-            case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+            override_file_sorter = true,    -- override the file sorter
+            case_mode = "smart_case",       -- or "ignore_case" or "respect_case"
             -- the default case_mode is "smart_case"
         },
         file_browser = {
@@ -217,7 +217,7 @@ telescope.setup({
             hidden = true,
             -- no_ignore = true,
             theme = "ivy",
-            hijack_netrw = true,
+            hijack_netrw = false,
             grouped = true,
             initial_browser = "tree",
             -- auto switch to `telescope.builtin.find_files` style finder if there is a prompt
@@ -255,26 +255,4 @@ telescope.load_extension("hop")
 telescope.load_extension("undo")
 telescope.load_extension("dap")
 telescope.load_extension("persisted")
--- require("telescope").load_extension("projections")
--- vim.keymap.set("n", "<leader>fp", function()
--- 	vim.cmd("Telescope projections")
--- end)
-
--- -- Autostore session on VimExit
--- local Session = require("projections.session")
--- vim.api.nvim_create_autocmd({ "VimLeavePre" }, {
--- 	callback = function()
--- 		Session.store(vim.loop.cwd())
--- 	end,
--- })
-
--- -- Switch to project if vim was started in a project dir
--- local switcher = require("projections.switcher")
--- vim.api.nvim_create_autocmd({ "VimEnter" }, {
--- 	callback = function()
--- 		if vim.fn.argc() == 0 then
--- 			switcher.switch(vim.loop.cwd())
--- 		end
--- 	end,
--- })
 telescope.load_extension("ui-select")
