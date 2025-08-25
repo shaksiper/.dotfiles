@@ -109,11 +109,11 @@ navic.setup({
 	depth_limit = 5,
 	depth_limit_indicator = "..",
 }) ]]
-require("nvim-navbuddy").setup({
-    lsp = {
-        auto_attach = true, -- If set to true, you don't need to manually use attach function
-    },
-})
+-- require("nvim-navbuddy").setup({
+--     lsp = {
+--         auto_attach = true, -- If set to true, you don't need to manually use attach function
+--     },
+-- })
 local on_attach = function(client, bufnr)
     -- if client.server_capabilities.inlayHintProvider then
     --     vim.lsp.inlay_hint.enable(bufnr, true)

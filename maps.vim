@@ -359,7 +359,7 @@ vim.keymap.set("n", "]b", require("goto-breakpoints").next, { desc = "Next Break
 vim.keymap.set("n", "[b", require("goto-breakpoints").prev, { desc = "Previous Break Point" })
 vim.keymap.set("n", "]B", require("goto-breakpoints").stopped, { desc = "Stopped Break Point" })
 
-vim.keymap.set("n", "<leader>n", require("nvim-navbuddy").open, { desc = "Navbuddy" })
+-- vim.keymap.set("n", "<leader>n", require("nvim-navbuddy").open, { desc = "Navbuddy" })
 
 vim.keymap.set({ "n", "x" }, "p", "<Plug>(YankyPutAfter)")
 vim.keymap.set({ "n", "x" }, "P", "<Plug>(YankyPutBefore)")
@@ -368,9 +368,11 @@ vim.keymap.set({ "n", "x" }, "gP", "<Plug>(YankyGPutBefore)")
 vim.keymap.set("n", "<c-n>", "<Plug>(YankyCycleForward)")
 vim.keymap.set("n", "<c-p>", "<Plug>(YankyCycleBackward)")
 vim.keymap.set("n", "<leader>fy", "<CMD>YankyRingHistory<CR>")
-vim.keymap.set("n", "<leader>ls", function()
-    require("dropbar.api").pick()
-end, { desc = "Select symbol from drop bar" })
+-- Dropbar
+local dropbar_api = require('dropbar.api')
+vim.keymap.set("n", "<leader>;", dropbar_api.pick, { desc = "Select symbol from drop bar" })
+vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
+vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
 
 -- Markdown
 vim.keymap.set("n", "\\mir", "<cmd>MkdnTableNewRowAbove<CR>", { desc = "Insert Row Before" })
