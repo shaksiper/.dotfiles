@@ -83,6 +83,9 @@ vim.keymap.set("v", "<leader>ca", ":Telescope range_code_action<CR>", opts)
 -- vim.keymap.set("n", "]D", function()
 --     require("lspsaga.diagnostic"):goto_next({ severity = vim.diagnostic.severity.ERROR })
 -- end, { silent = true })
+local conform = require("conform")
+vim.keymap.set({'n', 'v'}, "<leader>gf", function() conform.format({ async = true }) end, opts)
+-- vim.keymap.set("v", "<leader>gf", conform.format({ async = true }), opts)
 -- vim.keymap.set("n", "<leader>glf", "V<cmd>lua vim.lsp.buf.range_formatting()<CR>", opts) -- Code line formatting, for whatever it's worth.
 vim.keymap.set("n", "<leader>e", function()
     vim.diagnostic.open_float({ border = "rounded" })
@@ -141,7 +144,7 @@ vim.keymap.set('n', '<Leader>ds', function()
 end)
 
 vim.keymap.set('n', '\\dl', function()
-  require"osv".launch({port = 8086})
+    require "osv".launch({ port = 8086 })
 end, { noremap = true })
 
 vim.keymap.set("n", "<leader>ot", "<CMD>ObsidianToday<CR>", { desc = "Obsidian Today" })
