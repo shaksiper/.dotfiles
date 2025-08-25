@@ -133,3 +133,4 @@ require("kanagawa").setup({
 require("plugins.multicursor")
 require("snipe").setup()
 require("quicker").setup()
+require("plugins.commands")
