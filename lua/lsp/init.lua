@@ -18,90 +18,65 @@ vim.diagnostic.config({
     severity_sort = false,
 })
 
-
 -- local util = require("lspconfig.util")
-local signature_config = {
-    bind = true, -- This is mandatory, otherwise border config won't get registered.
-    -- If you want to hook lspsaga or other signature handler, pls set to false
-
-    floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
-    hint_enable = true, -- virtual hint enable
-    hint_prefix = "🐼 ", -- Panda for parameter
-    hint_scheme = "String",
-    max_height = 12, -- max height of signature floating_window, if content is more than max_height, you can scroll down
-    -- to view the hiding contents
-    max_width = 120, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-    transparency = 25, -- disabled by default, allow floating win transparent value 1~100
-    handler_opts = {
-        border = "single", -- double, single, shadow, none
-    },
-    -- hint_inline = function()
-    -- 	return true
-    -- end,
-    trigger_on_newline = false,     -- set to true if you need multiple line parameter, sometime show signature on new line can be confusing, set it to false for #58
-    zindex = 200,                   -- by default it will be on top of all floating windows, set to 50 send it to bottom
-    padding = "",                   -- character to pad on left and right of signature can be ' ', or '|'  etc
-    toggle_key = "<M-x>",           -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
-    select_signature_key = "<M-n>", -- cycle to next signature, e.g. '<M-n>' function overloading
-}
 -- require("lsp_signature").setup(signature_config)
-local lspsaga_conf = {
-    -- diagnostic_header = { " ", " ", " ", "ﴞ " },
-    -- show_diagnostic_source = true,
-    ui = {
-        -- currently only round theme
-        theme = "round",
-        -- border type can be single,double,rounded,solid,shadow.
-        border = "rounded",
-        winblend = 15,
-    },
-    -- beacon = {
-    --     enable = true,
-    --     frequency = 7
-    -- },
-    symbol_in_winbar = { enable = false },
-    diagnostic = {
-        -- on_insert_follow = true,
-        show_code_action = true,
-        show_source = true,
-        jump_num_shortcut = true,
-        keys = {
-            exec_action = "o",
-            -- expand_or_jump = "<CR>",
-            quit = "<ESC>",
-        },
-    },
-    code_action = {
-        num_shortcut = true,
-        keys = {
-            quit = "<ESC>",
-            exec = "<CR>",
-        },
-    },
-    lightbulb = {
-        enable = false,
-        enable_in_insert = true,
-        sign = true,
-        sign_priority = 40,
-        virtual_text = true,
-    },
-    finder = {
-        open = "o",
-        vsplit = "<c-v>",
-        split = "<c-s>",
-        tabe = "t",
-        quit = "<ESC>",
-        scroll_down = "<C-f>",
-        scroll_up = "<C-b>", -- quit can be a table
-    },
-    rename = {
-        quit = "<ESC>",
-        exec = "<CR>",
-        in_select = true,
-    },
-    -- definition_preview_icon = "  ",
-}
-require("lspsaga").setup(lspsaga_conf)
+-- local lspsaga_conf = {
+--     -- diagnostic_header = { " ", " ", " ", "ﴞ " },
+--     -- show_diagnostic_source = true,
+--     ui = {
+--         -- currently only round theme
+--         theme = "round",
+--         -- border type can be single,double,rounded,solid,shadow.
+--         border = "rounded",
+--         winblend = 15,
+--     },
+--     -- beacon = {
+--     --     enable = true,
+--     --     frequency = 7
+--     -- },
+--     symbol_in_winbar = { enable = false },
+--     diagnostic = {
+--         -- on_insert_follow = true,
+--         show_code_action = true,
+--         show_source = true,
+--         jump_num_shortcut = true,
+--         keys = {
+--             exec_action = "o",
+--             -- expand_or_jump = "<CR>",
+--             quit = "<ESC>",
+--         },
+--     },
+--     code_action = {
+--         num_shortcut = true,
+--         keys = {
+--             quit = "<ESC>",
+--             exec = "<CR>",
+--         },
+--     },
+--     lightbulb = {
+--         enable = false,
+--         enable_in_insert = true,
+--         sign = true,
+--         sign_priority = 40,
+--         virtual_text = true,
+--     },
+--     finder = {
+--         open = "o",
+--         vsplit = "<c-v>",
+--         split = "<c-s>",
+--         tabe = "t",
+--         quit = "<ESC>",
+--         scroll_down = "<C-f>",
+--         scroll_up = "<C-b>", -- quit can be a table
+--     },
+--     rename = {
+--         quit = "<ESC>",
+--         exec = "<CR>",
+--         in_select = true,
+--     },
+--     -- definition_preview_icon = "  ",
+-- }
+-- require("lspsaga").setup(lspsaga_conf)
 --[[ local navic = require("nvim-navic")
 navic.setup({
 	highlight = false,

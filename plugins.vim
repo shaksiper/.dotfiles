@@ -57,11 +57,11 @@ Plug 'mfussenegger/nvim-jdtls'
 Plug 'seblj/roslyn.nvim'
 " Plug 'adamclerk/vim-razor'
 " Plug 'habamax/vim-godot'
-Plug 'nvimdev/lspsaga.nvim' " Changed from glepnir to a more active fork
+"Plug 'nvimdev/lspsaga.nvim' " Changed from glepnir to a more active fork
 "Plug 'SmiteshP/nvim-navic'
 "Plug 'hasansujon786/nvim-navbuddy'
 Plug 'Bekaboo/dropbar.nvim'
-Plug 'VidocqH/lsp-lens.nvim'
+"Plug 'VidocqH/lsp-lens.nvim'
 Plug 'danymat/neogen'
 "Plug 'Sebastian-Nielsen/better-type-hover'
 "Plug 'Fildo7525/pretty_hover'
