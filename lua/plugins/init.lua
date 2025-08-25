@@ -99,6 +99,10 @@ require("plugins.obsidian")
 -- 	},
 -- })
 require("render-markdown").setup({
+    code = {
+        -- style = 'normal',
+        -- border = 'thick'
+    },
     completions = {
         blink = { enabled = true },
         lsp = { enabled = true }
