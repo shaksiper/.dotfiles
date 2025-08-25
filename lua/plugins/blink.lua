@@ -121,7 +121,7 @@ require("blink.cmp").setup({
     -- trigger = { signature_help = { enabled = true } },
     snippets = { preset = 'luasnip' },
     sources = {
-        default = { 'lsp', 'path', 'snippets', 'luasnip_choice', 'buffer', 'nvim_lua', 'markdown' },
+        default = { 'lsp', 'path', 'snippets', 'luasnip_choice', 'buffer', 'nvim_lua' },
         providers = {
             nvim_lua = {
                 name = 'nvim_lua',
@@ -136,20 +136,16 @@ require("blink.cmp").setup({
                 async = true,
                 min_keyword_length = 1,
                 module = 'blink.compat.source',
-                score_offset = -3,
+                score_offset = -1,
 
             },
             buffer = {
                 min_keyword_length = 2,
                 async = true,
             },
-            markdown = {
-                name = 'RenderMarkdown',
-                module = 'render-markdown.integ.blink',
-                fallbacks = { 'lsp' },
-            },
-            snippets = {
-                enabled = function() return vim.bo.filetype ~= "DressingInput" end,
+            snippets =
+            {
+                score_offset = -1
             }
         }
     }
