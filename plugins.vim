@@ -164,7 +164,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
 Plug 'nvim-telescope/telescope-file-browser.nvim'
 " Plug 'nvim-telescope/telescope-ui-select.nvim'
-Plug 'nvim-telescope/telescope-hop.nvim'
+Plug 'nvim-telescope/telescope-hop.nvim' "TODO: replace this with leap
 Plug 'debugloop/telescope-undo.nvim'
 Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'nvim-lua/popup.nvim'

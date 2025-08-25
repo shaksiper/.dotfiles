@@ -49,6 +49,8 @@ require("nvim-treesitter.configs").setup({
             -- automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
 
+            -- TODO: make function.inner and function.outer work better for c_sharp through queries
+            -- https://github.com/nvim-treesitter/nvim-treesitter-textobjects/blob/master/queries/c_sharp/textobjects.scm
             keymaps = {
                 -- you can use the capture groups defined in textobjects.scm
                 ["ae"] = { query = "@parameter.outer", desc = "Select around parameter" },
