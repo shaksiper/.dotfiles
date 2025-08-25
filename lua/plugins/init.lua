@@ -121,7 +121,7 @@ require("plugins.scissors")
 require("plugins.custom-usercommands")
 -- require("plugins.various-textobj")
 require("kanagawa").setup({
-    overrides = function(colors) -- add/modify highlights
+    overrides = function(_) -- add/modify highlights
         return {
             -- BlinkCmpLabelMatch = { fg = colors.theme.syn.fun },
             NormalFloat = { bg = "none" },
