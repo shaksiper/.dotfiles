@@ -238,6 +238,7 @@ Plug 'theKnightsOfRohan/csvlens.nvim'
 "Plug 'wfxr/minimap.vim', { 'do': ':!cargo install --locked code-minimap'}
 "Plug 'gorbit99/codewindow.nvim'
 Plug 'gennaro-tedesco/nvim-jqx'
+Plug 'cshuaimin/ssr.nvim'
 call plug#end()
 
 "" Multi Cursor Plugin Configs

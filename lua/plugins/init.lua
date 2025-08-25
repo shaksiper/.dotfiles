@@ -1,4 +1,5 @@
 require("plugins.snacks")
+require("ssr").setup()
 require("plugins.treesitter")
 require("plugins.treesitter-context")
 require("plugins.neotest")
