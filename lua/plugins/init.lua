@@ -1,10 +1,3 @@
--- require("plugins.dressing")
--- require("noice").setup(
---     {
---         cmdline = { enabled = false }
---     }
--- )
--- vim.notify = require("notify")
 require("plugins.snacks")
 require("plugins.treesitter")
 require("plugins.treesitter-context")
