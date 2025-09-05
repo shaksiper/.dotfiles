@@ -42,9 +42,9 @@ require("blink.cmp").setup({
 			selection = {
 				-- preselect = true,
 				--   auto_insert = true,
-                preselect = function(ctx)
-                    return ctx.mode ~= 'cmdline' -- and not require('blink.cmp').snippet_active({ direction = 1 })
-                end,
+				preselect = function(ctx)
+					return ctx.mode ~= "cmdline" and vim.bo.filetype ~= "oil" -- and not require('blink.cmp').snippet_active({ direction = 1 })
+				end,
 			},
 		},
 		documentation = {
