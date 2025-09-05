@@ -74,7 +74,7 @@ require("window-picker").setup()
 -- require("plugins.hydras")
 -- require("satellite").setup()
 require("nvim-surround").setup({
-    move_cursor = "sticky"
+	move_cursor = "sticky",
 })
 require("outline").setup()
 require("plugins.trouble")
@@ -82,14 +82,14 @@ require("syntax-tree-surfer").setup()
 require("fidget").setup({})
 require("plugins.config-local")
 require("neogen").setup({
-    snippet_engine = "luasnip",
-    languages = {
-        cs = {
-            template = {
-                annotation_convention = "xmldoc",
-            },
-        },
-    },
+	snippet_engine = "luasnip",
+	languages = {
+		cs = {
+			template = {
+				annotation_convention = "xmldoc",
+			},
+		},
+	},
 })
 require("plugins.obsidian")
 -- require("headlines").setup({
@@ -99,14 +99,14 @@ require("plugins.obsidian")
 -- 	},
 -- })
 require("render-markdown").setup({
-    code = {
-        -- style = 'normal',
-        -- border = 'thick'
-    },
-    completions = {
-        blink = { enabled = true },
-        lsp = { enabled = true }
-    },
+	code = {
+		-- style = 'normal',
+		-- border = 'thick'
+	},
+	completions = {
+		blink = { enabled = true },
+		lsp = { enabled = true },
+	},
 })
 -- require("highlight-undo").setup({
 --     duration = 300,
@@ -125,14 +125,14 @@ require("plugins.scissors")
 require("plugins.custom-usercommands")
 -- require("plugins.various-textobj")
 require("kanagawa").setup({
-    overrides = function(_) -- add/modify highlights
-        return {
-            -- BlinkCmpLabelMatch = { fg = colors.theme.syn.fun },
-            NormalFloat = { bg = "none" },
-            FloatBorder = { bg = "none" },
-            FloatTitle = { bg = "none" },
-        }
-    end,
+	overrides = function(_) -- add/modify highlights
+		return {
+			-- BlinkCmpLabelMatch = { fg = colors.theme.syn.fun },
+			NormalFloat = { bg = "none" },
+			FloatBorder = { bg = "none" },
+			FloatTitle = { bg = "none" },
+		}
+	end,
 })
 require("plugins.multicursor")
 require("snipe").setup()
