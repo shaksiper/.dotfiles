@@ -138,3 +138,9 @@ require("plugins.multicursor")
 require("snipe").setup()
 require("quicker").setup()
 require("plugins.commands")
+require("grug-far").setup({})
+require("demicolon").setup({
+	keymaps = {
+		horizontal_motions = false,
+	},
+})
