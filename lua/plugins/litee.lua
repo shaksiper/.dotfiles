@@ -1,1 +1,1 @@
-require('litee').setup({})
+require("litee").setup({})
