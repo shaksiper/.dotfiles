@@ -140,6 +140,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities = vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), capabilities)
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = true
 capabilities.textDocument.diagnostic.dynamicRegistration = true
+capabilities.textDocument.onTypeFormatting = { dynamicRegistration = false }
 -- capabilities.textDocument.codeLens.dynamicRegistration = true
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -150,7 +151,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
     },
 }
 capabilities.textDocument.foldingRange = {
-    dynamicRegistration = true,
+    dynamicRegistration = false,
     lineFoldingOnly = true,
 }
 
