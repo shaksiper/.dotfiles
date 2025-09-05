@@ -98,6 +98,7 @@ local function stopinsert(callback)
 	end
 end
 
+local fb_actions = require "telescope._extensions.file_browser.actions"
 telescope.setup({
 	defaults = {
 		cache_picker = {
@@ -131,7 +132,7 @@ telescope.setup({
 				["<c-s>"] = stopinsert(custom_actions.multi_selection_open_horizontal),
 				["<c-t>"] = stopinsert(custom_actions.multi_selection_open_tab),
 				["<c-b>"] = action_layout.toggle_preview,
-                ["<C-h>"] = function(prompt_bufnr)
+				["<C-o>"] = fb_actions.open,
 				["<C-/>"] = "which_key",
 				["<C-h>"] = function(prompt_bufnr)
 					telescope.extensions.hop.hop(prompt_bufnr)
@@ -191,18 +192,18 @@ telescope.setup({
 			-- auto switch to `telescope.builtin.find_files` style finder if there is a prompt
 			auto_depth = true,
 			depth = 1,
-            -- the shown `keys` are the defaults, no need to set `keys` if defaults work for you ;)
-            -- Highlight groups to link to signs and lines; the below configuration refers to demo
-            -- sign_hl typically only defines foreground to possibly be combined with line_hl
-            sign_hl = { "WarningMsg", "Title" },
-            -- optional, typically a table of two highlight groups that are alternated between
-            line_hl = { "CursorLine", "Normal" },
-            -- options specific to `hop_loop`
-            -- true temporarily disables Telescope selection highlighting
-            clear_selection_hl = false,
-            -- highlight hopped to entry with telescope selection highlight
-            -- note: mutually exclusive with `clear_selection_hl`
-            trace_entry = true,
+			mappings = {
+				["i"] = {
+					["<C-q>"] = function(prompt_bufnr)
+						actions.send_selected_to_qflist(prompt_bufnr)
+						actions.open_qflist(prompt_bufnr)
+					end,
+					["<M-q>"] = function(prompt_bufnr)
+						actions.send_to_qflist(prompt_bufnr)
+						actions.open_qflist(prompt_bufnr)
+					end,
+				},
+			},
 		},
 		hop = {
 			-- the shown `keys` are the defaults, no need to set `keys` if defaults work for you ;)
