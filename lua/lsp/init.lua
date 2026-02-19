@@ -305,130 +305,31 @@ vim.lsp.config("lua_ls", {
 		},
 	},
 })
--- JAVA LS
--- It is temporarily out of service due to not being compiled
--- TODO make it more dynamic
--- nvim_lsp.java_language_server.setup({
--- 	capabilities = capabilities,
--- 	on_attach = on_attach,
--- 	cmd = { "/home/shaksiper/Downloads/LSP/java-language-server/dist/lang_server_linux.sh" },
--- 	--[[ filetypes = { "java" },
---     root_dir = function(startpath)
---         return M.search_ancestors(startpath, matcher)
---     end, --]]
--- })
-
--- nvim_lsp.kotlin_language_server.setup({})
-
--- Python => PyLs
--- nvim_lsp.pylsp.setup({})
--- nvim_lsp.pyright.setup({})
--- nvim_lsp.pylyzer.setup({}) -- a lot error raised
--- NULL_LS setup
--- local null_ls = require("null-ls")
--- require("null-ls").setup({
---     on_attach = on_attach,
---     capabilities = capabilities,
---     sources = {
---         null_ls.builtins.formatting.uncrustify,
---         null_ls.builtins.diagnostics.vint, -- vim
---         -- null_ls.builtins.formatting.prettierd,
---         -- null_ls.builtins.formatting.rome, -- unmaintained -> Replaced by biome
---         null_ls.builtins.formatting.biome, -- patched rome to use biome as cmd
---         -- null_ls.builtins.diagnostics.cspell,
---         -- null_ls.builtins.code_actions.cspell,
---         -- C-like
---         -- null_ls.builtins.formatting.uncrustify,
---         -- null_ls.builtins.formatting.clang_format,
---
---         -- C#
---         null_ls.builtins.formatting.csharpier,
---         -- TODO: install/setup the following tools
---         -- null_ls.builtins.diagnostics.semgrep,
---         -- null_ls.builtins.diagnostics.golangci_lint,
---         --
---         -- null_ls.builtins.diagnostics.eslint_d,
---         -- null_ls.builtins.formatting.eslint_d,
---         -- See: [:h vim.lsp.buf.formatting_seq_sync]
---         -- require("null-ls.helpers").conditional(function(utils)
---         -- 	local b = null_ls.builtins
---         -- 	return utils.root_has_file(".eslintrc.js") and b.formatting.eslint_d --[[ or b.formatting.prettierd ]]
---         -- end),
---
---         -- JAVA
---         -- null_ls.builtins.formatting.google_java_format, -- needs [ https://github.com/google/google-java-format ] installed
---
---         -- JS
---         -- null_ls.builtins.diagnostics.eslint_d,
---         -- null_ls.builtins.code_actions.eslint_d,
---         -- null_ls.builtins.formatting.eslint_d, .with({
---         -- 	condition = function(utils)
---         -- 		return utils.root_has_file(".eslintrc.js")
---         -- 	end,
---         -- })
---
---         -- Go Lang
---         -- null_ls.builtins.formatting.gofmt,
---         null_ls.builtins.formatting.gofumpt, -- alternative to gofmt?
---         null_ls.builtins.formatting.goimports,
---         null_ls.builtins.diagnostics.buf,    -- protocol buffer
---         null_ls.builtins.formatting.buf,
---
---         -- Lua
---         null_ls.builtins.formatting.stylua,
---
---         --Markdown
---         -- null_ls.builtins.formatting.cbfmt, -- FeMaco to edit/format codeblocks on separate buffer suffices.
---         null_ls.builtins.diagnostics.markdownlint, --.with({ args = { "--stdin", "-c", "~/.markdownlint.yml" } }),
---         null_ls.builtins.formatting.markdownlint,
---         -- null_ls.builtins.formatting.mdformat,
---
---         -- Python related
---         null_ls.builtins.diagnostics.pylint,
---         null_ls.builtins.formatting.black,
---         null_ls.builtins.formatting.djhtml,
---
---         -- Spelling
---         -- null_ls.builtins.completion.spell.with({
---         -- 	filetypes = { "markdown", "org" },
---         -- }),
---         -- null_ls.builtins.diagnostics.typos,
---         null_ls.builtins.diagnostics.proselint,
---         null_ls.builtins.code_actions.proselint,
---         null_ls.builtins.diagnostics.commitlint.with({ filetypes = { "NeogitCommitMessage", "gitcommit" } }),
---         null_ls.builtins.diagnostics.codespell,
---         -- null_ls.builtins.diagnostics.textlint,
---         -- null_ls.builtins.formatting.tidy,
---         -- null_ls.builtins.diagnostics.codespell,
---
---         --XML - HTML
---         null_ls.builtins.formatting.tidy,
---         null_ls.builtins.diagnostics.tidy,
---         -- YML
---         -- null_ls.builtins.formatting.yamlfix,
---         -- null_ls.builtins.formatting.yq,
---         null_ls.builtins.diagnostics.yamllint,
---         null_ls.builtins.formatting.yamlfmt,
---     },
--- })
-require("conform").setup({
-    formatters_by_ft = {
-        lua = { "stylua" },
-        cs = { "csharpier" },
-        python = { "isort", "black" },
-        markdown = { "markdownlint" },
-        -- TODO: implement
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
-        -- xml = {}
-    },
+local conform = require("conform")
+conform.setup({
+	formatters_by_ft = {
+		lua = { "stylua" },
+		json = { "biome" }, -- set -gx BIOME_CONFIG_PATH ~/.config/biome
+		xml = { "yq" },
+		yaml = { "yq" },
+		cs = { "csharpier" },
+		python = { "isort", "black" },
+		-- markdown = { "markdownlint" },
+		markdown = { "rumdl" },
+		-- TODO: implement
+		-- javascript = { "prettierd", "prettier", stop_after_first = true },
+		-- xml = {}
+	},
 })
-require('lint').linters_by_ft = {
-    markdown = { 'markdownlint', 'proselint', 'codespell' },
-    -- cs = { 'csharpier' },
-    gitcommit = { 'commitlint' },
-    yaml = { 'yamllint' },
-    vim = { 'vint' }
-    -- xml = {'tidy'},
+require("lint").linters_by_ft = {
+	-- markdown = { "markdownlint", "proselint", "codespell" },
+	markdown = { "rumdl", "proselint", "codespell" },
+	-- cs = { 'csharpier' },
+	gitcommit = { "commitlint" },
+	yaml = { "yamllint" },
+	json = { "biome" },
+	vim = { "vint" },
+	-- xml = {'tidy'},
 }
 vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
