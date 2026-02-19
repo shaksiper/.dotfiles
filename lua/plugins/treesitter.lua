@@ -40,3 +40,17 @@ vim.api.nvim_create_autocmd("FileType", {
 -- 		-- after = "fg", -- "fg" or "bg" or empty
 -- 	},
 -- })
+require("treewalker").setup({})
+-- vim.api.nvim_create_autocmd("User", {
+-- 	pattern = "TSUpdate",
+-- 	callback = function()
+-- 		require("nvim-treesitter.parsers").comment = {
+-- 			install_info = {
+-- 				url = "https://github.com/OXY2DEV/tree-sitter-comment",
+--
+-- 				branch = "main", -- only needed if different from default branch
+-- 				queries = "queries/",
+-- 			},
+-- 		}
+-- 	end,
+-- })

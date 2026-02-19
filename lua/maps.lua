@@ -569,3 +569,17 @@ end, { desc = "Swap parameter with prev." })
 -- end, { desc = "Previous todo comment" })
 
 -- movement
+vim.keymap.set({ "n", "v" }, "<M-k>", "<cmd>Treewalker Up<cr>", { silent = true, desc = "Move up the tree" })
+vim.keymap.set({ "n", "v" }, "<M-j>", "<cmd>Treewalker Down<cr>", { silent = true, desc = "Move down the tree" })
+vim.keymap.set(
+	{ "n", "v" },
+	"<M-h>",
+	"<cmd>Treewalker Left<cr>",
+	{ silent = true, desc = "Move left through the tree" }
+)
+vim.keymap.set(
+	{ "n", "v" },
+	"<M-l>",
+	"<cmd>Treewalker Right<cr>",
+	{ silent = true, desc = "Move rigtht through the tree" }
+)
