@@ -144,3 +144,4 @@ require("demicolon").setup({
 		horizontal_motions = false,
 	},
 })
+require("refactoring").setup()

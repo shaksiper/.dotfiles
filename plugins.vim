@@ -14,7 +14,8 @@ Plug 'mfussenegger/nvim-treehopper'
 "Plug 'ziontee113/syntax-tree-surfer'
 Plug 'aaronik/treewalker.nvim'
 Plug 'windwp/nvim-ts-autotag'
-Plug 'nvim-treesitter/nvim-treesitter-refactor'
+"Plug 'nvim-treesitter/nvim-treesitter-refactor'
+Plug 'ThePrimeagen/refactoring.nvim'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'nvim-treesitter/nvim-treesitter-context' " seems not very useful, gps and
 " outline works better for its purpose
