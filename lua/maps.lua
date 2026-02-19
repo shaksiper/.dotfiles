@@ -46,6 +46,18 @@ end, { noremap = true, desc = "Test Output Panel" })
 vim.keymap.set("n", "<M-t>", function()
 	require("neotest").summary.toggle()
 end, { noremap = true, desc = "Toggle Test Summary" })
+vim.keymap.set("n", "\\tm", function()
+	require("neotest").summary.run_marked()
+end, { noremap = true, desc = "Run Marked Tests" })
+vim.keymap.set("n", "\\tM", function()
+	require("neotest").summary.debug_marked()
+end, { noremap = true, desc = "Debug Marked Tests" })
+vim.keymap.set("n", "\\taa", function()
+	require("neotest").run.run({ suite = true })
+end, { noremap = true, desc = "Run All Test Suite" })
+vim.keymap.set("n", "\\tad", function()
+	require("neotest").run.run({ suite = true, strategy = "dap" })
+end, { noremap = true, desc = "Run All Test Suite" })
 
 local default_opts = { noremap = true }
 -- SNACKS
