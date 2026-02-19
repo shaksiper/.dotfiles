@@ -336,84 +336,85 @@ vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 -- nvim_lsp.rust_analyzer.setup({})
 
 vim.lsp.config("roslyn", {
-    -- on_attach = function(client, bufnr)
-    --     monkey_patch_semantic_tokens(client)
-    --     on_attach(client, bufnr)
-    -- end,                         -- required
-    -- on_attach = monkey_patch_semantic_tokens,
-    cmd = {
-        -- "dotnet",
-        "roslyn-ls",
-        "--logLevel=Information", "--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
-        "--stdio"
-    },
-    on_attach = on_attach,
-    capabilities = capabilities, -- required
-    settings = {
-        ["csharp|inlay_hints"] = {
-            csharp_enable_inlay_hints_for_implicit_object_creation = true,
-            csharp_enable_inlay_hints_for_implicit_variable_types = true,
-            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
-            csharp_enable_inlay_hints_for_types = true,
-            dotnet_enable_inlay_hints_for_indexer_parameters = true,
-            dotnet_enable_inlay_hints_for_literal_parameters = true,
-            dotnet_enable_inlay_hints_for_object_creation_parameters = true,
-            dotnet_enable_inlay_hints_for_other_parameters = true,
-            dotnet_enable_inlay_hints_for_parameters = true,
-            -- dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
-            -- dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
-            -- dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
-        },
-        ["csharp|code_lens"] = {
-            dotnet_enable_references_code_lens = true,
-            -- dotnet_enable_tests_code_lens = true,
-        },
-        ["csharp|completion"] = {
-            dotnet_show_completion_items_from_unimported_namespaces = true,
-            dotnet_show_name_completion_suggestions = true,
-        },
-        ["csharp|symbol_search"] = {
-            dotnet_search_reference_assemblies = true,
-        },
-        ["csharp|background_analysis"] = {
-            dotnet_analyzer_diagnostics_scope = 'fullSolution',
-            dotnet_compiler_diagnostics_scope = 'fullSolution',
-        },
-        ["csharp|formatting"] = {
-            dotnet_organize_imports_on_format = true
-        }
-    },
+	-- on_attach = function(client, bufnr)
+	--     monkey_patch_semantic_tokens(client)
+	--     on_attach(client, bufnr)
+	-- end,                         -- required
+	-- on_attach = monkey_patch_semantic_tokens,
+	cmd = {
+		-- "dotnet",
+		"roslyn-ls",
+		"--logLevel=Information",
+		"--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
+		"--stdio",
+	},
+	on_attach = on_attach,
+	capabilities = capabilities, -- required
+	settings = {
+		["csharp|inlay_hints"] = {
+			csharp_enable_inlay_hints_for_implicit_object_creation = true,
+			csharp_enable_inlay_hints_for_implicit_variable_types = true,
+			csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+			csharp_enable_inlay_hints_for_types = true,
+			dotnet_enable_inlay_hints_for_indexer_parameters = true,
+			dotnet_enable_inlay_hints_for_literal_parameters = true,
+			dotnet_enable_inlay_hints_for_object_creation_parameters = true,
+			dotnet_enable_inlay_hints_for_other_parameters = true,
+			dotnet_enable_inlay_hints_for_parameters = true,
+			-- dotnet_suppress_inlay_hints_for_parameters_that_differ_only_by_suffix = true,
+			-- dotnet_suppress_inlay_hints_for_parameters_that_match_argument_name = true,
+			-- dotnet_suppress_inlay_hints_for_parameters_that_match_method_intent = true,
+		},
+		["csharp|code_lens"] = {
+			dotnet_enable_references_code_lens = true,
+			-- dotnet_enable_tests_code_lens = true,
+		},
+		["csharp|completion"] = {
+			dotnet_show_completion_items_from_unimported_namespaces = true,
+			dotnet_show_name_completion_suggestions = true,
+		},
+		["csharp|symbol_search"] = {
+			dotnet_search_reference_assemblies = true,
+		},
+		["csharp|background_analysis"] = {
+			dotnet_analyzer_diagnostics_scope = "fullSolution",
+			dotnet_compiler_diagnostics_scope = "fullSolution",
+		},
+		["csharp|formatting"] = {
+			dotnet_organize_imports_on_format = true,
+		},
+	},
 })
 require("roslyn").setup()
 
 -- TODO: improve neotest discovery
 vim.lsp.commands["dotnet.test.run"] = function(command)
-    local args = command.arguments or {}
-    local data = args[1]
-    if not data then
-        vim.notify("No test information in CodeLens args", vim.log.levels.WARN)
-        return
-    end
+	local args = command.arguments or {}
+	local data = args[1]
+	if not data then
+		vim.notify("No test information in CodeLens args", vim.log.levels.WARN)
+		return
+	end
 
-    local uri = data.textDocument and data.textDocument.uri
-    if not uri then
-        vim.notify("Missing URI in CodeLens data", vim.log.levels.WARN)
-        return
-    end
+	local uri = data.textDocument and data.textDocument.uri
+	if not uri then
+		vim.notify("Missing URI in CodeLens data", vim.log.levels.WARN)
+		return
+	end
 
-    local file = vim.uri_to_fname(uri)
-    local row = data.range.start.line + 1 -- Lua is 1-based, LSP is 0-based
+	local file = vim.uri_to_fname(uri)
+	local row = data.range.start.line + 1 -- Lua is 1-based, LSP is 0-based
 
-    -- Use Neotest to run the test at the given line
-    require("neotest").run.run({
-        path = file,
-        -- You can use `pos` to target line more directly
-        pos = {
-            path = file,
-            row = row,
-            col = data.range.start.character,
-        },
-    })
+	-- Use Neotest to run the test at the given line
+	require("neotest").run.run({
+		path = file,
+		-- You can use `pos` to target line more directly
+		pos = {
+			path = file,
+			row = row,
+			col = data.range.start.character,
+		},
+	})
 end
 
 -- nvim_lsp.razor.setup({
