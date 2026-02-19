@@ -113,34 +113,25 @@ local on_attach = function(client, bufnr)
 		-- 	desc = "Auto-refresh CodeLens",
 		-- })
 	end
+	-- used to use tree-sitter-refactor for highlighting definitions under cursor
+	if client:supports_method("textDocument/documentHighlight") then
+		-- vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+		local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+		vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
 
-        vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
-            buffer = bufnr,
-            callback = function()
-                vim.lsp.codelens.refresh()
-            end,
-            desc = "Auto-refresh CodeLens",
-        })
-    end
-    -- used to use tree-sitter-refactor for highlighting definitions under cursor
-    if client:supports_method("textDocument/documentHighlight") then
-        -- vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
-        local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
-        vim.api.nvim_clear_autocmds { buffer = bufnr, group = group }
-
-        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-            callback = vim.lsp.buf.document_highlight,
-            buffer = bufnr,
-            group = group,
-            desc = "Document Highlight",
-        })
-        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-            callback = vim.lsp.buf.clear_references,
-            buffer = bufnr,
-            group = group,
-            desc = "Clear All the References",
-        })
-    end
+		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+			callback = vim.lsp.buf.document_highlight,
+			buffer = bufnr,
+			group = group,
+			desc = "Document Highlight",
+		})
+		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+			callback = vim.lsp.buf.clear_references,
+			buffer = bufnr,
+			group = group,
+			desc = "Clear All the References",
+		})
+	end
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
