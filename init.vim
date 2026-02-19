@@ -37,7 +37,8 @@ set pumheight=8
 set termguicolors
 runtime plugins.vim
 lua require('init')
-runtime maps.vim
+lua require('maps')
+"runtime maps.vim
 augroup highlight_yank
     autocmd!
     au TextYankPost * silent! lua vim.highlight.on_yank { higroup='IncSearch', timeout=200 }
