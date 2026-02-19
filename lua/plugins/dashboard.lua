@@ -51,7 +51,7 @@ require("dashboard").setup({
 				icon_hl = "@variable",
 				desc = "Files",
 				group = "Label",
-				action = "Telescope find_files",
+				action = "lua Snacks.picker.files()",
 				key = "f",
 			},
 			{
@@ -65,7 +65,7 @@ require("dashboard").setup({
 				icon_hl = "@variable",
 				desc = "Brows",
 				group = "Label",
-				action = "Telescope file_browser",
+				action = "lua Snacks.picker.explorer()",
 				key = "e",
 			},
 			{
@@ -73,7 +73,7 @@ require("dashboard").setup({
 				icon_hl = "@string",
 				desc = "Sessions",
 				group = "String",
-				action = "Telescope persisted",
+				action = "Persisted select",
 				key = "s",
 			},
 			{
@@ -81,7 +81,7 @@ require("dashboard").setup({
 				icon_hl = "@string",
 				desc = "Last Session",
 				group = "String",
-				action = "SessionLoadLast",
+				action = "Persisted load_last",
 				key = "S",
 			},
 			{
@@ -89,7 +89,7 @@ require("dashboard").setup({
 				icon_hl = "@string",
 				desc = "Project",
 				group = "String",
-				action = "Telescope projects theme=dropdown",
+				action = "lua Snacks.picker.projects()",
 				key = "p",
 			},
 			{
@@ -103,7 +103,8 @@ require("dashboard").setup({
 			{
 				desc = "󰎞 Obsidasion",
 				group = "DiagnosticHint",
-				action = "Telescope file_browser cwd=/mnt/c/Users/CanBerkCetin/Documents/Obsidian/Vispera/",
+				-- action = "Telescope file_browser cwd=/mnt/c/Users/CanBerkCetin/Documents/Obsidian/Vispera/",
+				action = "lua Snacks.picker.files( {cwd = \"/mnt/c/Users/CanBerkCetin/Documents/Obsidian/Vispera/\"})",
 				key = "o",
 			},
 			{
@@ -115,7 +116,7 @@ require("dashboard").setup({
 			{
 				desc = " dotfiles",
 				group = "Number",
-				action = "Telescope file_browser cwd=~/.config/nvim/",
+				action = "lua Snacks.picker.files({ cwd = vim.fn.stdpath(\"config\") })",
 				key = "d",
 			},
 			{
