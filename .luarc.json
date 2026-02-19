@@ -5,7 +5,7 @@
     ],
     "workspace.library": [
         "/home/shaksiper/.local/share/nvim/plugged/neodev.nvim/types/nightly",
-        "/usr/local/share/nvim/runtime/lua",
+        "$VIMRUNTIME/lua",
         "/home/shaksiper/.config/nvim/lua",
         "${3rd}/luv/library"
     ]
