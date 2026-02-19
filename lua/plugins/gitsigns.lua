@@ -7,8 +7,6 @@ require("gitsigns").setup({
 	on_attach = function(bufnr)
 		local gs = package.loaded.gitsigns
 
-		--@param mode Mode falan
-		--@param l llll
 		local function map(mode, l, r, opts)
 			opts = opts or {}
 			opts.buffer = bufnr
@@ -16,25 +14,21 @@ require("gitsigns").setup({
 		end
 
 		-- Navigation
-		-- map("n", "]h", function()
-		--     if vim.wo.diff then
-		--         return "]h"
-		--     end
-		--     vim.schedule(function()
-		--         gs.next_hunk()
-		--     end)
-		--     return "<Ignore>"
-		-- end, { expr = true, desc = "Next Hunk" })
+		map("n", "]h", function()
+			if vim.wo.diff then
+				vim.cmd.normal({ "]h", bang = true })
+			else
+				gs.nav_hunk("next")
+			end
+		end, { expr = true, desc = "Next Hunk" })
 
-		-- map("n", "[h", function()
-		--     if vim.wo.diff then
-		--         return "[h"
-		--     end
-		--     vim.schedule(function()
-		--         gs.prev_hunk()
-		--     end)
-		--     return "<Ignore>"
-		-- end, { expr = true, desc = "Previous Hunk" })
+		map("n", "[h", function()
+			if vim.wo.diff then
+				vim.cmd.normal({ "[h", bang = true })
+			else
+				gs.nav_hunk("prev")
+			end
+		end, { expr = true, desc = "Previous Hunk" })
 
 		-- Actions
 		map({ "n", "v" }, "<leader>hs", ":Gitsigns stage_hunk<CR>", { desc = "Stage hunk" })
