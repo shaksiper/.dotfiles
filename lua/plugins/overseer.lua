@@ -1,4 +1,25 @@
 local overseer = require("overseer")
+overseer.register_template({
+	name = "Roslyn: Build Current Solution",
+	builder = function()
+		local sln = vim.g.roslyn_nvim_selected_solution
+		return {
+			cmd = { "dotnet" },
+			args = { "build", sln },
+			name = "dotnet build " .. vim.fn.fnamemodify(sln, ":t"),
+			components = {
+				"default",
+				"status-notification",
+			},
+		}
+	end,
+	condition = {
+		callback = function()
+			-- Only show if roslyn.nvim has actually picked a solution
+			return vim.g.roslyn_nvim_selected_solution ~= nil
+		end,
+	},
+})
 overseer.setup()
 vim.api.nvim_create_user_command("OverseerRestartLast", function()
 	-- local overseer = require("overseer")
