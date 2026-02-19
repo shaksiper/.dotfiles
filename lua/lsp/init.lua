@@ -93,18 +93,26 @@ navic.setup({
 --     },
 -- })
 local on_attach = function(client, bufnr)
-    -- if client.server_capabilities.inlayHintProvider then
-    --     vim.lsp.inlay_hint.enable(bufnr, true)
-    -- end
-    -- This methods considers dynamic registration as per neovim/neovim/pull/23681
-    -- Instead use `client.supports_method(<method>)`. It considers both the dynamic capabilities and static `server_capabilities`.
-    if client:supports_method("textDocument/inlayHint") then
-        vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) -- include bufnr for safety
-    end
+	-- if client.server_capabilities.inlayHintProvider then
+	--     vim.lsp.inlay_hint.enable(bufnr, true)
+	-- end
+	-- This methods considers dynamic registration as per neovim/neovim/pull/23681
+	-- Instead use `client.supports_method(<method>)`. It considers both the dynamic capabilities and static `server_capabilities`.
+	if client:supports_method("textDocument/inlayHint") then
+		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr }) -- include bufnr for safety
+	end
 
-    if client:supports_method("textDocument/codeLens") then
-        vim.lsp.codelens.refresh()
+	if client:supports_method("textDocument/codeLens") then
+		vim.lsp.codelens.enable(true, { bufnr = bufnr })
 
+		-- vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+		-- 	buffer = bufnr,
+		-- 	callback = function()
+		-- 		vim.lsp.codelens.refresh()
+		-- 	end,
+		-- 	desc = "Auto-refresh CodeLens",
+		-- })
+	end
 
         vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
             buffer = bufnr,
