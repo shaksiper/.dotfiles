@@ -61,7 +61,7 @@ dap.configurations.javascript = {
 }
 
 -- Python
-require("dap-python").setup("~/Downloads/LSP/Debug/venv/debugpy/bin/python")
+-- require("dap-python").setup("~/Downloads/LSP/Debug/venv/debugpy/bin/python")
 
 --C#
 dap.adapters.coreclr = {
