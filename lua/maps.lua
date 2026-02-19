@@ -234,6 +234,8 @@ end, { desc = "LSP Workspace Symbols" })
 vim.keymap.set({ "n", "t" }, "<M-/>", function()
 	Snacks.terminal()
 end, { desc = "Toggle Terminal" })
+
+vim.keymap.set("n", "<leader>fa", "<cmd>Seeker files<CR>", { desc = "Seeker files" })
 -- TELESCOPE
 -- vim.keymap.set(
 -- 	"n",

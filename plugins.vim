@@ -74,6 +74,7 @@ Plug 'danymat/neogen'
 "Plug 'Fildo7525/pretty_hover'
 "Plug 'stevearc/dressing.nvim'
 Plug 'folke/snacks.nvim'
+Plug '2kabhishek/seeker.nvim'
 "Plug 'folke/noice.nvim'
 " Install nvim-cmp
 "Plug 'hrsh7th/nvim-cmp'

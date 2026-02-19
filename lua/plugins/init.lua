@@ -1,4 +1,5 @@
 require("plugins.snacks")
+require("seeker").setup({})
 require("ssr").setup()
 require("plugins.treesitter")
 require("plugins.treesitter-context")
