@@ -4,14 +4,14 @@ Plug 'tpope/vim-repeat'
 Plug 'michaelb/sniprun', { 'do': 'bash install.sh'}
 "Plug 'rcarriga/nvim-notify'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
-Plug 'nvim-treesitter/nvim-treesitter-textobjects'
- Plug 'chrisgrieser/nvim-various-textobjs' " not what i wantted
+Plug 'nvim-treesitter/nvim-treesitter-textobjects', { 'branch': 'main'}
+Plug 'chrisgrieser/nvim-various-textobjs' " not what i wantted
 " Plug 'Jason-M-Chan/ts-textobjects'
 " Plug 'https://gitlab.com/HiPhish/nvim-ts-rainbow2/'
 Plug 'HiPhish/rainbow-delimiters.nvim'
 "Plug 'nvim-treesitter/playground'
 Plug 'mfussenegger/nvim-treehopper'
-Plug 'ziontee113/syntax-tree-surfer'
+"Plug 'ziontee113/syntax-tree-surfer'
 Plug 'windwp/nvim-ts-autotag'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
