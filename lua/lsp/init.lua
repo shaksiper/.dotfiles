@@ -146,23 +146,23 @@ capabilities.textDocument.onTypeFormatting = { dynamicRegistration = false }
 -- capabilities.textDocument.codeLens.dynamicRegistration = true
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
-    properties = {
-        "documentation",
-        "detail",
-        "additionalTextEdits",
-    },
+	properties = {
+		"documentation",
+		"detail",
+		"additionalTextEdits",
+	},
 }
 capabilities.textDocument.foldingRange = {
-    dynamicRegistration = false,
-    lineFoldingOnly = true,
+	dynamicRegistration = false,
+	lineFoldingOnly = true,
 }
 
 nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.default_config, {
-    on_attach = on_attach,
-    capabilities = capabilities,
-    flags = {
-        debounce_text_changes = 150,
-    },
+	on_attach = on_attach,
+	capabilities = capabilities,
+	flags = {
+		debounce_text_changes = 150,
+	},
 })
 -- PHP
 -- nvim_lsp.intelephense.setup({
@@ -173,67 +173,69 @@ nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.defaul
 -- })
 -- Styling
 -- nvim_lsp.ls_emmet.setup({})
-vim.lsp.enable('emmet_language_server') -- https://github.com/olrtg/emmet-language-server
-nvim_lsp.cssls.setup({})
-nvim_lsp.jsonls.setup({})
-nvim_lsp.eslint.setup({})
-nvim_lsp.html.setup({
-    cmd = { "vscode-html-language-server", "--stdio" },
-    filetypes = { "html" },
-    init_options = {
-        configurationSection = { "html", "css", "javascript" },
-        embeddedLanguages = {
-            css = true,
-            javascript = true,
-        },
-    },
-    -- root_dir = function(fname)
-    --       return util.root_pattern('package.json', '.git')(fname) or util.path.dirname(fname)
-    --     end,
-    settings = {},
-})
+vim.lsp.enable("emmet_language_server") -- https://github.com/olrtg/emmet-language-server
+vim.lsp.enable("cssls")
 require("lsp.biome-lsp") -- refactor away for clutter
+vim.lsp.enable("eslint")
+vim.lsp.enable("html")
+-- nvim_lsp.cssls.setup({})
+-- nvim_lsp.jsonls.setup({})
+-- nvim_lsp.biome.setup({}) -- instead of rome (unmaintained)
+-- nvim_lsp.eslint.setup({})
+-- vim.lsp.config('html', {
+--     cmd = { "vscode-html-language-server", "--stdio" },
+--     filetypes = { "html" },
+--     init_options = {
+--         configurationSection = { "html", "css", "javascript" },
+--         embeddedLanguages = {
+--             css = true,
+--             javascript = true,
+--         },
+--     },
+--     -- root_dir = function(fname)
+--     --       return util.root_pattern('package.json', '.git')(fname) or util.path.dirname(fname)
+--     --     end,
+--     settings = {},
+-- })
+vim.lsp.enable("html")
 -- CSS Language Server
-nvim_lsp.cssls.setup({})
-local configs = require("lspconfig.configs")
-if not configs.ls_emmet then
-    configs.ls_emmet = {
-        default_config = {
-            cmd = { "ls_emmet", "--stdio" },
-            filetypes = {
-                "html",
-                "css",
-                "scss",
-                "javascript",
-                "javascriptreact",
-                "typescript",
-                "typescriptreact",
-                "haml",
-                "xml",
-                "xsl",
-                "pug",
-                "slim",
-                "sass",
-                "stylus",
-                "less",
-                "sss",
-            },
-            root_dir = function(_)
-                return vim.loop.cwd()
-            end,
-            settings = {},
-        },
-    }
-end
+-- nvim_lsp.cssls.setup({})
+-- local configs = require("lspconfig.configs")
+-- if not configs.ls_emmet then
+--     configs.ls_emmet = {
+--         default_config = {
+--             cmd = { "ls_emmet", "--stdio" },
+--             filetypes = {
+--                 "html",
+--                 "css",
+--                 "scss",
+--                 "javascript",
+--                 "javascriptreact",
+--                 "typescript",
+--                 "typescriptreact",
+--                 "haml",
+--                 "xml",
+--                 "xsl",
+--                 "pug",
+--                 "slim",
+--                 "sass",
+--                 "stylus",
+--                 "less",
+--                 "sss",
+--             },
+--             root_dir = function(_)
+--                 return vim.loop.cwd()
+--             end,
+--             settings = {},
+--         },
+--     }
+-- end
 -- Vim LSP
-nvim_lsp.vimls.setup({
-    -- Defaults
-})
+vim.lsp.enable("vimls")
 -- TSSERVER
-nvim_lsp.ts_ls.setup({
-    -- Defaults
-})
-nvim_lsp.quick_lint_js.setup({})
+vim.lsp.enable("ts_ls")
+vim.lsp.enable("quick_lint_js")
+-- nvim_lsp.quick_lint_js.setup({})
 -- ray-x/go.nvim init
 -- This plugin sets global configs which interfere with my config
 -- require("go").setup({
@@ -244,59 +246,64 @@ nvim_lsp.quick_lint_js.setup({})
 --     diagnostic = false,
 -- })
 -- GOPLS
-nvim_lsp.gopls.setup({
-    cmd = { "gopls", "serve" },
-    settings = {
-        gopls = {
-            gofumpt = true,
-            analyses = {
-                unusedparams = true,
-                shadow = true,
-                fieldalignment = true,
-                nilness = true,
-            },
-            staticcheck = true,
-        },
-    },
+vim.lsp.config("gopls", {
+	cmd = { "gopls", "serve" },
+	settings = {
+		gopls = {
+			gofumpt = true,
+			analyses = {
+				unusedparams = true,
+				shadow = true,
+				fieldalignment = true,
+				nilness = true,
+			},
+			staticcheck = true,
+		},
+	},
 })
+vim.lsp.enable("gopls")
 -- LUA LSP
 -- local runtime_path = vim.split(package.path, ";")
 -- table.insert(runtime_path, "lua/?.lua")
 -- table.insert(runtime_path, "lua/?/init.lua")
 require("neodev").setup({
-    -- add any options here, or leave empty to use the default settings
+	-- add any options here, or leave empty to use the default settings
 })
-nvim_lsp.lua_ls.setup({
-    on_init = function(client)
-        if client.workspace_folders then
-            local path = client.workspace_folders[1].name
-            if path ~= vim.fn.stdpath('config') and (vim.loop.fs_stat(path .. '/.luarc.json') or vim.loop.fs_stat(path .. '/.luarc.jsonc')) then
-                return
-            end
-        end
+vim.lsp.enable("lua_ls")
+vim.lsp.config("lua_ls", {
+	on_init = function(client)
+		if client.workspace_folders then
+			local path = client.workspace_folders[1].name
+			if
+				path ~= vim.fn.stdpath("config")
+				and (vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc"))
+			then
+				return
+			end
+		end
 
-        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-            runtime = {
-                version = 'LuaJIT'
-            },
-            workspace = {
-                checkThirdParty = false,
-                library = {
-                    vim.env.VIMRUNTIME
-                }
-            }
-        })
-    end,
-    settings = {
-        Lua = {
-            completion = {
-                callSnippet = "Replace",
-            },
-            hint = {
-                enable = true,
-            },
-        },
-    },
+		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+			runtime = {
+				version = "LuaJIT",
+			},
+			workspace = {
+				checkThirdParty = false,
+				library = {
+					vim.env.VIMRUNTIME,
+				},
+			},
+		})
+	end,
+	settings = {
+		Lua = {
+			completion = {
+				callSnippet = "Replace",
+			},
+			hint = {
+				enable = true,
+			},
+		},
+	},
 })
 -- JAVA LS
 -- It is temporarily out of service due to not being compiled
@@ -513,19 +520,21 @@ end
 -- })
 
 -- local util = require 'lspconfig.util'
-nvim_lsp.gdscript.setup({})
-nvim_lsp.clangd.setup({}) -- ~/.clang-format has indentation settings
+vim.lsp.enable("gdscript")
+vim.lsp.enable("clangd") -- ~/.clang-format has indentation settings
 -- Markup
-nvim_lsp.yamlls.setup({})
-nvim_lsp.dockerls.setup({})
-nvim_lsp.docker_compose_language_service.setup({})
+vim.lsp.enable("yamlls")
+vim.lsp.enable("dockerls")
+vim.lsp.enable("docker_compose_language_service")
 -- DB
-nvim_lsp.sqls.setup({ cmd = { "sqls", "-config", "~/sqls/config.yml" } })
-nvim_lsp.graphql.setup({
-    -- root_dir =  util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*', '.git'),
-})
+vim.lsp.enable("sqls")
+-- vim.lsp.enable('graphql')
+-- nvim_lsp.graphql.setup({
+--     -- root_dir =  util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*', '.git'),
+-- })
 -- TEXT
-nvim_lsp.typos_lsp.setup({})
-nvim_lsp.markdown_oxide.setup({})
-nvim_lsp.marksman.setup({})
-nvim_lsp.vale_ls.setup({ cmd = { "vale" } })
+vim.lsp.enable("typos_lsp")
+vim.lsp.enable("markdown_oxide")
+vim.lsp.enable("marksman")
+vim.lsp.enable("vale_ls")
+-- nvim_lsp.vale_ls.setup({ cmd = { "vale" } })
