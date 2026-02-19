@@ -25,6 +25,7 @@ local handler = function(virtText, lnum, endLnum, width, truncate)
 	table.insert(newVirtText, { suffix, "MoreMsg" })
 	return newVirtText
 end
+
 local builtin = require("statuscol.builtin")
 require("statuscol").setup({
 	relculright = true,
@@ -37,6 +38,19 @@ require("statuscol").setup({
 require("ufo").setup({
 	fold_virt_text_handler = handler,
 })
+
+-- vim.o.foldmethod = "expr"
+-- vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
+-- vim.o.foldcolumn = "1"
+-- vim.o.foldlevelstart = 99
+-- vim.wo.foldtext = ""
+-- vim.opt.fillchars = {
+-- 	fold = " ",
+-- 	foldclose = "",
+-- 	foldopen = "",
+-- 	foldsep = " ",
+-- 	-- foldinner = "│",
+-- }
 
 vim.o.foldenable = true
 vim.o.foldcolumn = "auto:1"

@@ -64,7 +64,7 @@ require("plugins.neogit")
 require("plugins.ufo")
 -- vim.o.foldmethod = "expr"
 vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions,globals"
 -- TODO: replace this plugin with usercmd
 -- require("auto-session").setup({
 -- 	bypass_session_save_file_types = { "neo-tree", "startify" },
