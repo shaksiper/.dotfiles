@@ -80,7 +80,7 @@ require("nvim-surround").setup({
 })
 require("outline").setup()
 require("plugins.trouble")
-require("syntax-tree-surfer").setup()
+--require("syntax-tree-surfer").setup()
 require("fidget").setup({})
 require("plugins.config-local")
 require("neogen").setup({
@@ -125,7 +125,6 @@ require("plugins.scissors")
 -- codewindow.setup()
 -- codewindow.apply_default_keybinds()
 require("plugins.custom-usercommands")
--- require("plugins.various-textobj")
 require("kanagawa").setup({
 	overrides = function(_) -- add/modify highlights
 		return {
