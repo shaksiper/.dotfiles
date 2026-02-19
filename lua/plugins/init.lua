@@ -77,6 +77,9 @@ require("window-picker").setup()
 -- require("satellite").setup()
 require("nvim-surround").setup({
 	move_cursor = "sticky",
+	keymaps = {
+		visual = "<C-s>",
+	},
 })
 require("outline").setup()
 require("plugins.trouble")
