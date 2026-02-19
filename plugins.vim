@@ -84,7 +84,7 @@ Plug '2kabhishek/seeker.nvim'
 "Plug 'hrsh7th/cmp-path'
 "Plug 'ray-x/cmp-treesitter'
 "Plug 'hrsh7th/cmp-nvim-lsp-signature-help'
-Plug 'rachartier/tiny-inline-diagnostic.nvim'
+"Plug 'rachartier/tiny-inline-diagnostic.nvim'
 " Plug 'tzachar/cmp-tabnine', { 'do': './install.sh' }
 " Plug 'Exafunction/codeium.vim'
 "Plug 'hrsh7th/cmp-cmdline'

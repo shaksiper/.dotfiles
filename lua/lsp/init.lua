@@ -1,21 +1,24 @@
 -- LSP settings
 local nvim_lsp = require("lspconfig")
+vim.o.pumborder = "rounded"
+vim.api.nvim_set_hl(0, "Pmenu", { bg = "NONE" })
+vim.api.nvim_set_hl(0, "PmenuBorder", { bg = "NONE", fg = "#CC6600" })
 -- require('tiny-inline-diagnostic').setup({
 -- })
 vim.diagnostic.config({
-    virtual_text = true,
-    -- https://github.com/neovim/neovim/commit/8122470f8310ae34bcd5e436e8474f9255eb16f2
-    signs = {
-        text = {
-            [vim.diagnostic.severity.ERROR] = "",
-            [vim.diagnostic.severity.WARN] = "",
-            [vim.diagnostic.severity.HINT] = "",
-            [vim.diagnostic.severity.INFO] = "",
-        },
-    },
-    underline = true,
-    update_in_insert = false,
-    severity_sort = false,
+	virtual_text = true,
+	-- https://github.com/neovim/neovim/commit/8122470f8310ae34bcd5e436e8474f9255eb16f2
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "",
+			[vim.diagnostic.severity.WARN] = "",
+			[vim.diagnostic.severity.HINT] = "",
+			[vim.diagnostic.severity.INFO] = "",
+		},
+	},
+	underline = true,
+	update_in_insert = false,
+	severity_sort = false,
 })
 
 -- local util = require("lspconfig.util")
