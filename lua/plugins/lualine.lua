@@ -14,7 +14,7 @@ require("lualine").setup({
 		section_separators = { left = "", right = "" },
 	},
 	sections = {
-		lualine_x = { "encoding", "fileformat", "filetype" },
+		lualine_x = { "overseer", "encoding", "fileformat", "filetype" },
 		lualine_b = { { "b:gitsigns_head", icon = "" }, { "diff", source = diff_source }, "diagnostics" },
 	},
 	extensions = {
