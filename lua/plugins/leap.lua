@@ -1,5 +1,5 @@
 -- require("lightspeed").setup({})
-require("leap").add_default_mappings()
+-- require("leap").add_default_mappings()
 require("leap").opts.equivalence_classes = { " \t\r\n" }
 require("leap-spooky").setup({
 	affixes = {
