@@ -37,7 +37,7 @@ require("plugins.lualine")
 -- -- require("plugins.litee")
 require("plugins.marks")
 require("plugins.modes")
-require("plugins.neodim") -- until errors fixed
+-- require("plugins.neodim") -- until errors fixed
 require("plugins.zen")
 -- require('dim').setup({})
 require("plugins.markdownflow")

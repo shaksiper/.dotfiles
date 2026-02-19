@@ -153,7 +153,7 @@ Plug 'ray-x/lsp_signature.nvim'
 " buffer-like
 Plug 'hedyhli/outline.nvim'
 " Plug 'narutoxy/dim.lua'
-Plug 'zbirenbaum/neodim'
+"Plug 'zbirenbaum/neodim'
 " Plug 'kyazdani42/nvim-tree.lua'
 " Plug 'nvim-neo-tree/neo-tree.nvim', { 'branch': 'main' }
 Plug 'stevearc/oil.nvim'
