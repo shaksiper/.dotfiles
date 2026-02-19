@@ -20,6 +20,54 @@ overseer.register_template({
 		end,
 	},
 })
+local test_filters = { "image", "visit" }
+overseer.register_template({
+	name = string.format("Dotnet Test All"),
+	builder = function()
+		local sln = vim.g.roslyn_nvim_selected_solution
+		return {
+			cmd = { "dotnet" },
+			args = { "test", sln },
+			name = "dotnet test",
+			components = {
+				{ "open_output", on_complete = "always" },
+				"on_exit_set_status",
+				"default",
+				-- "status-notification",
+			},
+		}
+	end,
+	condition = {
+		callback = function()
+			return vim.g.roslyn_nvim_selected_solution ~= nil
+		end,
+	},
+})
+
+for _, filter in ipairs(test_filters) do
+	overseer.register_template({
+		name = string.format("Dotnet Test: Filter %s", filter),
+		builder = function()
+			local sln = vim.g.roslyn_nvim_selected_solution
+			return {
+				cmd = { "dotnet" },
+				args = { "test", sln, "--filter", filter },
+				name = "dotnet test --filter " .. filter,
+				components = {
+					{ "open_output", on_complete = "always" },
+					"on_exit_set_status",
+					"default",
+					-- "status-notification",
+				},
+			}
+		end,
+		condition = {
+			callback = function()
+				return vim.g.roslyn_nvim_selected_solution ~= nil
+			end,
+		},
+	})
+end
 overseer.setup()
 vim.api.nvim_create_user_command("OverseerRestartLast", function()
 	-- local overseer = require("overseer")
