@@ -1,11 +1,11 @@
 require("neotest").setup({
 	adapters = {
-		-- require("neotest-dotnet") {
-		--     discovery_root = "solution",
-		--     dap = {
-		--         adapter_name = "coreclr"
-		--     },
-		-- },
+		-- require("neotest-dotnet")({
+		-- 	discovery_root = "solution",
+		-- 	dap = {
+		-- 		adapter_name = "coreclr",
+		-- 	},
+		-- }),
 		require("neotest-vstest")({
 			dap_settings = {
 				type = "coreclr",
