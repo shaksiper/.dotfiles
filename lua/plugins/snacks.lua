@@ -1,4 +1,6 @@
 local Snacks = require("snacks")
+local helpers = require("plugins.snacks-helpers")
+
 vim.api.nvim_create_autocmd("User", {
 	pattern = "OilActionsPost",
 	callback = function(event)
@@ -19,8 +21,52 @@ Snacks.setup({
 	},
 	picker = {
 		enabled = true,
+		sources = {
+			buffers = {
+				layout = { preset = "dropdown" },
+				-- current = false,
+				-- sort_lastused = true,
+				-- sort = { "lastused" },
+			},
+			files = {
+				win = {
+					input = {
+						keys = {
+							["<C-o>"] = { "multi_open", mode = { "i" } }, -- open with system application
+						},
+					},
+				},
+			},
+			explorer = {
+				win = {
+					list = {
+						keys = {
+							["<leader>o"] = "multi_open", -- open with system application
+						},
+					},
+				},
+			},
+		},
 		matcher = {
 			frecency = true,
+		},
+		actions = {
+			multi_open = function(picker)
+				if vim.fn.mode():find("^[vV]") then
+					picker.list:select()
+				end
+				local files = {}
+				for index, item in ipairs(picker:selected({ fallback = true })) do
+					table.insert(files, item.file)
+				end
+				print(vim.inspect(files))
+				local _, err = helpers.multi_open(files, { cmd = { "zed" } })
+				if err then
+					Snacks.notify.error("Failed to open `" .. files .. "`:\n- " .. err)
+				end
+				picker:close()
+				-- picker.list:set_selected() -- clear selection
+			end,
 		},
 	},
 	quickfile = { enabled = true },
