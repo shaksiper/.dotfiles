@@ -177,7 +177,6 @@ nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.defaul
 vim.lsp.enable('emmet_language_server') -- https://github.com/olrtg/emmet-language-server
 nvim_lsp.cssls.setup({})
 nvim_lsp.jsonls.setup({})
-nvim_lsp.biome.setup({}) -- instead of rome (unmaintained)
 nvim_lsp.eslint.setup({})
 nvim_lsp.html.setup({
     cmd = { "vscode-html-language-server", "--stdio" },
@@ -194,6 +193,7 @@ nvim_lsp.html.setup({
     --     end,
     settings = {},
 })
+require("lsp.biome-lsp") -- refactor away for clutter
 -- CSS Language Server
 nvim_lsp.cssls.setup({})
 local configs = require("lspconfig.configs")
