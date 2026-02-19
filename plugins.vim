@@ -18,6 +18,8 @@ Plug 'windwp/nvim-ts-autotag'
 Plug 'ThePrimeagen/refactoring.nvim'
 Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 Plug 'nvim-treesitter/nvim-treesitter-context' " seems not very useful, gps and
+"Plug 'OXY2DEV/tree-sitter-comment'
+"Plug 'folke/todo-comments.nvim'
 " outline works better for its purpose
 " Plug 'SmiteshP/nvim-gps' " we need to provide treesitter queries for the
 " languages
@@ -32,7 +34,7 @@ Plug 'ggandor/leap-ast.nvim'
 Plug 'jake-stewart/multicursor.nvim'
 Plug 'mawkler/demicolon.nvim'
 " Plug 'folke/flash.nvim'
-Plug 'rlane/pounce.nvim'
+"Plug 'rlane/pounce.nvim'
 " Plug 'mg979/vim-visual-multi', { 'branch': 'master'}
 " Plug 'mg979/vim-visual-multi' " There is a learning curve for this and
 " vanilla vim macros and motions *may* suffice as they say
