@@ -27,13 +27,7 @@ require("blink.cmp").setup({
 	-- Experimental signature help support
 	signature = {
 		enabled = true,
-		trigger = {
-			-- When true, will show the signature help window when the cursor comes after a trigger character when entering insert mode
-			show_on_insert_on_trigger_character = true,
-		},
 		window = {
-			-- show_documentation = true,
-			-- winblend = 60,
 			border = "single",
 		},
 	},
@@ -51,12 +45,12 @@ require("blink.cmp").setup({
 			-- Controls whether the documentation window will automatically show when selecting a completion item
 			auto_show = true,
 			-- Delay before showing the documentation window
-			auto_show_delay_ms = 500,
-			-- Delay before updating the documentation window when selecting a new item,
-			-- while an existing item is still visible
-			update_delay_ms = 50,
-			-- Whether to use treesitter highlighting, disable if you run into performance issues
-			treesitter_highlighting = true,
+			-- auto_show_delay_ms = 500,
+			-- -- Delay before updating the documentation window when selecting a new item,
+			-- -- while an existing item is still visible
+			-- update_delay_ms = 50,
+			-- -- Whether to use treesitter highlighting, disable if you run into performance issues
+			-- treesitter_highlighting = true,
 			window = {
 				-- winblend = 60,
 				border = "single",
@@ -64,14 +58,15 @@ require("blink.cmp").setup({
 		},
 		ghost_text = {
 			enabled = true,
+            show_without_menu = false,
+            show_without_selection = true -- we are defaulting to first element already
 		},
 		menu = {
 			draw = {
 				treesitter = { "lsp" },
-				columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },
+				-- columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } }, -- same as the default already
 				components = {
 					kind_icon = {
-						ellipsis = false,
 						text = function(ctx)
 							local icon = ctx.kind_icon
 							if vim.tbl_contains({ "Path" }, ctx.source_name) then
@@ -91,7 +86,7 @@ require("blink.cmp").setup({
 						-- keep the highlight groups in sync with the icons.
 						highlight = function(ctx)
 							local hl = ctx.kind_hl
-                            -- local hl = "BlinkCmpKind" .. ctx.kind
+								-- local hl = "BlinkCmpKind" .. ctx.kind
 								or require("blink.cmp.completion.windows.render.tailwind").get_hl(ctx)
 							if vim.tbl_contains({ "Path" }, ctx.source_name) then
 								local dev_icon, dev_hl = require("nvim-web-devicons").get_icon(ctx.label)
@@ -109,8 +104,12 @@ require("blink.cmp").setup({
 			dot_repeat = true, -- causes bug, drops to background when snippet completion
 			auto_brackets = {
 				enabled = true,
+				kind_resolution = {
+					enabled = true,
+				},
 				semantic_token_resolution = {
 					enabled = true,
+					timeout_ms = 400,
 				},
 			},
 		},
