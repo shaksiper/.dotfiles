@@ -29,7 +29,7 @@ require("neotest").setup({
 				})
 			end
 			client.listeners.starting = function(_)
-				vim.notify("Tests being discovered", vim.log.levels.INFO, {
+				vim.notify("Tests being discovered", vim.log.levels.DEBUG, {
 					title = "Neotest",
 					id = notification_id,
 					timeout = false, -- Keep it open until we manually close it
@@ -57,12 +57,13 @@ require("neotest").setup({
 
 				local level = has_failed and vim.log.levels.ERROR or vim.log.levels.INFO
 				local msg = has_failed and "Tests Failed" or "Tests Passed"
-				local icon = ""
 
 				vim.notify(msg, level, {
 					title = "Neotest",
 					id = notification_id,
 					timeout = 3000,
+                    hl = not has_failed and { title = "NeotestPassed", border = "NeotestPassed"},
+                    icon = not has_failed and ""
 				})
 			end
 		end,
