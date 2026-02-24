@@ -21,42 +21,55 @@ vim.keymap.set("v", ">", ">gv", { desc = "Indent and reselect last visual select
 -- " " -- TELESCOPE -- Find files using Telescope command-line sugar.
 -- lua << EOF
 -- local notifier =
+vim.keymap.set(
+	"x",
+	"<C-s>",
+	"<Plug>(nvim-surround-visual)",
+	{ desc = "Add a surrounding pair around a visual selection" }
+)
+vim.keymap.set(
+	"x",
+	"gS",
+	"<Plug>(nvim-surround-visual-line)",
+	{ desc = "Add a surrounding pair around a visual selection, on new lines" }
+)
 -- TESTING
+local neotest = require("neotest")
 vim.keymap.set("n", "\\td", function()
-	require("neotest").run.run({ strategy = "dap" })
+	neotest.run.run({ strategy = "dap" })
 end, { noremap = true, desc = "Test Debug" })
 vim.keymap.set("n", "\\tl", function()
-	require("neotest").run.run_last()
+	neotest.run.run_last()
 end, { noremap = true, desc = "Run Last Test" })
 vim.keymap.set("n", "\\tt", function()
-	require("neotest").run.run(vim.fn.expand("%"))
+	neotest.run.run(vim.fn.expand("%"))
 end, { noremap = true, desc = "Test Current Test File" })
 vim.keymap.set("n", "\\ts", function()
-	require("neotest").run.stop()
+	neotest.run.stop()
 end, { noremap = true, desc = "Stop Test" })
 vim.keymap.set("n", "\\T", function()
-	require("neotest").run.run()
+	neotest.run.run()
 end, { noremap = true, desc = "Test Nearest" })
 vim.keymap.set("n", "\\to", function()
-	require("neotest").output.toggle({ enter = false })
+	neotest.output.toggle({ enter = false })
 end, { noremap = true, desc = "Test Output" })
 vim.keymap.set("n", "\\tO", function()
-	require("neotest").output_panel.toggle({ enter = true })
+	neotest.output_panel.toggle({ enter = true })
 end, { noremap = true, desc = "Test Output Panel" })
 vim.keymap.set("n", "<M-t>", function()
-	require("neotest").summary.toggle()
+	neotest.summary.toggle()
 end, { noremap = true, desc = "Toggle Test Summary" })
 vim.keymap.set("n", "\\tm", function()
-	require("neotest").summary.run_marked()
+	neotest.summary.run_marked()
 end, { noremap = true, desc = "Run Marked Tests" })
 vim.keymap.set("n", "\\tM", function()
-	require("neotest").summary.debug_marked()
+	neotest.summary.debug_marked()
 end, { noremap = true, desc = "Debug Marked Tests" })
 vim.keymap.set("n", "\\taa", function()
-	require("neotest").run.run({ suite = true })
+	neotest.run.run({ suite = true })
 end, { noremap = true, desc = "Run All Test Suite" })
 vim.keymap.set("n", "\\tad", function()
-	require("neotest").run.run({ suite = true, strategy = "dap" })
+	neotest.run.run({ suite = true, strategy = "dap" })
 end, { noremap = true, desc = "Run All Test Suite" })
 
 local default_opts = { noremap = true }
@@ -64,7 +77,9 @@ local default_opts = { noremap = true }
 local Snacks = require("snacks")
 Snacks.toggle.profiler():map("<leader>pp")
 Snacks.toggle.profiler_highlights():map("<leader>ph")
-vim.keymap.set("n", "<leader>ps", function() Snacks.profiler.scratch() end, { desc = "Profiler Scratch Buffer" })
+vim.keymap.set("n", "<leader>ps", function()
+	Snacks.profiler.scratch()
+end, { desc = "Profiler Scratch Buffer" })
 vim.keymap.set("n", "<leader><space>", function()
 	Snacks.picker.smart()
 end, { desc = "Smart Find Files" })

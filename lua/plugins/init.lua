@@ -75,11 +75,12 @@ vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,
 require("window-picker").setup()
 -- require("plugins.hydras")
 -- require("satellite").setup()
+vim.g.nvim_surround_no_visual_mappings = false
 require("nvim-surround").setup({
 	move_cursor = "sticky",
-	keymaps = {
-		visual = "<C-s>",
-	},
+	-- keymaps = {
+	-- 	visual = "<C-s>",
+	-- },
 })
 require("outline").setup()
 require("plugins.trouble")
