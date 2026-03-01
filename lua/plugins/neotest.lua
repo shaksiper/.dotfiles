@@ -1,4 +1,4 @@
-local Snakcs = require("snacks")
+local Snacks = require("snacks")
 require("neotest").setup({
 	adapters = {
 		-- require("neotest-dotnet")({
@@ -24,7 +24,7 @@ require("neotest").setup({
 					timeout = false, -- Keep it open until we manually close it
 					layout = { top = 5 },
 					opts = function(notif)
-						notif.icon = Snakcs.util.spinner()
+						notif.icon = Snacks.util.spinner()
 					end,
 				})
 			end
@@ -35,7 +35,7 @@ require("neotest").setup({
 					timeout = false, -- Keep it open until we manually close it
 					layout = { top = 5 },
 					opts = function(notif)
-						notif.icon = Snakcs.util.spinner()
+						notif.icon = Snacks.util.spinner()
 					end,
 				})
 			end
