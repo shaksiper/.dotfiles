@@ -798,3 +798,5 @@ vim.keymap.set(
 	"<cmd>Treewalker Right<cr>",
 	{ silent = true, desc = "Move rigtht through the tree" }
 )
+
+vim.keymap.set("n", "<leader>fo", "<CMD>Oil --float<CR>", {desc = "Open Oil in float"})

@@ -13,4 +13,9 @@ require("oil").setup({
 		update_on_cursor_moved = false,
 		-- How to open the preview window "load"|"scratch"|"fast_scratch"
 	},
+    float = {
+        max_width = 0.6,
+        max_height = 0.65,
+        border = 'single'
+    }
 })
