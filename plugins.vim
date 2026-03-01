@@ -1,7 +1,7 @@
 call plug#begin()
 " Plug '~/Documents/development/projects/neovim-plugin/minimap.nvim'
 Plug 'tpope/vim-repeat'
-Plug 'michaelb/sniprun', { 'do': 'bash install.sh'}
+"Plug 'michaelb/sniprun', { 'do': 'bash install.sh'}
 "Plug 'rcarriga/nvim-notify'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate'}
 Plug 'nvim-treesitter/nvim-treesitter-textobjects', { 'branch': 'main'}
