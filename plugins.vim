@@ -151,7 +151,7 @@ Plug 'chentoast/marks.nvim'
 " Plug 'tversteeg/registers.nvim'
 " Plug 'AckslD/nvim-neoclip.lua'
 " Buffer select. The preview over extends form the borders to window
-Plug 'ray-x/lsp_signature.nvim'
+"Plug 'ray-x/lsp_signature.nvim'
 " buffer-like
 Plug 'hedyhli/outline.nvim'
 " Plug 'narutoxy/dim.lua'
