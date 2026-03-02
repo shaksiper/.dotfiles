@@ -16,21 +16,19 @@ require("lualine").setup({
 	},
 	sections = {
 		lualine_x = {
-			-- "lsp_status",
 			require("plugins.lualine.component.neotest"),
-			"overseer",
 			"encoding",
 			"fileformat",
 			"filetype",
 		},
 		-- lualine_x = { "overseer", "encoding", "fileformat", "filetype" },
-		lualine_b = { { "b:gitsigns_head", icon = "" }, { "diff", source = diff_source }, "diagnostics", "oil" },
+		lualine_b = { { "b:gitsigns_head", icon = "" }, { "diff", source = diff_source }, "diagnostics" },
 	},
 	extensions = {
 		"oil",
 		-- "nvim-dap-ui",
 		"overseer",
-		"trouble",
+		-- "trouble",
 	},
 	--[[ sections = {
 		lualine_c = {
