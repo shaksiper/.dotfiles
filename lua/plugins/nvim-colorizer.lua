@@ -4,4 +4,9 @@ require("colorizer").setup({
 		"javascript",
 		html = { mode = "foreground" },
 	},
+	options = {
+		parsers = {
+			css = true,
+		},
+	},
 })
