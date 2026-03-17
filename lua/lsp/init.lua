@@ -61,6 +61,15 @@ local on_attach = function(client, bufnr)
 			group = group,
 			desc = "Clear All the References",
 		})
+
+		-- Sticky / persistent highlight.
+		vim.keymap.set("n", "<leader>mh", function()
+			doc_hl.request(doc_hl.ns.sticky, bufnr)
+		end, { buffer = bufnr, desc = "Sticky document highlight" })
+
+		vim.keymap.set("n", "<leader>mH", function()
+			doc_hl.clear(doc_hl.ns.sticky, bufnr)
+		end, { buffer = bufnr, desc = "Clear sticky document highlight" })
 	end
 end
 
