@@ -249,6 +249,12 @@ end, { desc = "LSP Workspace Symbols" })
 vim.keymap.set({ "n", "t" }, "<M-/>", function()
 	Snacks.terminal()
 end, { desc = "Toggle Terminal" })
+vim.keymap.set({ "n" }, "<M-]>", function()
+	Snacks.words.jump(vim.v.count1)
+end, { desc = "Jump Next [Count] LSP Reference" })
+vim.keymap.set({ "n", "t" }, "<M-[>", function()
+	Snacks.words.jump(-vim.v.count1)
+end, { desc = "Jump Previous [Count] LSP Reference" })
 
 vim.keymap.set("n", "<leader>fa", "<cmd>Seeker files<CR>", { desc = "Seeker files" })
 -- TELESCOPE
