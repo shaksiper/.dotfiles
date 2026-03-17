@@ -793,4 +793,10 @@ vim.keymap.set(
 	{ silent = true, desc = "Move rigtht through the tree" }
 )
 
-vim.keymap.set("n", "<leader>fo", "<CMD>Oil --float<CR>", {desc = "Open Oil in float"})
+local oil = require("oil")
+vim.keymap.set("n", "<leader>fo", function()
+	oil.open_float()
+end, { desc = "Open Oil in float" })
+vim.keymap.set("n", "<leader>fO", function()
+	oil.open_float(vim.uv.cwd())
+end, { desc = "Open Oil in float with CWD" })
