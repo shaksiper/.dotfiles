@@ -20,7 +20,7 @@ require("plugins.gitsigns")
 -- require("plugins.neoscroll")
 -- require("plugins.specs")
 -- require("plugins.spellsitter")
-require("ts_context_commentstring").setup({})
+-- require("ts_context_commentstring").setup({}) " configure this for only languages that commonly embeds other langs, eg. markdown etc.
 require("plugins.nvim-autopair")
 -- require("plugins.nvim-gps")
 -- require("plugins.neo-tree")
@@ -87,7 +87,7 @@ require("outline").setup()
 require("plugins.trouble")
 --require("syntax-tree-surfer").setup()
 require("fidget").setup({})
-require("plugins.config-local")
+-- require("plugins.config-local")
 require("neogen").setup({
 	snippet_engine = "luasnip",
 	languages = {
@@ -151,3 +151,4 @@ require("demicolon").setup({
 	},
 })
 require("refactoring").setup()
+
