@@ -9,7 +9,7 @@ require("mkdnflow").setup({
 	-- 	lsp = { enabled = true },
 	-- },
 	modules = {
-		cmp = true,
+		completion = true,
 	},
 	links = {
 		conceal = true,
