@@ -13,7 +13,7 @@ local highlight = {
 }
 
 -- vim.g.rainbow_delimiters = { highlight = highlight }
-local rainbow_delimiters = require("rainbow-delimiters")
+-- local rainbow_delimiters = require("rainbow-delimiters")
 
 vim.g.rainbow_delimiters = {
 	highlight = highlight,

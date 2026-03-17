@@ -14,7 +14,7 @@ require("neotest").setup({
 		}),
 	},
 	consumers = {
-		overseer = require("neotest.consumers.overseer"),
+		-- overseer = require("neotest.consumers.overseer"),
 		notification = function(client)
 			local notification_id = "test_start_notification"
 			client.listeners.run = function(_) -- (adapter_id, results)
@@ -62,17 +62,17 @@ require("neotest").setup({
 					title = "Neotest",
 					id = notification_id,
 					timeout = 3000,
-                    hl = not has_failed and { title = "NeotestPassed", border = "NeotestPassed"},
-                    icon = not has_failed and ""
+					hl = not has_failed and { title = "NeotestPassed", border = "NeotestPassed" },
+					icon = not has_failed and "",
 				})
 			end
 		end,
 	},
-	overseer = {
-		enabled = true,
-		-- When this is true (the default), it will replace all neotest.run.* commands
-		-- force_default = false,
-	},
+	-- overseer = {
+	-- 	enabled = true,
+	-- 	-- When this is true (the default), it will replace all neotest.run.* commands
+	-- 	-- force_default = false,
+	-- },
 })
 
 -- vim.api.nvim_create_autocmd("User", {

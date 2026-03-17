@@ -6,6 +6,8 @@ npairs.setup({
 
 		chars = { "{", "[", "(", '"', "'", "<" },
 	},
+	check_ts = true,
+	-- map_cr = false,
 })
 
 local Rule = require("nvim-autopairs.rule")

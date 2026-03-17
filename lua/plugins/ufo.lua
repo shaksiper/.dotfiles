@@ -31,6 +31,7 @@ require("statuscol").setup({
 	relculright = true,
 	segments = {
 		{ text = { builtin.foldfunc }, click = "v:lua.ScFa" },
+        -- TODO: if there is fold, check for git status inside the fold and reflect an overall sight
 		{ text = { "%s" }, click = "v:lua.ScSa" },
 		{ text = { builtin.lnumfunc, " " }, click = "v:lua.ScLa" },
 	},
