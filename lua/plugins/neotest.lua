@@ -15,6 +15,7 @@ require("neotest").setup({
 	},
 	consumers = {
 		-- overseer = require("neotest.consumers.overseer"),
+		run_history = require("plugins.neotest.consumers.run_history"),
 		notification = function(client)
 			local notification_id = "test_start_notification"
 			client.listeners.run = function(_) -- (adapter_id, results)
@@ -27,6 +28,14 @@ require("neotest").setup({
 						notif.icon = Snacks.util.spinner()
 					end,
 				})
+                -- BUG
+				-- ...can/.local/share/nvim/plugged/nvim-nio/lua/nio/tasks.lua:100: Async task failed without callback: The coroutine failed with this message:
+				-- /home/can/.config/nvim/lua/plugins/neotest.lua:31: E5560: nvim_exec_autocmds must not be called in a fast event context
+				vim.schedule(function()
+					vim.api.nvim_exec_autocmds("User", {
+						pattern = "RemoteOperationTerminated",
+					})
+				end)
 			end
 			client.listeners.starting = function(_)
 				vim.notify("Tests being discovered", vim.log.levels.DEBUG, {
@@ -46,6 +55,7 @@ require("neotest").setup({
 					timeout = 5000,
 				})
 			end
+            -- TODO: improve success/fail details with a little bit more persistent notification
 			client.listeners.results = function(_, results)
 				local has_failed = false
 				for _, result in pairs(results) do
