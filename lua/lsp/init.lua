@@ -20,8 +20,7 @@ vim.diagnostic.config({
 	update_in_insert = false,
 	severity_sort = false,
 })
-
-
+local doc_hl = require("lsp.document_highlight")
 local on_attach = function(client, bufnr)
 	-- if client.server_capabilities.inlayHintProvider then
 	--     vim.lsp.inlay_hint.enable(bufnr, true)
@@ -34,6 +33,7 @@ local on_attach = function(client, bufnr)
 
 	if client:supports_method("textDocument/codeLens") then
 		vim.lsp.codelens.enable(true, { bufnr = bufnr })
+		-- vim.keymap.set("n", "\\f", function() end, { desc = "Keep highlighting symbol under cursor" })
 
 		-- vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
 		-- 	buffer = bufnr,
@@ -46,28 +46,53 @@ local on_attach = function(client, bufnr)
 	-- used to use tree-sitter-refactor for highlighting definitions under cursor
 	if client:supports_method("textDocument/documentHighlight") then
 		-- vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
-		local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
-		vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
+		-- local group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
+		-- local persistent_hl_group = vim.api.nvim_create_augroup("persistent_hl_group", { clear = false })
+		--
+		-- vim.api.nvim_clear_autocmds({ buffer = bufnr, group = persistent_hl_group })
+		-- vim.keymap.set("n", "\\f", function() end, { desc = "Keep highlighting symbol under cursor" })
+		-- vim.keymap.set("n", "<C-l>", function() end, { desc = "Keep highlighting symbol under cursor" })
+		-- vim.api.nvim_clear_autocmds({ buffer = bufnr, group = group })
 
-		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-			callback = vim.lsp.buf.document_highlight,
-			buffer = bufnr,
-			group = group,
-			desc = "Document Highlight",
-		})
-		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-			callback = vim.lsp.buf.clear_references,
-			buffer = bufnr,
-			group = group,
-			desc = "Clear All the References",
-		})
+		-- NOTE: Snacks.words handle this highlight
+		-- vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+		-- 	callback = vim.lsp.buf.document_highlight,
+		-- 	buffer = bufnr,
+		-- 	group = group,
+		-- 	desc = "Document Highlight",
+		-- })
+		-- vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+		-- 	callback = vim.lsp.buf.clear_references,
+		-- 	buffer = bufnr,
+		-- 	group = group,
+		-- 	desc = "Clear All the References",
+		-- })
+
+		-- Current behavior, but through your own transient namespace.
+		-- vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+		-- 	buffer = bufnr,
+		-- 	group = group,
+		-- 	callback = function()
+		-- 		doc_hl.request(doc_hl.ns.transient, bufnr)
+		-- 	end,
+		-- 	desc = "Document Highlight",
+		-- })
+		--
+		-- vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
+		-- 	buffer = bufnr,
+		-- 	group = group,
+		-- 	callback = function()
+		-- 		doc_hl.clear(doc_hl.ns.transient, bufnr)
+		-- 	end,
+		-- 	desc = "Clear transient references",
+		-- })
 
 		-- Sticky / persistent highlight.
-		vim.keymap.set("n", "<leader>mh", function()
+		vim.keymap.set("n", "<leader>hl", function()
 			doc_hl.request(doc_hl.ns.sticky, bufnr)
 		end, { buffer = bufnr, desc = "Sticky document highlight" })
 
-		vim.keymap.set("n", "<leader>mH", function()
+		vim.keymap.set("n", "<leader>hL", function()
 			doc_hl.clear(doc_hl.ns.sticky, bufnr)
 		end, { buffer = bufnr, desc = "Clear sticky document highlight" })
 	end
@@ -92,7 +117,7 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 	},
 }
 capabilities.textDocument.foldingRange = {
-	dynamicRegistration = false,
+	dynamicRegistration = true,
 	lineFoldingOnly = true,
 }
 
@@ -208,42 +233,47 @@ vim.lsp.enable("gopls")
 require("neodev").setup({
 	-- add any options here, or leave empty to use the default settings
 })
-vim.lsp.enable("lua_ls")
-vim.lsp.config("lua_ls", {
-	on_init = function(client)
-		if client.workspace_folders then
-			local path = client.workspace_folders[1].name
-			if
-				path ~= vim.fn.stdpath("config")
-				and (vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc"))
-			then
-				return
+vim.lsp.config(
+	"lua_ls",
+	---@type vim.lsp.Config
+	{
+		on_init = function(client)
+			if client.workspace_folders then
+				local path = client.workspace_folders[1].name
+				if
+					path ~= vim.fn.stdpath("config")
+					and (vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc"))
+				then
+					return
+				end
 			end
-		end
 
-		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-			runtime = {
-				version = "LuaJIT",
-			},
-			workspace = {
-				checkThirdParty = false,
-				library = {
-					vim.env.VIMRUNTIME,
+			client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+				runtime = {
+					version = "LuaJIT",
+				},
+				workspace = {
+					checkThirdParty = false,
+					library = {
+						vim.env.VIMRUNTIME,
+					},
+				},
+			})
+		end,
+		---@type lspconfig.settings.lua_ls
+		settings = {
+			Lua = {
+				completion = {
+					callSnippet = "Replace",
+				},
+				hint = {
+					enable = true,
 				},
 			},
-		})
-	end,
-	settings = {
-		Lua = {
-			completion = {
-				callSnippet = "Replace",
-			},
-			hint = {
-				enable = true,
-			},
 		},
-	},
-})
+	}
+)
+vim.lsp.enable("lua_ls")
 local conform = require("conform")
 conform.setup({
 	formatters_by_ft = {
