@@ -108,11 +108,20 @@ Snacks.setup({
 				picker:close()
 				-- picker.list:set_selected() -- clear selection
 			end,
+			-- leap = function(picker)
+			-- 	require("leap").leap({
+			-- 		-- windows = { picker.list.win.win },
+			--                  action = function (item) -- debug
+			--                      print(vim.inspect(item))
+			--                      print(vim.inspect(picker.list))
+			--                  end
+			-- 	})
+			-- end,
 		},
 	},
 	quickfile = { enabled = true },
 	-- scope = { enabled = true },
-	scroll = { enabled = true },
+	scroll = { enabled = not vim.g.neovide },
 	-- statuscolumn = { enabled = true },
 	words = { enabled = true },
 	styles = {
