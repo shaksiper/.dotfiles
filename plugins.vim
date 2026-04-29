@@ -103,7 +103,7 @@ Plug 'rafamadriz/friendly-snippets'
 "Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/cmp-luasnip-choice'
 Plug 'chrisgrieser/nvim-scissors'
-Plug 'Saghen/blink.cmp', { 'do': ':!cargo build --release'}
+Plug 'Saghen/blink.cmp', { 'branch': 'v1', 'do': ':!cargo build --release'}
 Plug 'saghen/blink.compat'
 " AI
 "Plug 'zbirenbaum/copilot.lua'
