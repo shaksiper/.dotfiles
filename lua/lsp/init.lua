@@ -282,7 +282,8 @@ vim.lsp.config("roslyn", {
 	-- on_attach = monkey_patch_semantic_tokens,
 	cmd = {
 		-- "dotnet",
-		"roslyn-ls",
+		-- "roslyn-ls",
+		"roslyn-language-server", -- dotnet new install -g roslyn-language-server --prerelease
 		"--logLevel=Information",
 		"--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
 		"--stdio",
@@ -324,6 +325,7 @@ vim.lsp.config("roslyn", {
 		},
 	},
 })
+-- vim.lsp.enable("roslyn") -- already enabling it through roslyn.nvim
 require("roslyn").setup()
 
 -- TODO: improve neotest discovery
