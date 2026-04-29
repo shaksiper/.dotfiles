@@ -32,6 +32,9 @@ require("obsidian").setup({
 		enabled = true,
 	},
 	callbacks = {
+		---comment
+		---@param _ obsidian.Client
+		---@param note obsidian.Note
 		enter_note = function(_, note)
 			-- we can set keymaps here
 			vim.keymap.set("n", "gf", function()
@@ -41,7 +44,7 @@ require("obsidian").setup({
 					return "gf"
 				end
 			end, {
-				buffer = note.bufnr,
+				-- buffer = note.bufnr,
 				desc = "Follow Link",
 				noremap = false,
 				expr = true,
