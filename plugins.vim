@@ -182,6 +182,7 @@ Plug 'nvim-lua/plenary.nvim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'NeogitOrg/neogit', {'branch': 'master'}
+Plug 'm00qek/baleia.nvim'
 Plug 'isakbm/gitgraph.nvim'
 Plug 'akinsho/git-conflict.nvim', {'tag': 'v2.1.0'} " until commands are fixed: https://github.com/akinsho/git-conflict.nvim/issues/103
 Plug 'DrKJeff16/project.nvim'

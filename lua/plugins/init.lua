@@ -1,4 +1,5 @@
 require("plugins.snacks")
+vim.g.baleia = require("baleia").setup({ })
 require("seeker").setup({})
 require("ssr").setup()
 require("plugins.treesitter")
