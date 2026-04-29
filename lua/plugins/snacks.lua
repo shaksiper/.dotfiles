@@ -72,6 +72,7 @@ Snacks.setup({
 					input = {
 						keys = {
 							["<C-o>"] = { "multi_open", mode = { "i" } }, -- open with system application
+							-- ["<A-s>"] = { "leap", mode = { "n", "i" } },
 						},
 					},
 				},
@@ -90,12 +91,13 @@ Snacks.setup({
 			frecency = true,
 		},
 		actions = {
+			-- TODO: refine and generalize, and consider for upstream
 			multi_open = function(picker)
 				if vim.fn.mode():find("^[vV]") then
 					picker.list:select()
 				end
 				local files = {}
-				for index, item in ipairs(picker:selected({ fallback = true })) do
+				for _, item in ipairs(picker:selected({ fallback = true })) do
 					table.insert(files, item.file)
 				end
 				print(vim.inspect(files))
