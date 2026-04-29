@@ -11,6 +11,9 @@ require("neotest").setup({
 			dap_settings = {
 				type = "coreclr",
 			},
+			-- build_opts = {
+			-- 	"/p:ConsoleLoggerParameters=ForceNoAlign;LogColor",
+			-- },
 		}),
 	},
 	consumers = {
@@ -28,7 +31,7 @@ require("neotest").setup({
 						notif.icon = Snacks.util.spinner()
 					end,
 				})
-                -- BUG
+				-- BUG
 				-- ...can/.local/share/nvim/plugged/nvim-nio/lua/nio/tasks.lua:100: Async task failed without callback: The coroutine failed with this message:
 				-- /home/can/.config/nvim/lua/plugins/neotest.lua:31: E5560: nvim_exec_autocmds must not be called in a fast event context
 				vim.schedule(function()
@@ -55,7 +58,7 @@ require("neotest").setup({
 					timeout = 5000,
 				})
 			end
-            -- TODO: improve success/fail details with a little bit more persistent notification
+			-- TODO: improve success/fail details with a little bit more persistent notification
 			client.listeners.results = function(_, results)
 				local has_failed = false
 				for _, result in pairs(results) do
