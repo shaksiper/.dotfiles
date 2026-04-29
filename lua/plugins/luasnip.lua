@@ -15,3 +15,8 @@ luasnip.config.setup({
 		},
 	},
 })
+
+-- require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
+require("luasnip.loaders.from_vscode").lazy_load() -- for friendly-snippets
+require("luasnip.loaders.from_lua").lazy_load({ paths = { "./snippets/luasnip" } }) -- for custom

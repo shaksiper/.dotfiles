@@ -1,5 +1,5 @@
-require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } }) -- added to scissors
-require("luasnip.loaders.from_vscode").lazy_load()
+-- require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets", "./snippets/luasnip"} }) -- added to scissors
+-- require("luasnip.loaders.from_vscode").lazy_load()
 require("blink.cmp").setup({
 	enabled = function()
 		return vim.bo.buftype ~= "prompt" and vim.b.completion ~= false
