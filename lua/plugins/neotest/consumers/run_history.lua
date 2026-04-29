@@ -1,16 +1,8 @@
+local nio = require("nio")
 local lib = require("neotest.lib")
+local utils = require("plugins.neotest.consumers.utils")
 
 local M = {}
-
--- ---------- utils ----------
-local function now_ms()
-	return os.time()
-end
-
-local function fmt_time(ts_ms)
-	-- local sec = math.floor(ts_ms / 1000)
-	return os.date("%Y-%m-%d %H:%M:%S", ts_ms) -- FIXED: correct time and time unit
-end
 
 local function safe(tbl, key, default)
 	local v = tbl and tbl[key]
@@ -58,24 +50,12 @@ local function compute_aggregate(results, position_ids)
 			test_counter(result and result.status or "unknown")
 		end
 	else
-		-- fallback: aggregate all results
 		for _, result in pairs(results or {}) do
 			test_counter(result and result.status or "unknown")
 		end
 	end
 
 	return worst, counts
-end
-
-local function read_output_file(path)
-	if not path then
-		return nil
-	end
-	local ok, content = pcall(lib.files.read, path)
-	if not ok then
-		return nil
-	end
-	return content
 end
 
 local function resolve_target_label(client, adapter_id, position_ids)
@@ -90,7 +70,7 @@ local function resolve_target_label(client, adapter_id, position_ids)
 		end
 		return position_ids[1]
 	end
-	-- multiple ids: try to show file / root
+
 	local node = client:get_position(position_ids[1], { adapter = adapter_id })
 	if node then
 		local data = node:data()
@@ -99,10 +79,43 @@ local function resolve_target_label(client, adapter_id, position_ids)
 	return string.format("Multiple (%d)", #position_ids)
 end
 
+local function split_preserving_current_behavior(text)
+	if type(text) == "table" then
+		text = table.concat(text, "\n")
+	end
+	if not text or text == "" then
+		return {}
+	end
+	return vim.split(text, "[\r\n]+")
+end
+
+local function spinner_provider()
+	local ok_snacks, snacks = pcall(require, "snacks.util")
+	if ok_snacks and type(snacks.spinner) == "function" then
+		return function(i)
+			return snacks.spinner(i)
+		end
+	end
+
+	local ok_neotest_lib, neotest_lib = pcall(require, "neotest.lib")
+	if ok_neotest_lib and type(neotest_lib.spinner) == "function" then
+		return function(i)
+			return neotest_lib.spinner(i)
+		end
+	end
+
+	local frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+	return function(i)
+		return frames[((i - 1) % #frames) + 1]
+	end
+end
+
+local get_spinner_frame = spinner_provider()
+
 -- ---------- UI state ----------
 local state = {
-	runs = {}, -- newest first
-	pending_by_adapter = {}, -- adapter_id -> run_id
+	runs = {},
+	pending_by_adapter = {},
 	selected = 1,
 
 	win_left = nil,
@@ -118,29 +131,23 @@ local state = {
 		failed = "DiffDelete",
 		skipped = "DiffChange",
 		unknown = "Normal",
+		section = "Special",
 	},
+
+	_render_scheduled = false,
+	_spinner_index = 1,
+	_spinner_timer = nil,
+	_line_actions = {},
+	_expanded = {},
 }
 
-state._render_scheduled = false
+local function ensure_hls() end
 
-local function ensure_hls()
-	-- You can customize these in your colorscheme; we just map to common groups.
-	-- No-op: state.hl already references built-in highlight groups.
-end
-
--- local function close_ui()
--- 	local wins = { state.win_left, state.win_right }
--- 	for _, w in ipairs(wins) do
--- 		if w and vim.api.nvim_win_is_valid(w) then
--- 			pcall(vim.api.nvim_win_close, w, true)
--- 		end
--- 	end
--- 	state.win_left, state.win_right = nil, nil
--- end
 local function set_buf_lines(buf, lines)
 	if not (buf and vim.api.nvim_buf_is_valid(buf)) then
 		return
 	end
+
 	local ok_mod = pcall(function()
 		vim.bo[buf].modifiable = true
 	end)
@@ -150,32 +157,132 @@ local function set_buf_lines(buf, lines)
 
 	local ok, err = pcall(vim.api.nvim_buf_set_lines, buf, 0, -1, false, lines)
 
-	-- Always restore
 	pcall(function()
 		vim.bo[buf].modifiable = false
 	end)
 
 	if not ok then
-		-- Optional: log
 		vim.schedule(function()
 			vim.notify(("run_history: failed to render buffer: %s"):format(err), vim.log.levels.ERROR)
 		end)
 	end
 end
--- local function set_buf_lines(buf, lines)
--- 	-- vim.api.nvim_buf_set_option(buf, "modifiable", true)
--- 	vim.api.nvim_set_option_value("modifiable", true, { buf = buf })
--- 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
--- 	-- vim.api.nvim_buf_set_option(buf, "modifiable", false)
--- 	vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
--- end
 
 local function apply_line_hl(buf, lnum0, hl)
-	-- pcall(vim.api.nvim_buf_add_highlight, buf, state.ns, hl, lnum0, 0, -1)
 	pcall(vim.hl.range, buf, state.ns, hl, { lnum0, 0 }, { lnum0, -1 })
 end
 
-local function render_history()
+local function request_render()
+	if state._render_scheduled then
+		return
+	end
+	state._render_scheduled = true
+	vim.schedule(function()
+		state._render_scheduled = false
+		if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
+			render_history()
+		end
+		if state.win_right and vim.api.nvim_win_is_valid(state.win_right) then
+			render_output()
+		end
+	end)
+end
+
+local function output_key(run_id, test_id)
+	return ("%s::%s"):format(run_id, test_id)
+end
+
+local function is_output_expanded(run_id, test_id)
+	local key = output_key(run_id, test_id)
+	local value = state._expanded[key]
+	if value == nil then
+		return true
+	end
+	return value
+end
+
+local function toggle_output_expanded(run_id, test_id)
+	local key = output_key(run_id, test_id)
+	state._expanded[key] = not is_output_expanded(run_id, test_id)
+	request_render()
+end
+
+local function any_loading_outputs()
+	for _, run in ipairs(state.runs) do
+		for _, result in pairs(run.results or {}) do
+			if result._output_state == "loading" then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+local function ensure_spinner_running()
+	if state._spinner_timer or not any_loading_outputs() then
+		return
+	end
+
+	local uv = vim.uv or vim.loop
+	local timer = uv.new_timer()
+	state._spinner_timer = timer
+
+	timer:start(
+		0,
+		100,
+		vim.schedule_wrap(function()
+			if not any_loading_outputs() then
+				if state._spinner_timer then
+					state._spinner_timer:stop()
+					state._spinner_timer:close()
+					state._spinner_timer = nil
+				end
+				request_render()
+				return
+			end
+
+			state._spinner_index = state._spinner_index + 1
+			request_render()
+		end)
+	)
+end
+
+local function stop_spinner_if_idle()
+	if state._spinner_timer and not any_loading_outputs() then
+		state._spinner_timer:stop()
+		state._spinner_timer:close()
+		state._spinner_timer = nil
+	end
+end
+
+local function request_output_read(result)
+	if not result or not result.output then
+		return
+	end
+	if result._output_state == "loading" or result._output_state == "ready" then
+		return
+	end
+
+	result._output_state = "loading"
+	ensure_spinner_running()
+
+	nio.run(function()
+		local ok, content = pcall(lib.files.read, result.output)
+		vim.schedule(function()
+			if ok and content and content ~= "" then
+				result._output_state = "ready"
+				result._output_text = content
+			else
+				result._output_state = "error"
+				result._output_text = nil
+			end
+			stop_spinner_if_idle()
+			request_render()
+		end)
+	end)
+end
+
+function render_history()
 	if not (state.buf_left and vim.api.nvim_buf_is_valid(state.buf_left)) then
 		return
 	end
@@ -199,13 +306,16 @@ local function render_history()
 		local counts = run.counts or { passed = 0, failed = 0, skipped = 0, unknown = 0 }
 		local count_str = string.format("P:%d F:%d S:%d", counts.passed, counts.failed, counts.skipped)
 
-		lines[#lines + 1] = string.format(
-			"%s [%s] %s  (%s)  %s",
-			fmt_time(run.started_at_ms),
-			tag,
-			run.target_label or "(unknown)",
-			run.adapter_id ~= nil and ("adapter " .. tostring(run.adapter_id)) or "adapter ?",
-			count_str
+		table.insert(
+			lines,
+			string.format(
+				"%s [%s] %s  (%s)  %s",
+				utils.fmt_time(run.started_at_ms),
+				tag,
+				run.target_label or "(unknown)",
+				run.adapter_id ~= nil and ("adapter " .. tostring(run.adapter_id)) or "adapter ?",
+				count_str
+			)
 		)
 	end
 
@@ -215,7 +325,6 @@ local function render_history()
 
 	set_buf_lines(state.buf_left, lines)
 
-	-- highlights
 	vim.api.nvim_buf_clear_namespace(state.buf_left, state.ns, 0, -1)
 	for i, run in ipairs(state.runs) do
 		local hl = state.hl.unknown
@@ -229,14 +338,13 @@ local function render_history()
 		apply_line_hl(state.buf_left, i - 1, hl)
 	end
 
-	-- cursor selection
 	if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
 		local row = math.max(1, math.min(state.selected, #state.runs))
 		pcall(vim.api.nvim_win_set_cursor, state.win_left, { row, 0 })
 	end
 end
 
-local function render_output()
+function render_output()
 	if not (state.buf_right and vim.api.nvim_buf_is_valid(state.buf_right)) then
 		return
 	end
@@ -250,38 +358,55 @@ local function render_output()
 	end
 
 	local lines = {}
-	lines[#lines + 1] = string.format(
-		"Run: %s\tElapsed: %s ms",
-		fmt_time(run.started_at_ms),
-		(run.finished_at_ms or now_ms()) - run.started_at_ms
+	local hl_lines = {}
+	state._line_actions = {}
+
+	local function add_line(text, hl, action)
+		table.insert(lines, text)
+		local lnum0 = #lines - 1
+		if hl then
+			table.insert(hl_lines, { lnum0, hl })
+		end
+		if action then
+			state._line_actions[lnum0 + 1] = action
+		end
+	end
+
+	add_line(
+		string.format(
+			"Run: %s\tElapsed: %s s",
+			utils.fmt_time(run.started_at_ms),
+			(run.finished_at_ms or utils.now_ms()) - run.started_at_ms
+		),
+		state.hl.title
 	)
-	lines[#lines + 1] = string.format("Target: %s", run.target_label or "(unknown)")
-	lines[#lines + 1] = string.format("Status: %s", run.status or "unknown")
+	add_line(string.format("Target: %s", run.target_label or "(unknown)"), state.hl.dim)
+	add_line(string.format("Status: %s", run.status or "unknown"), state.hl.dim)
 
 	local counts = run.counts or { passed = 0, failed = 0, skipped = 0, unknown = 0 }
-	lines[#lines + 1] = string.format(
-		"Counts: passed=%d failed=%d skipped=%d unknown=%d",
-		counts.passed,
-		counts.failed,
-		counts.skipped,
-		counts.unknown
+	add_line(
+		string.format(
+			"Counts: passed=%d failed=%d skipped=%d unknown=%d",
+			counts.passed,
+			counts.failed,
+			counts.skipped,
+			counts.unknown
+		),
+		state.hl.dim
 	)
-	lines[#lines + 1] = string.rep("-", 80)
+	add_line(string.rep("-", 80), state.hl.dim)
 
 	local results = run.results or {}
 	local order = {}
 
-	-- TODO: rework this?
-	-- Put failed first, then others
-	for id, r in pairs(results) do
-		if r and r.status == "failed" then
-			order[#order + 1] = id
+	for id, result in pairs(results) do
+		if result and result.status == "failed" then
+			table.insert(order, id)
 		end
 	end
-	for id, _ in pairs(results) do
-		local r = results[id]
-		if not (r and r.status == "failed") then
-			order[#order + 1] = id
+	for id, result in pairs(results) do
+		if not (result and result.status == "failed") then
+			table.insert(order, id)
 		end
 	end
 
@@ -292,9 +417,70 @@ local function render_output()
 		unknown = state.hl.unknown,
 	}
 
-	local hl_lines = {} -- {lnum0, hl}
-	local function add_test_block(id, r)
-		local status = (r and r.status) or "unknown"
+	local function add_output_section(test_id, result)
+		local expanded = is_output_expanded(run.id, test_id)
+		local prefix = expanded and "▼" or "▶"
+
+		if result and result.output and result._output_state == nil then
+			result._output_state = "idle"
+		end
+
+		if result and result.output and result._output_state == "idle" then
+			request_output_read(result)
+		end
+
+		local function toggle()
+			toggle_output_expanded(run.id, test_id)
+		end
+
+		if result and result.output then
+			if result._output_state == "loading" then
+				add_line(
+					("  %s Output %s"):format(prefix, get_spinner_frame(state._spinner_index)),
+					state.hl.section,
+					toggle
+				)
+				if expanded then
+					table.insert(lines, "    Loading output...")
+				end
+				return
+			end
+
+			if result._output_state == "error" then
+				add_line(("  %s Output [read error]"):format(prefix), state.hl.failed, toggle)
+				if expanded then
+					table.insert(lines, "    Could not read output file.")
+					table.insert(lines, "    " .. tostring(result.output))
+				end
+				return
+			end
+
+			if result._output_state == "ready" and result._output_text and result._output_text ~= "" then
+				add_line(("  %s Output"):format(prefix), state.hl.section, toggle)
+				if expanded then
+					vim.list_extend(lines, split_preserving_current_behavior(result._output_text))
+					-- vim.iter(split_preserving_current_behavior(result._output_text)):each(function(line)
+					-- 	table.insert(lines, line)
+					-- end)
+				end
+				return
+			end
+		end
+
+		local out = result and safe(result, "short", nil) or nil
+		if out and out ~= "" then
+			add_line(("  %s Output"):format(prefix), state.hl.section, toggle)
+			if expanded then
+				vim.list_extend(lines, split_preserving_current_behavior(out))
+				-- vim.iter(split_preserving_current_behavior(out)):each(function(line)
+				-- 	table.insert(lines, line)
+				-- end)
+			end
+		end
+	end
+
+	local function add_test_block(id, result)
+		local status = (result and result.status) or "unknown"
 		local name = id
 
 		local node = run.client and run.client:get_position(id, { adapter = run.adapter_id })
@@ -303,55 +489,28 @@ local function render_output()
 			name = data.name or data.path or id
 		end
 
-		lines[#lines + 1] = string.format("[%s] %s", status:upper(), name)
-		hl_lines[#hl_lines + 1] = { #lines - 1, hl_by_status[status] or state.hl.unknown }
+		add_line(string.format("[%s] %s", status:upper(), name), hl_by_status[status] or state.hl.unknown)
 
-		-- errors
-		if r and r.errors and #r.errors > 0 then
-			for _, e in ipairs(r.errors) do
-				local msg = e.message or "(error)"
-
-				-- msg = msg:gsub("\r\n?", "\n")
-				-- for _, l in ipairs(vim.split("  ✖ " .. msg, "[\r\n]+")) do
-				-- 	lines[#lines + 1] = "    " .. l
-				-- end
-				vim.iter(vim.split("  ✖ " .. msg, "[\r\n]+")):map(function(line)
-					table.insert(lines, line)
-				end)
-				-- lines[#lines + 1] = "  ✖ " .. msg
+		if result and result.errors and #result.errors > 0 then
+			for _, err in ipairs(result.errors) do
+				local msg = err.message or "(error)"
+				vim.list_extend(lines, split_preserving_current_behavior("  ✖ " .. msg))
+				-- vim.iter(split_preserving_current_behavior("  ✖ " .. msg)):each(function(line)
+				-- 	table.insert(lines, line)
+				-- end)
 			end
 		end
 
-		-- output (short if available, else full output file)
-		local out = nil
-		if r then
-			out = safe(r, "short", nil) -- this preserves summary output for passed
-			if not out then
-				out = read_output_file(r.output)
-			end
-		end
-		if out and #out > 0 then
-			lines[#lines + 1] = "  Output:"
-
-			-- out = out:gsub("\r\n?", "\n")
-
-			-- for _, l in ipairs(vim.split(out, "[\r\n]+")) do
-			-- 	lines[#lines + 1] = "    " .. l
-			-- end
-			vim.iter(vim.split(out, "[\r\n]+")):map(function(line)
-				table.insert(lines, line)
-			end)
-		end
-
-		lines[#lines + 1] = ""
+		add_output_section(id, result)
+		table.insert(lines, "")
 	end
 
-	local max_blocks = 2000 -- guard against huge runs
+	local max_blocks = 2000
 	local n = 0
 	for _, id in ipairs(order) do
 		n = n + 1
 		if n > max_blocks then
-			lines[#lines + 1] = string.format("… truncated (%d tests shown)", max_blocks)
+			table.insert(lines, string.format("… truncated (%d tests shown)", max_blocks))
 			break
 		end
 		add_test_block(id, results[id])
@@ -360,30 +519,9 @@ local function render_output()
 	set_buf_lines(state.buf_right, lines)
 
 	vim.api.nvim_buf_clear_namespace(state.buf_right, state.ns, 0, -1)
-	apply_line_hl(state.buf_right, 0, state.hl.title)
-	apply_line_hl(state.buf_right, 1, state.hl.dim)
-	apply_line_hl(state.buf_right, 2, state.hl.dim)
-	apply_line_hl(state.buf_right, 3, state.hl.dim)
-
 	for _, pair in ipairs(hl_lines) do
 		apply_line_hl(state.buf_right, pair[1], pair[2])
 	end
-end
-
-local function request_render()
-	if state._render_scheduled then
-		return
-	end
-	state._render_scheduled = true
-	vim.schedule(function()
-		state._render_scheduled = false
-		if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
-			render_history()
-		end
-		if state.win_right and vim.api.nvim_win_is_valid(state.win_right) then
-			render_output()
-		end
-	end)
 end
 
 local function select_run(delta)
@@ -399,12 +537,7 @@ local function is_win_valid(win)
 	return win and vim.api.nvim_win_is_valid(win)
 end
 
--- local function is_buf_valid(buf)
--- 	return buf and vim.api.nvim_buf_is_valid(buf)
--- end
-
 local function close_ui()
-	-- Close only our UI windows; don't wipe unrelated windows.
 	if is_win_valid(state.win_left) then
 		pcall(vim.api.nvim_win_close, state.win_left, true)
 	end
@@ -412,13 +545,12 @@ local function close_ui()
 		pcall(vim.api.nvim_win_close, state.win_right, true)
 	end
 	state.win_left, state.win_right = nil, nil
-	-- buffers are scratch with bufhidden=wipe, so closing windows is enough
 	state.buf_left, state.buf_right = nil, nil
 end
 
+-- TODO: refactor these out
 local function open_ui()
 	vim.schedule(function()
-		-- If already open, just re-render and focus list
 		if is_win_valid(state.win_left) and is_win_valid(state.win_right) then
 			render_history()
 			render_output()
@@ -428,7 +560,6 @@ local function open_ui()
 
 		close_ui()
 
-		-- Create fresh scratch buffers
 		state.buf_left = vim.api.nvim_create_buf(false, true)
 		state.buf_right = vim.api.nvim_create_buf(false, true)
 
@@ -440,48 +571,37 @@ local function open_ui()
 		vim.bo[state.buf_right].bufhidden = "wipe"
 		vim.bo[state.buf_left].swapfile = false
 		vim.bo[state.buf_right].swapfile = false
+		vim.bo[state.buf_left].modifiable = false
+		vim.bo[state.buf_right].modifiable = false
 
-		-- ---- Create bottom dock (single window) ----
-		-- Save current win to return focus later if you want
 		local prev_win = vim.api.nvim_get_current_win()
-
-		-- Create a bottom split with a fixed height
 		local dock_height = math.max(10, math.min(18, math.floor(vim.o.lines * 0.25)))
 		vim.cmd("botright " .. dock_height .. "split")
 
 		state.win_right = vim.api.nvim_get_current_win()
 		vim.api.nvim_win_set_buf(state.win_right, state.buf_right)
-
-		-- Ensure the right window inherits the dock height behavior
 		vim.wo[state.win_right].winfixheight = true
 		vim.wo[state.win_right].number = false
 		vim.wo[state.win_right].relativenumber = false
 		vim.wo[state.win_right].signcolumn = "no"
 		vim.wo[state.win_right].wrap = false
 
-		-- This is the dock base window (we'll turn it into the LEFT pane)
-		-- ---- Split the dock vertically into list (left) and details (right) ----
 		vim.cmd("vsplit")
 		state.win_left = vim.api.nvim_get_current_win()
 		vim.api.nvim_win_set_buf(state.win_left, state.buf_left)
-
-		-- Fix dock height; keep it a "drawer"
 		vim.wo[state.win_left].winfixheight = true
 		vim.wo[state.win_left].number = false
 		vim.wo[state.win_left].relativenumber = false
 		vim.wo[state.win_left].signcolumn = "no"
 		vim.wo[state.win_left].wrap = false
 
-		-- Go back to left list window (the other split)
 		vim.cmd("wincmd h")
 		state.win_left = vim.api.nvim_get_current_win()
 
-		-- Make list narrower and fixed width
 		local list_width = math.max(40, math.min(60, math.floor(vim.o.columns * 0.30)))
 		pcall(vim.api.nvim_win_set_width, state.win_left, list_width)
 		vim.wo[state.win_left].winfixwidth = true
 
-		-- Keymaps
 		local function map(buf, lhs, rhs, desc)
 			vim.keymap.set("n", lhs, rhs, { buffer = buf, silent = true, noremap = true, desc = desc })
 		end
@@ -519,21 +639,31 @@ local function open_ui()
 				vim.api.nvim_set_current_win(state.win_left)
 			end
 		end, "Focus list")
+		map(state.buf_right, "<CR>", function()
+			local row = vim.api.nvim_win_get_cursor(state.win_right)[1]
+			local action = state._line_actions[row]
+			if action then
+				action()
+			end
+		end, "Toggle output section")
+		map(state.buf_right, "za", function()
+			local row = vim.api.nvim_win_get_cursor(state.win_right)[1]
+			local action = state._line_actions[row]
+			if action then
+				action()
+			end
+		end, "Toggle output section")
 
-		-- Render
 		state.selected = math.max(1, math.min(state.selected, #state.runs))
 		render_history()
 		render_output()
 
-		-- Optional: focus list pane; or return focus to previous window
-		-- pcall(vim.api.nvim_set_current_win, state.win_left)
-		-- If you prefer keeping focus in editor: uncomment
 		pcall(vim.api.nvim_set_current_win, prev_win)
 	end)
 end
+
 -- ---------- consumer init ----------
 local function init(client)
-	-- Create user commands
 	vim.api.nvim_create_user_command("NeotestRunHistoryOpen", open_ui, {})
 	vim.api.nvim_create_user_command("NeotestRunHistoryToggle", function()
 		if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
@@ -546,22 +676,23 @@ local function init(client)
 		state.runs = {}
 		state.pending_by_adapter = {}
 		state.selected = 1
+		state._expanded = {}
+		stop_spinner_if_idle()
 		if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
 			render_history()
 			render_output()
 		end
 	end, {})
 
-	-- Hook into neotest client events (same mechanism used by built-in consumers) :contentReference[oaicite:1]{index=1}
 	client.listeners.run = function(adapter_id, _, position_ids)
-		local run_id = tostring(now_ms()) .. ":" .. tostring(math.random(1000, 9999)) -- TODO: better identification
+		local run_id = tostring(utils.now_ms()) .. ":" .. tostring(math.random(1000, 9999))
 		state.pending_by_adapter[adapter_id] = run_id
 
 		local target_label = resolve_target_label(client, adapter_id, position_ids)
 		local run = {
 			id = run_id,
 			adapter_id = adapter_id,
-			started_at_ms = now_ms(),
+			started_at_ms = utils.now_ms(),
 			finished_at_ms = nil,
 			position_ids = position_ids,
 			target_label = target_label,
@@ -573,11 +704,6 @@ local function init(client)
 
 		table.insert(state.runs, 1, run)
 		state.selected = 1
-
-		-- if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
-		-- 	render_left()
-		-- 	render_right()
-		-- end
 		request_render()
 	end
 
@@ -588,22 +714,12 @@ local function init(client)
 
 		local run_id = state.pending_by_adapter[adapter_id]
 		if not run_id then
-			-- Could be results from earlier discovery or other consumer; ignore.
 			return
 		end
 
-		-- local run
-		-- for _, r in ipairs(state.runs) do
-		-- 	if r.id == run_id then
-		-- 		run = r
-		-- 		break
-		-- 	end
-		-- end
-
-		local run = vim.iter(state.runs):find(function(run)
-			return run.id == run_id
+		local run = vim.iter(state.runs):find(function(item)
+			return item.id == run_id
 		end)
-
 		if not run then
 			return
 		end
@@ -611,32 +727,18 @@ local function init(client)
 		local tree = client:get_position(nil, { adapter = adapter_id })
 		assert(tree, "No tree for adapter " .. adapter_id)
 
-		-- run.results = results or {}
 		run.results = vim.iter(results or {})
-			:filter(function(pos_id, result)
-				if result.output and tree:get_key(pos_id) and tree:get_key(pos_id):data().type == "test" then -- TODO: print this hierarchy with map? IntegrationTests > *SetTests >  *.cs > method
-					return true
-				end
-				return false
+			:filter(function(pos_id)
+				local key = tree:get_key(pos_id)
+				return key and key:data().type == "test"
 			end)
-			:fold({}, function(acc, k, v)
-				acc[k] = v
+			:fold({}, function(acc, key, value)
+				acc[key] = value
 				return acc
 			end)
 
-		-- print("Results:\n")
-		-- print(vim.inspect(results))
-		-- print("Deneme:\n")
-		-- print(vim.inspect(run.results))
-
-		run.finished_at_ms = now_ms()
+		run.finished_at_ms = utils.now_ms()
 		run.status, run.counts = compute_aggregate(run.results, run.position_ids)
-
-		-- If UI open, refresh
-		-- if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
-		-- 	render_left()
-		-- 	render_right()
-		-- end
 		request_render()
 	end
 
