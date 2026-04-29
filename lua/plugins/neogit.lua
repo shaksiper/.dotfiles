@@ -5,8 +5,12 @@ end
 require("neogit").setup({
 	graph_style = graph_style,
 	diff_viewer = "codediff",
-    -- highlight = { -- somehow it is not fallback to default
-    --     red = "red",
-    --     purple = "purple"
-    -- }
+	treesitter_diff_highlight = true,
+	word_diff_highlight = true,
+	process_spinner = true,
+	log_pager = nil,
+	-- highlight = { -- somehow it is not fallback to default
+	--     red = "red",
+	--     purple = "purple"
+	-- }
 })
