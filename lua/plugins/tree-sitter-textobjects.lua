@@ -23,6 +23,12 @@ require("nvim-treesitter-textobjects").setup({
 		-- * query_string: eg '@function.inner'
 		-- * selection_mode: eg 'v'
 		-- and should return true of false
-		include_surrounding_whitespace = true,
+		-- include_surrounding_whitespace = function(query)
+		-- 	if query.query_string == "@function.outer" then
+		-- 		return false
+		-- 	end
+		-- 	return true
+		-- end,
+		-- include_surrounding_whitespace = false, -- already default
 	},
 })
