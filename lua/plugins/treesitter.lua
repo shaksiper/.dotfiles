@@ -8,6 +8,7 @@ ts.setup({
 require("various-textobjs").setup({
 	keymaps = {
 		useDefaults = true,
+        disabledDefaults = {"an", "in"},
 	},
 })
 local group = vim.api.nvim_create_augroup("TreesitterSetup", { clear = true })

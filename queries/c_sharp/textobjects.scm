@@ -49,6 +49,14 @@
           ; (#strip! @function.inner "^{" "}$")
           )
 
+; (method_declaration) @function.outer
+;
+; (method_declaration
+;   body: (block
+;     "{" @_start
+;     _*
+;     "}" @_end)
+;   (#make-range! "function.inner" @_start @_end))
 
 ; (method_declaration
 ;   body: (_
