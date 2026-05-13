@@ -316,6 +316,7 @@ vim.lsp.config("roslyn", {
 		"roslyn-language-server", -- dotnet new install -g roslyn-language-server --prerelease
 		"--logLevel=Information",
 		"--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
+		"--autoLoadProjects",
 		"--stdio",
 	},
 	on_attach = on_attach,
@@ -356,7 +357,9 @@ vim.lsp.config("roslyn", {
 	},
 })
 -- vim.lsp.enable("roslyn") -- already enabling it through roslyn.nvim
-require("roslyn").setup()
+require("roslyn").setup({
+	filewatching = "roslyn",
+})
 
 -- TODO: improve neotest discovery
 vim.lsp.commands["dotnet.test.run"] = function(command)
@@ -406,8 +409,8 @@ vim.lsp.enable("sqls")
 --     -- root_dir =  util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*', '.git'),
 -- })
 -- TEXT
-vim.lsp.enable("typos_lsp")
+-- vim.lsp.enable("typos_lsp")
 vim.lsp.enable("markdown_oxide")
 vim.lsp.enable("marksman")
-vim.lsp.enable("vale_ls")
+-- vim.lsp.enable("vale_ls")
 -- nvim_lsp.vale_ls.setup({ cmd = { "vale" } })
