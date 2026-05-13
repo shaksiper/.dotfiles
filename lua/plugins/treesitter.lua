@@ -1,4 +1,4 @@
-require("tsht").config.hint_keys = { "h", "j", "f", "d", "n", "v", "s", "l", "a" }
+-- require("tsht").config.hint_keys = { "h", "j", "f", "d", "n", "v", "s", "l", "a" }
 --require("orgmode").setup_ts_grammar()
 local ts = require("nvim-treesitter")
 ts.setup({
