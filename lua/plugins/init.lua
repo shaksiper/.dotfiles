@@ -1,9 +1,9 @@
 require("plugins.snacks")
-vim.g.baleia = require("baleia").setup({ })
+vim.g.baleia = require("baleia").setup({})
 require("seeker").setup({})
 require("ssr").setup()
 require("plugins.treesitter")
-require("plugins.treesitter-context")
+-- require("plugins.treesitter-context")
 require("plugins.tree-sitter-textobjects")
 require("plugins.neotest")
 require("plugins.devicons")
@@ -123,7 +123,12 @@ require("render-markdown").setup({
 --         Redo = { mode = "n", lhs = "<C-r>", rhs = "<C-r>", desc = "redo", hlgroup = "HighlightUndo", opts = {} },
 --     },
 -- })
-require("yanky").setup({})
+require("yanky").setup({
+	system_clipboard = {
+		sync_with_ring = false,
+		clipboard_register = nil,
+	},
+})
 require("plugins.scissors")
 -- require("projections").setup({})
 -- require("sentiment").setup({})
@@ -141,7 +146,7 @@ require("kanagawa").setup({
 		}
 	end,
 })
-require("plugins.multicursor")
+-- require("plugins.multicursor")
 require("snipe").setup()
 require("quicker").setup()
 require("plugins.commands")
@@ -151,5 +156,16 @@ require("demicolon").setup({
 		horizontal_motions = false,
 	},
 })
-require("refactoring").setup()
-
+-- require("refactoring").setup()
+require("dropbar").setup({
+	bar = {
+		update_events = {
+			buf = {
+				"OptionSet",
+				"FileChangedShellPost",
+				"TextChanged",
+				"ModeChanged",
+			},
+		},
+	},
+})
