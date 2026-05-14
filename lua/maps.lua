@@ -1,4 +1,3 @@
-vim.g.mapleader = " "
 vim.keymap.set("i", "<C-u>", "<C-g>u<C-u>", { desc = "Delete all before cursor" })
 vim.keymap.set("n", "<leader>gp", "'`[' . getregtype()[0] . '`]'", { expr = true, desc = "Paste last" })
 vim.keymap.set("v", "<", "<gv", { desc = "De-indent and reselect last visual selection" })
@@ -225,7 +224,10 @@ end, { desc = "Goto Definition" })
 vim.keymap.set("n", "gD", function()
 	Snacks.picker.lsp_declarations()
 end, { desc = "Goto Declaration" })
-vim.keymap.set("n", "gr", function()
+-- TODO : extend quickfix implementation
+-- if 1 item no op
+-- if 2 item go to first
+vim.keymap.set("n", "<leader>gr", function()
 	Snacks.picker.lsp_references()
 end, { desc = "References", nowait = true })
 vim.keymap.set("n", "gI", function()
@@ -334,10 +336,10 @@ vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts)
 vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts)
 vim.keymap.set("n", "<leader>wl", "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>", opts)
 -- vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, opts)
-vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+-- vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 
 -- vim.keymap.set("n", "<leader>gr", "<cmd>Telescope lsp_references theme=ivy<CR>", opts)
-vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
+-- vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", opts)
 -- vim.keymap.set("v", "<leader>ca", ":Telescope range_code_action<CR>", opts)
 
 -- vim.keymap.set("n", "<leader>cla", "V:<C-U>Lspsaga range_code_action<CR>", opts) -- Code line action
@@ -800,3 +802,4 @@ end, { desc = "Open Oil in float" })
 vim.keymap.set("n", "<leader>fO", function()
 	oil.open_float(vim.uv.cwd())
 end, { desc = "Open Oil in float with CWD" })
+-- vim.keymap.set("n", "<leader>grr", vim.lsp.buf.references)

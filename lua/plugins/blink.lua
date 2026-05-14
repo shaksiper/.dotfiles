@@ -4,6 +4,7 @@ require("blink.cmp").setup({
 	enabled = function()
 		return vim.bo.buftype ~= "prompt" and vim.b.completion ~= false
 	end,
+	fuzzy = { implementation = "prefer_rust_with_warning" },
 	keymap = {
 		preset = "enter",
 	},
@@ -58,8 +59,8 @@ require("blink.cmp").setup({
 		},
 		ghost_text = {
 			enabled = true,
-            show_without_menu = false,
-            show_without_selection = true -- we are defaulting to first element already
+			show_without_menu = false,
+			show_without_selection = true, -- we are defaulting to first element already
 		},
 		menu = {
 			draw = {
@@ -120,7 +121,7 @@ require("blink.cmp").setup({
 	-- trigger = { signature_help = { enabled = true } },
 	snippets = { preset = "luasnip" },
 	sources = {
-		default = { "lsp", "path", "snippets", "luasnip_choice", "buffer", "nvim_lua" },
+		default = { "lsp", "path", "snippets", "luasnip_choice", "buffer", "nvim_lua", "lazydev" },
 		providers = {
 			nvim_lua = {
 				name = "nvim_lua",
@@ -145,6 +146,12 @@ require("blink.cmp").setup({
 				opts = {
 					use_label_description = true,
 				},
+			},
+			lazydev = {
+				name = "LazyDev",
+				module = "lazydev.integrations.blink",
+				-- make lazydev completions top priority (see `:h blink.cmp`)
+				score_offset = 100,
 			},
 		},
 	},

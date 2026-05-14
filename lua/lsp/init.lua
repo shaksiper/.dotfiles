@@ -1,4 +1,11 @@
 -- LSP settings
+require("lazydev").setup({
+	library = {
+		-- See the configuration section for more details
+		-- Load luvit types when the `vim.uv` word is found
+		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+	},
+})
 local nvim_lsp = require("lspconfig")
 vim.o.pumborder = "rounded"
 vim.api.nvim_set_hl(0, "Pmenu", { bg = "NONE" })
@@ -230,9 +237,9 @@ vim.lsp.enable("gopls")
 -- local runtime_path = vim.split(package.path, ";")
 -- table.insert(runtime_path, "lua/?.lua")
 -- table.insert(runtime_path, "lua/?/init.lua")
-require("neodev").setup({
-	-- add any options here, or leave empty to use the default settings
-})
+-- require("neodev").setup({
+-- 	-- add any options here, or leave empty to use the default settings
+-- })
 vim.lsp.config(
 	"lua_ls",
 	---@type vim.lsp.Config

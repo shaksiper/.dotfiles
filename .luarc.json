@@ -4,7 +4,7 @@
         "vim"
     ],
     "workspace.library": [
-        "/home/shaksiper/.local/share/nvim/plugged/neodev.nvim/types/nightly",
+        "/home/shaksiper/.local/share/nvim/site/pack/core/opt/neodev.nvim/types/nightly",
         "$VIMRUNTIME/lua",
         "/home/shaksiper/.config/nvim/lua",
         "${3rd}/luv/library"

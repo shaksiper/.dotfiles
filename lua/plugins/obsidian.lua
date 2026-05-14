@@ -3,7 +3,7 @@ require("obsidian").setup({
 	workspaces = {
 		{
 			name = "work",
-			path = "/mnt/c/Users/CanBerkCetin/Documents/Obsidian/Vispera/",
+			path = "~/Documents/Obsidasion/",
 		},
 	},
 	completion = {
