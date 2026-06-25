@@ -19,6 +19,7 @@ require("neotest").setup({
 	consumers = {
 		-- overseer = require("neotest.consumers.overseer"),
 		run_history = require("plugins.neotest.consumers.run_history"),
+		select = require("plugins.neotest.consumers.select"),
 		notification = function(client)
 			local notification_id = "test_start_notification"
 			client.listeners.run = function(_) -- (adapter_id, results)
