@@ -2,6 +2,7 @@ local luasnip = require("luasnip")
 local types = require("luasnip.util.types")
 luasnip.config.setup({
 	-- Remember the last snippet I was in
+	store_selection_keys = "<Tab>",
 	ext_opts = {
 		[types.choiceNode] = {
 			active = {
