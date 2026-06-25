@@ -583,7 +583,7 @@ local function open_ui()
 		vim.wo[state.win_right].number = false
 		vim.wo[state.win_right].relativenumber = false
 		vim.wo[state.win_right].signcolumn = "no"
-		vim.wo[state.win_right].wrap = false
+		vim.wo[state.win_right].wrap = true
 
 		vim.cmd("vsplit")
 		state.win_left = vim.api.nvim_get_current_win()
