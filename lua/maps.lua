@@ -795,11 +795,13 @@ vim.keymap.set(
 	{ silent = true, desc = "Move rigtht through the tree" }
 )
 
-local oil = require("oil")
+-- local oil = require("oil")
+local fyler = require("fyler")
 vim.keymap.set("n", "<leader>fo", function()
-	oil.open_float()
+	-- oil.open_float()
+	fyler.toggle({ kind = "floating" })
 end, { desc = "Open Oil in float" })
 vim.keymap.set("n", "<leader>fO", function()
-	oil.open_float(vim.uv.cwd())
-end, { desc = "Open Oil in float with CWD" })
+	fyler.toggle()
+end, { desc = "Open Fyler in float with CWD" })
 -- vim.keymap.set("n", "<leader>grr", vim.lsp.buf.references)

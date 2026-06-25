@@ -55,9 +55,9 @@ require("dashboard").setup({
 				key = "f",
 			},
 			{
-				desc = " Oil",
+				desc = " Fyler",
 				group = "Boolean",
-				action = "Oil --float",
+				action = "Fyler toggle kind=floating",
 				key = "O",
 			},
 			{
