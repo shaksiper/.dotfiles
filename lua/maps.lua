@@ -2,6 +2,12 @@ vim.keymap.set("i", "<C-u>", "<C-g>u<C-u>", { desc = "Delete all before cursor" 
 vim.keymap.set("n", "<leader>gp", "'`[' . getregtype()[0] . '`]'", { expr = true, desc = "Paste last" })
 vim.keymap.set("v", "<", "<gv", { desc = "De-indent and reselect last visual selection" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent and reselect last visual selection" })
+vim.keymap.set("x", "<leader>m", function()
+	require("completion.crank").add_visual({ source = "manual" })
+end, { desc = "Crank add selection" })
+vim.keymap.set("n", "<leader>m", function()
+	return require("completion.crank").operator_add()
+end, { expr = true, desc = "Crank add text object" })
 -- let mapleader=' '
 -- " start new change before deleting an entire line
 -- inoremap <c-u> <c-g>u<c-u>
