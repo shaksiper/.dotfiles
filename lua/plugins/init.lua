@@ -129,6 +129,9 @@ require("yanky").setup({
 		sync_with_ring = false,
 		clipboard_register = nil,
 	},
+	highlight = {
+		timer = 200,
+	},
 })
 require("plugins.scissors")
 -- require("projections").setup({})
