@@ -92,6 +92,16 @@ end, { desc = "Profiler Scratch Buffer" })
 vim.keymap.set("n", "<leader><space>", function()
 	Snacks.picker.smart()
 end, { desc = "Smart Find Files" })
+vim.keymap.set("n", "<leader><tab>", function()
+	local helpers = require("plugins.snacks-helpers")
+	Snacks.picker.buffers({
+		on_show = function(picker)
+			picker.list:view(2)
+			helpers.leap_select(picker)
+		end,
+		layout = "select",
+	})
+end, { desc = "Buffers" })
 vim.keymap.set("n", "<leader>,", function()
 	Snacks.picker.buffers({
 		on_show = function(picker)
