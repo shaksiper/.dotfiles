@@ -33,22 +33,6 @@ vim.lsp.config("biomejson", {
 			return
 		end
 
-		-- We know that the buffer is using Biome if it has a config file
-		-- in its directory tree.
-		local filename = vim.api.nvim_buf_get_name(bufnr)
-		local biome_config_files = { "biome.json", "biome.jsonc" }
-		biome_config_files = lsp_util.insert_package_json(biome_config_files, "biomejs", filename)
-		local is_buffer_using_biome = vim.fs.find(biome_config_files, {
-			path = filename,
-			type = "file",
-			limit = 1,
-			upward = true,
-			stop = vim.fs.dirname(project_root),
-		})[1]
-		if is_buffer_using_biome then -- will disable when OG biome working
-			return
-		end
-
 		on_dir(project_root)
 	end,
 })
