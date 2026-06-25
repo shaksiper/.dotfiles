@@ -10,6 +10,31 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 })
 
+local function multi_open(is_new_window)
+	local cmd = { "zed" }
+	if is_new_window == true then
+		table.insert(cmd, "-n")
+	end
+	return function(picker)
+		if vim.fn.mode():find("^[vV]") then
+			picker.list:select()
+		end
+		local files = {}
+		for _, item in ipairs(picker:selected({ fallback = true })) do
+			table.insert(files, item.file)
+		end
+		print(vim.inspect(files))
+		local _, err = helpers.multi_open(files, { cmd = cmd })
+		if err then
+			Snacks.notify.error("Failed to open `" .. files .. "`:\n- " .. err)
+		end
+		picker:close()
+		-- picker.list:set_selected() -- clear selection
+	end
+end
+
+Snacks.picker.pick_list = helpers.pick_list
+
 Snacks.setup({
 	bigfile = { enabled = true },
 	terminal = {
@@ -60,6 +85,18 @@ Snacks.setup({
 	},
 	picker = {
 		enabled = true,
+		win = {
+			input = {
+				keys = {
+					["<A-s>"] = { "leap_select", mode = { "n", "i" } },
+				},
+			},
+			list = {
+				keys = {
+					["<A-s>"] = "leap_select",
+				},
+			},
+		},
 		sources = {
 			buffers = {
 				layout = { preset = "dropdown" },
@@ -72,7 +109,7 @@ Snacks.setup({
 					input = {
 						keys = {
 							["<C-o>"] = { "multi_open", mode = { "i" } }, -- open with system application
-							-- ["<A-s>"] = { "leap", mode = { "n", "i" } },
+							["<M-o>"] = { "multi_open_new_window", mode = { "i" } }, -- open with system application
 						},
 					},
 				},
@@ -92,31 +129,8 @@ Snacks.setup({
 		},
 		actions = {
 			-- TODO: refine and generalize, and consider for upstream
-			multi_open = function(picker)
-				if vim.fn.mode():find("^[vV]") then
-					picker.list:select()
-				end
-				local files = {}
-				for _, item in ipairs(picker:selected({ fallback = true })) do
-					table.insert(files, item.file)
-				end
-				print(vim.inspect(files))
-				local _, err = helpers.multi_open(files, { cmd = { "zed" } })
-				if err then
-					Snacks.notify.error("Failed to open `" .. files .. "`:\n- " .. err)
-				end
-				picker:close()
-				-- picker.list:set_selected() -- clear selection
-			end,
-			-- leap = function(picker)
-			-- 	require("leap").leap({
-			-- 		-- windows = { picker.list.win.win },
-			--                  action = function (item) -- debug
-			--                      print(vim.inspect(item))
-			--                      print(vim.inspect(picker.list))
-			--                  end
-			-- 	})
-			-- end,
+			multi_open = multi_open(false),
+			multi_open_new_window = multi_open(true),
 		},
 	},
 	quickfile = { enabled = true },
