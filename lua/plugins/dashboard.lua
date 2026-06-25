@@ -45,7 +45,7 @@ require("dashboard").setup({
 			-- "⠀⠀⠀⠀⠀⠀⠀⠀⠙⠛⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠛⠛⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⠚⠋⠀⠀⠀⠀⠀⠀⠀⠀",
 		}, --your header
 		shortcut = {
-			{ desc = "󰊳 Update", group = "@property", action = "PlugUpdate", key = "u" },
+			{ desc = "󰊳 Update", group = "@property", action = "packupdate", key = "u" },
 			{
 				icon = " ",
 				icon_hl = "@variable",
@@ -116,7 +116,7 @@ require("dashboard").setup({
 			{
 				desc = " dotfiles",
 				group = "Number",
-				action = "lua Snacks.picker.files({ cwd = vim.fn.stdpath(\"config\") })",
+				action = 'lua Snacks.picker.files({ cwd = vim.fn.stdpath("config") })',
 				key = "d",
 			},
 			{
