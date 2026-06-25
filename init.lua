@@ -31,7 +31,29 @@ vim.pack.add(require("pack.plugins"), {
 	confirm = #vim.api.nvim_list_uis() > 0,
 })
 
--- Options (migrated from former init.vim)
+require("vim._core.ui2").enable({
+	enable = true,
+	-- msg = {
+	-- 	targets = {
+	-- 		default = "msg",
+	-- 		typed_cmd = "msgarea",
+	-- 		wmsg = "msgarea",
+	-- 		emsg = "msgarea",
+	-- 		lua_error = "msgarea",
+	-- 		list_cmd = "msgarea",
+	-- 		lua_print = "msgarea",
+	-- 		echoerr = "msgarea",
+	-- 		shell_out = "msgarea",
+	-- 		shell_cmd = "msgarea",
+	-- 		shell_err = "msgarea",
+	--
+	-- 		confirm = "pager",
+	-- 		rpc_error = "pager",
+	-- 	},
+		msg = { timeout = 4000 },
+	-- 	pager = { height = 0.75 },
+	-- },
+})
 vim.opt.guifont = "JetBrainsMono NFM:h9"
 vim.opt.confirm = true
 vim.opt.encoding = "utf-8"
