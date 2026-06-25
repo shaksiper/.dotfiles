@@ -128,13 +128,16 @@ capabilities.textDocument.foldingRange = {
 	lineFoldingOnly = true,
 }
 
-nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.default_config, {
-	on_attach = on_attach,
-	capabilities = capabilities,
-	flags = {
-		debounce_text_changes = 150,
-	},
-})
+-- nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.default_config, {
+-- 	on_attach = on_attach,
+-- 	capabilities = capabilities,
+-- 	flags = {
+-- 		debounce_text_changes = 150,
+-- 	},
+-- })
+
+vim.lsp.config("*", { on_attach = on_attach, capabilities = capabilities })
+
 -- PHP
 -- nvim_lsp.intelephense.setup({
 --     -- cmd = { "phpactor", "-vvv", "language-server" },
@@ -146,7 +149,10 @@ nvim_lsp.util.default_config = vim.tbl_deep_extend("force", nvim_lsp.util.defaul
 -- nvim_lsp.ls_emmet.setup({})
 vim.lsp.enable("emmet_language_server") -- https://github.com/olrtg/emmet-language-server
 vim.lsp.enable("cssls")
-require("lsp.biome-lsp") -- refactor away for clutter
+-- require("lsp.biome-lsp") -- refactor away for clutter
+-- vim.lsp.enable("biome") -- too much resource and takes too long to start
+vim.lsp.enable("jqls")
+vim.lsp.enable("jsonls")
 vim.lsp.enable("eslint")
 vim.lsp.enable("html")
 -- nvim_lsp.cssls.setup({})
@@ -205,7 +211,8 @@ vim.lsp.enable("html")
 vim.lsp.enable("vimls")
 -- TSSERVER
 vim.lsp.enable("ts_ls")
-vim.lsp.enable("quick_lint_js")
+vim.lsp.enable("oxlint")
+-- vim.lsp.enable("quick_lint_js")
 -- nvim_lsp.quick_lint_js.setup({})
 -- ray-x/go.nvim init
 -- This plugin sets global configs which interfere with my config
@@ -232,6 +239,7 @@ vim.lsp.config("gopls", {
 		},
 	},
 })
+
 vim.lsp.enable("gopls")
 -- LUA LSP
 -- local runtime_path = vim.split(package.path, ";")
@@ -308,7 +316,7 @@ require("lint").linters_by_ft = {
 	-- cs = { 'csharpier' },
 	gitcommit = { "commitlint" },
 	yaml = { "yamllint" },
-	json = { "biome" },
+	json = { "biomejs" },
 	vim = { "vint" },
 	-- xml = {'tidy'},
 }
