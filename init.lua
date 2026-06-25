@@ -25,6 +25,7 @@ vim.api.nvim_create_autocmd("PackChanged", {
 	end,
 })
 
+-- plugin location: ~/.local/share/nvim/site/pack/core/opt/
 vim.pack.add(require("pack.plugins"), {
 	-- load = true,
 	-- Avoid blocking headless/CI on the interactive install prompt.
