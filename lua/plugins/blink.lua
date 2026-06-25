@@ -1,5 +1,10 @@
 -- require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets", "./snippets/luasnip"} }) -- added to scissors
 -- require("luasnip.loaders.from_vscode").lazy_load()
+if vim.loader and vim.loader.reset then
+	vim.loader.reset("completion.crank")
+end
+local crank = require("completion.crank")
+crank.setup()
 require("blink.cmp").setup({
 	enabled = function()
 		return vim.bo.buftype ~= "prompt" and vim.b.completion ~= false
@@ -7,6 +12,11 @@ require("blink.cmp").setup({
 	fuzzy = { implementation = "prefer_rust_with_warning" },
 	keymap = {
 		preset = "enter",
+		["<C-x><C-r>"] = {
+			function()
+				return crank.show()
+			end,
+		},
 	},
 	cmdline = {
 		-- enabled = true,
@@ -70,7 +80,9 @@ require("blink.cmp").setup({
 					kind_icon = {
 						text = function(ctx)
 							local icon = ctx.kind_icon
-							if vim.tbl_contains({ "Path" }, ctx.source_name) then
+							if ctx.source_id == "crank" then
+								icon = ctx.kind_icon
+							elseif vim.tbl_contains({ "Path" }, ctx.source_name) then
 								local dev_icon, _ = require("nvim-web-devicons").get_icon(ctx.label)
 								if dev_icon then
 									icon = dev_icon
@@ -121,8 +133,14 @@ require("blink.cmp").setup({
 	-- trigger = { signature_help = { enabled = true } },
 	snippets = { preset = "luasnip" },
 	sources = {
-		default = { "lsp", "path", "snippets", "luasnip_choice", "buffer", "nvim_lua", "lazydev" },
+		default = { "lsp", "path", "snippets", "luasnip_choice", "buffer", "nvim_lua", "lazydev", "crank" },
 		providers = {
+			crank = {
+				name = "Crank",
+				module = "completion.crank",
+				min_keyword_length = 0,
+				max_items = 40,
+			},
 			nvim_lua = {
 				name = "nvim_lua",
 				async = true,
