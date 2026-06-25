@@ -172,6 +172,67 @@ local function apply_line_hl(buf, lnum0, hl)
 	pcall(vim.hl.range, buf, state.ns, hl, { lnum0, 0 }, { lnum0, -1 })
 end
 
+local function render_history()
+	if not (state.buf_left and vim.api.nvim_buf_is_valid(state.buf_left)) then
+		return
+	end
+
+	ensure_hls()
+
+	local lines = {}
+	for _, run in ipairs(state.runs) do
+		local status = run.status or "unknown"
+		local tag
+		if status == "passed" then
+			tag = "PASS"
+		elseif status == "failed" then
+			tag = "FAIL"
+		elseif status == "skipped" then
+			tag = "SKIP"
+		else
+			tag = "----"
+		end
+
+		local counts = run.counts or { passed = 0, failed = 0, skipped = 0, unknown = 0 }
+		local count_str = string.format("P:%d F:%d S:%d", counts.passed, counts.failed, counts.skipped)
+
+		table.insert(
+			lines,
+			string.format(
+				"%s [%s] %s  (%s)  %s",
+				utils.fmt_time(run.started_at_ms),
+				tag,
+				run.target_label or "(unknown)",
+				run.adapter_id ~= nil and ("adapter " .. tostring(run.adapter_id)) or "adapter ?",
+				count_str
+			)
+		)
+	end
+
+	if #lines == 0 then
+		lines = { "No runs yet. Trigger a test run, then reopen." }
+	end
+
+	set_buf_lines(state.buf_left, lines)
+
+	vim.api.nvim_buf_clear_namespace(state.buf_left, state.ns, 0, -1)
+	for i, run in ipairs(state.runs) do
+		local hl = state.hl.unknown
+		if run.status == "passed" then
+			hl = state.hl.passed
+		elseif run.status == "failed" then
+			hl = state.hl.failed
+		elseif run.status == "skipped" then
+			hl = state.hl.skipped
+		end
+		apply_line_hl(state.buf_left, i - 1, hl)
+	end
+
+	if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
+		local row = math.max(1, math.min(state.selected, #state.runs))
+		pcall(vim.api.nvim_win_set_cursor, state.win_left, { row, 0 })
+	end
+end
 local function request_render()
 	if state._render_scheduled then
 		return
@@ -280,68 +341,6 @@ local function request_output_read(result)
 			request_render()
 		end)
 	end)
-end
-
-function render_history()
-	if not (state.buf_left and vim.api.nvim_buf_is_valid(state.buf_left)) then
-		return
-	end
-
-	ensure_hls()
-
-	local lines = {}
-	for _, run in ipairs(state.runs) do
-		local status = run.status or "unknown"
-		local tag
-		if status == "passed" then
-			tag = "PASS"
-		elseif status == "failed" then
-			tag = "FAIL"
-		elseif status == "skipped" then
-			tag = "SKIP"
-		else
-			tag = "----"
-		end
-
-		local counts = run.counts or { passed = 0, failed = 0, skipped = 0, unknown = 0 }
-		local count_str = string.format("P:%d F:%d S:%d", counts.passed, counts.failed, counts.skipped)
-
-		table.insert(
-			lines,
-			string.format(
-				"%s [%s] %s  (%s)  %s",
-				utils.fmt_time(run.started_at_ms),
-				tag,
-				run.target_label or "(unknown)",
-				run.adapter_id ~= nil and ("adapter " .. tostring(run.adapter_id)) or "adapter ?",
-				count_str
-			)
-		)
-	end
-
-	if #lines == 0 then
-		lines = { "No runs yet. Trigger a test run, then reopen." }
-	end
-
-	set_buf_lines(state.buf_left, lines)
-
-	vim.api.nvim_buf_clear_namespace(state.buf_left, state.ns, 0, -1)
-	for i, run in ipairs(state.runs) do
-		local hl = state.hl.unknown
-		if run.status == "passed" then
-			hl = state.hl.passed
-		elseif run.status == "failed" then
-			hl = state.hl.failed
-		elseif run.status == "skipped" then
-			hl = state.hl.skipped
-		end
-		apply_line_hl(state.buf_left, i - 1, hl)
-	end
-
-	if state.win_left and vim.api.nvim_win_is_valid(state.win_left) then
-		local row = math.max(1, math.min(state.selected, #state.runs))
-		pcall(vim.api.nvim_win_set_cursor, state.win_left, { row, 0 })
-	end
 end
 
 function render_output()
