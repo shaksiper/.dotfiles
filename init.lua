@@ -83,14 +83,15 @@ vim.opt.colorcolumn = "80"
 vim.opt.pumheight = 8
 vim.opt.termguicolors = true
 vim.opt.completeopt = { "menu", "menuone", "noselect" }
-vim.opt.updatetime = 500
+-- vim.opt.updatetime = 500
 
-vim.api.nvim_create_autocmd("TextYankPost", {
-	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
-	callback = function()
-		pcall(vim.highlight.on_yank, { higroup = "IncSearch", timeout = 200 })
-	end,
-})
+-- yanky.nvim already handles this
+-- vim.api.nvim_create_autocmd("TextYankPost", {
+-- 	group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+-- 	callback = function()
+-- 		pcall(vim.hl.hl_op, { higroup = "IncSearch", timeout = 100 })
+-- 	end,
+-- })
 
 require("init")
 require("maps")
@@ -98,6 +99,7 @@ require("maps")
 vim.cmd.colorscheme("kanagawa")
 vim.opt.background = "dark"
 
+vim.api.nvim_set_hl(0, "YankyYanked", { link = "IncSearch", nocombine = true })
 vim.api.nvim_set_hl(0, "IndentBlanklineIndent1", { fg = "#56B6C2", nocombine = true })
 vim.api.nvim_set_hl(0, "IndentBlanklineIndent2", { fg = "#E5C07B", nocombine = true })
 vim.api.nvim_set_hl(0, "IndentBlanklineIndent3", { fg = "#98C379", nocombine = true })
