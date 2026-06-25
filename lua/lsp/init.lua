@@ -378,7 +378,7 @@ vim.lsp.config("roslyn", {
 })
 -- vim.lsp.enable("roslyn") -- already enabling it through roslyn.nvim
 require("roslyn").setup({
-	filewatching = "roslyn",
+	-- filewatching = "roslyn",
 })
 
 -- TODO: improve neotest discovery
