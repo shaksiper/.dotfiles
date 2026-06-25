@@ -129,6 +129,7 @@ Snacks.setup({
 		},
 		actions = {
 			-- TODO: refine and generalize, and consider for upstream
+			leap_select = helpers.leap_select,
 			multi_open = multi_open(false),
 			multi_open_new_window = multi_open(true),
 		},
