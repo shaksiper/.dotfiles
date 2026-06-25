@@ -31,7 +31,7 @@ return {
 	"https://github.com/folke/trouble.nvim",
 	"https://github.com/hrsh7th/cmp-nvim-lua",
 	-- "https://github.com/folke/neodev.nvim",
-    "https://github.com/folke/lazydev.nvim",
+	"https://github.com/folke/lazydev.nvim",
 	"https://github.com/onsails/lspkind-nvim",
 	"https://github.com/L3MON4D3/LuaSnip",
 	"https://github.com/rafamadriz/friendly-snippets",

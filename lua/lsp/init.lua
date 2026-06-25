@@ -1,11 +1,11 @@
 -- LSP settings
-require("lazydev").setup({
-	library = {
-		-- See the configuration section for more details
-		-- Load luvit types when the `vim.uv` word is found
-		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
-	},
-})
+-- require("lazydev").setup({
+-- 	library = {
+-- 		-- See the configuration section for more details
+-- 		-- Load luvit types when the `vim.uv` word is found
+-- 		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+-- 	},
+-- })
 local nvim_lsp = require("lspconfig")
 vim.o.pumborder = "rounded"
 vim.api.nvim_set_hl(0, "Pmenu", { bg = "NONE" })
@@ -240,52 +240,57 @@ vim.lsp.enable("gopls")
 -- require("neodev").setup({
 -- 	-- add any options here, or leave empty to use the default settings
 -- })
-vim.lsp.config(
-	"lua_ls",
-	---@type vim.lsp.Config
-	{
-		on_init = function(client)
-			if client.workspace_folders then
-				local path = client.workspace_folders[1].name
-				if
-					path ~= vim.fn.stdpath("config")
-					and (vim.loop.fs_stat(path .. "/.luarc.json") or vim.loop.fs_stat(path .. "/.luarc.jsonc"))
-				then
-					return
-				end
+vim.lsp.config("lua_ls", {
+	---@param client vim.lsp.Client
+	on_init = function(client)
+		if client.workspace_folders then
+			local path = client.workspace_folders[1].name
+			if
+				path ~= vim.fn.stdpath("config")
+				and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+			then
+				return
 			end
+		end
 
-			client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
-				runtime = {
-					version = "LuaJIT",
-				},
-				workspace = {
-					checkThirdParty = false,
-					library = {
-						vim.env.VIMRUNTIME,
-					},
-				},
-			})
-		end,
-		---@type lspconfig.settings.lua_ls
-		settings = {
-			Lua = {
-				completion = {
-					callSnippet = "Replace",
-				},
-				hint = {
-					enable = true,
+		client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+			runtime = {
+				version = "LuaJIT",
+			},
+			workspace = {
+				checkThirdParty = false,
+				library = {
+					vim.env.VIMRUNTIME,
+					-- vim.env.VIMRUNTIME .. "/lua",
+					vim.api.nvim_get_runtime_file("lua/lspconfig", false)[1],
 				},
 			},
+		})
+	end,
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { "vim" },
+			},
+			completion = {
+				callSnippet = "Replace",
+			},
+			hint = {
+				enable = true,
+			},
 		},
-	}
-)
+	},
+})
 vim.lsp.enable("lua_ls")
 local conform = require("conform")
 conform.setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
 		json = { "biome" }, -- set -gx BIOME_CONFIG_PATH ~/.config/biome
+		javascript = { "oxfmt" },
+		javascriptreact = { "oxfmt" },
+		typescript = { "oxfmt" },
+		typescriptreact = { "oxfmt" },
 		xml = { "yq" },
 		yaml = { "yq" },
 		cs = { "csharpier" },
