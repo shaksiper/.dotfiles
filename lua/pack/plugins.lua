@@ -64,7 +64,7 @@ return {
 	"https://github.com/s1n7ax/nvim-window-picker",
 	"https://github.com/carbon-steel/detour.nvim",
 	"https://github.com/folke/edgy.nvim",
-	"https://github.com/nvim-lua/plenary.nvim",
+	-- "https://github.com/nvim-lua/plenary.nvim",
 	"https://github.com/kyazdani42/nvim-web-devicons",
 	"https://github.com/lewis6991/gitsigns.nvim",
 	{ src = "https://github.com/NeogitOrg/neogit", version = "master" },
