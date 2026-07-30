@@ -11,7 +11,7 @@ local defaults = {
         enabled = true,
         include = { "0", "+", "*", '"' },
         include_numeric = false,
-        include_named = true,
+        include_named = false,
         max_items = 6,
         score_offset = -8,
     },
@@ -27,8 +27,8 @@ local defaults = {
         luasnip = false,
     },
     score_offset = {
-        manual = 8,
-        luasnip_selection = 4,
+        manual = 0,
+        luasnip_selection = 0,
         register = -8,
     },
 }
