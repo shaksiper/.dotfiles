@@ -210,7 +210,8 @@ vim.lsp.enable("html")
 -- Vim LSP
 vim.lsp.enable("vimls")
 -- TSSERVER
-vim.lsp.enable("ts_ls")
+-- vim.lsp.enable("ts_ls")
+vim.lsp.enable('tsgo')
 vim.lsp.enable("oxlint")
 -- vim.lsp.enable("quick_lint_js")
 -- nvim_lsp.quick_lint_js.setup({})
@@ -334,7 +335,7 @@ vim.lsp.config("roslyn", {
 		-- "dotnet",
 		-- "roslyn-ls",
 		"roslyn-language-server", -- dotnet new install -g roslyn-language-server --prerelease
-		"--logLevel=Information",
+		"--logLevel=Warning",
 		"--extensionLogDirectory=" .. vim.fs.dirname(vim.lsp.log.get_filename()),
 		"--autoLoadProjects",
 		"--stdio",
