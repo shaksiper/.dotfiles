@@ -161,15 +161,4 @@ require("demicolon").setup({
 	},
 })
 -- require("refactoring").setup()
-require("dropbar").setup({
-	bar = {
-		update_events = {
-			buf = {
-				"OptionSet",
-				"FileChangedShellPost",
-				"TextChanged",
-				"ModeChanged",
-			},
-		},
-	},
-})
+require("dropbar").setup({})

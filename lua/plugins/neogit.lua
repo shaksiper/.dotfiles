@@ -7,7 +7,7 @@ require("neogit").setup({
 	diff_viewer = "codediff",
 	treesitter_diff_highlight = true,
 	word_diff_highlight = true,
-	process_spinner = true,
+	process_spinner = false,
 	log_pager = nil,
 	-- highlight = { -- somehow it is not fallback to default
 	--     red = "red",

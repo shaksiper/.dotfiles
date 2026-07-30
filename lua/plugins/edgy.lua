@@ -7,7 +7,7 @@ require("edgy").setup({
 		{
 			ft = "snacks_terminal",
 			title = "%{b:snacks_terminal.id}: %{b:term_title}",
-			size = { height = 0.4 },
+			size = { height = 0.25 },
 			filter = function(_buf, win)
 				return vim.w[win].snacks_win
 					and vim.w[win].snacks_win.position == "bottom"
@@ -21,7 +21,7 @@ require("edgy").setup({
 		{
 			ft = "neotest-run-history",
 			title = "Neotest Run History",
-			size = { height = 0.4 },
+			size = { height = 0.25 },
 			-- filter = function(buf)
 			-- 	return not vim.b[buf].lazyterm_cmd
 			-- end,
@@ -29,7 +29,7 @@ require("edgy").setup({
 		{
 			ft = "neotest-run-details",
 			title = "Neotest Run Details",
-			size = { height = 0.4 },
+			size = { height = 0.25 },
 			-- filter = function(buf)
 			-- 	return not vim.b[buf].lazyterm_cmd
 			-- end,
@@ -37,7 +37,7 @@ require("edgy").setup({
 		{
 			ft = "neotest-output-panel",
 			title = "Neotest Output",
-			size = { height = 0.4 },
+			size = { height = 0.25 },
 			-- filter = function(buf)
 			-- 	return not vim.b[buf].lazyterm_cmd
 			-- end,
@@ -46,7 +46,7 @@ require("edgy").setup({
 		{ ft = "qf", title = "QuickFix" },
 		{
 			ft = "help",
-			size = { height = 0.4 },
+			size = { height = 0.25 },
 			-- only show help buffers
 			filter = function(buf)
 				return vim.bo[buf].buftype == "help"
