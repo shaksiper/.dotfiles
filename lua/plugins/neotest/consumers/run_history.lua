@@ -89,6 +89,108 @@ local function split_preserving_current_behavior(text)
 	return vim.split(text, "[\r\n]+")
 end
 
+local function strip_ansi(text)
+	if type(text) == "table" then
+		local ok_ansi, ansi = pcall(require, "baleia.ansi")
+		if ok_ansi and type(ansi.strip) == "function" then
+			return ansi.strip(text)
+		end
+
+		local stripped = {}
+		for _, line in ipairs(text) do
+			table.insert(stripped, (line:gsub("\27%[[:;0-9]*m", "")))
+		end
+		return stripped
+	end
+
+	local ok_ansi, ansi = pcall(require, "baleia.ansi")
+	if ok_ansi and type(ansi.strip) == "function" then
+		return ansi.strip(text)
+	end
+	return (text:gsub("\27%[[:;0-9]*m", ""))
+end
+
+local function trim(s)
+	return (s or ""):gsub("^%s+", ""):gsub("%s+$", "")
+end
+
+local function is_absolute_path(path)
+	return path:sub(1, 1) == "/" or path:match("^%a:[/\\]") ~= nil
+end
+
+local function stat_file(path)
+	local uv = vim.uv or vim.loop
+	local stat = path and uv.fs_stat(path) or nil
+	return stat and stat.type == "file"
+end
+
+local function clean_path(path)
+	path = trim(path)
+	path = path:gsub("^['\"`<]+", ""):gsub("[>'\"`,.;]+$", "")
+	if not path:match("^%a:[/\\]") then
+		path = path:gsub("\\", "/")
+	end
+	return path
+end
+
+local function path_candidates(path, context_path)
+	path = clean_path(path)
+	if path == "" or path:match("^https?://") then
+		return {}
+	end
+	if path:sub(1, 1) == "~" then
+		path = vim.fn.expand(path)
+	end
+	if is_absolute_path(path) then
+		return { vim.fs.normalize(path) }
+	end
+
+	local candidates = {}
+	local seen = {}
+	local function add(candidate)
+		candidate = vim.fs.normalize(candidate)
+		if not seen[candidate] then
+			table.insert(candidates, candidate)
+			seen[candidate] = true
+		end
+	end
+
+	add(vim.fs.joinpath(vim.fn.getcwd(), path))
+
+	local dir = context_path and vim.fs.dirname(vim.fs.normalize(context_path)) or nil
+	while dir and dir ~= "" do
+		add(vim.fs.joinpath(dir, path))
+		local parent = vim.fs.dirname(dir)
+		if parent == dir then
+			break
+		end
+		dir = parent
+	end
+
+	return candidates
+end
+
+local function resolve_file(path, context_path)
+	local candidates = path_candidates(path, context_path)
+	for _, candidate in ipairs(candidates) do
+		if stat_file(candidate) then
+			return candidate
+		end
+	end
+	return candidates[1]
+end
+
+local function uri_for_location(location)
+	if not location or not location.filename then
+		return nil
+	end
+	local uri = vim.uri_from_fname(location.filename)
+	if location.lnum then
+		uri = ("%s#L%d"):format(uri, location.lnum)
+	end
+	return uri
+end
+
 local function spinner_provider()
 	local ok_snacks, snacks = pcall(require, "snacks.util")
 	if ok_snacks and type(snacks.spinner) == "function" then
@@ -122,6 +224,7 @@ local state = {
 	win_right = nil,
 	buf_left = nil,
 	buf_right = nil,
+	parent_win = nil,
 
 	ns = vim.api.nvim_create_namespace("neotest_run_history"),
 	hl = {
@@ -132,21 +235,45 @@ local state = {
 		skipped = "DiffChange",
 		unknown = "Normal",
 		section = "Special",
+		output_error = "NeotestRunHistoryError",
+		output_warn = "NeotestRunHistoryWarn",
+		output_info = "NeotestRunHistoryInfo",
+		stack = "NeotestRunHistoryStack",
+		file = "NeotestRunHistoryFile",
+		expected = "NeotestRunHistoryExpected",
+		actual = "NeotestRunHistoryActual",
 	},
 
 	_render_scheduled = false,
 	_spinner_index = 1,
 	_spinner_timer = nil,
 	_line_actions = {},
+	_line_links = {},
+	_line_locations = {},
 	_expanded = {},
 }
 
-local function ensure_hls() end
+local function ensure_hls()
+	local links = {
+		NeotestRunHistoryError = "DiagnosticError",
+		NeotestRunHistoryWarn = "DiagnosticWarn",
+		NeotestRunHistoryInfo = "DiagnosticInfo",
+		NeotestRunHistoryStack = "Comment",
+		NeotestRunHistoryExpected = "DiffDelete",
+		NeotestRunHistoryActual = "DiffAdd",
+	}
 
-local function set_buf_lines(buf, lines)
+	for group, target in pairs(links) do
+		pcall(vim.api.nvim_set_hl, 0, group, { link = target, default = true })
+	end
+	pcall(vim.api.nvim_set_hl, 0, "NeotestRunHistoryFile", { underline = true, default = true })
+end
+
+local function set_buf_lines(buf, lines, opts)
 	if not (buf and vim.api.nvim_buf_is_valid(buf)) then
 		return
 	end
+	opts = opts or {}
 
 	local ok_mod = pcall(function()
 		vim.bo[buf].modifiable = true
@@ -155,7 +282,12 @@ local function set_buf_lines(buf, lines)
 		return
 	end
 
-	local ok, err = pcall(vim.api.nvim_buf_set_lines, buf, 0, -1, false, lines)
+	local ok, err
+	if opts.ansi and vim.g.baleia and type(vim.g.baleia.buf_set_lines) == "function" then
+		ok, err = pcall(vim.g.baleia.buf_set_lines, buf, 0, -1, false, lines)
+	else
+		ok, err = pcall(vim.api.nvim_buf_set_lines, buf, 0, -1, false, opts.ansi and strip_ansi(lines) or lines)
+	end
 
 	pcall(function()
 		vim.bo[buf].modifiable = false
@@ -169,7 +301,29 @@ local function set_buf_lines(buf, lines)
 end
 
 local function apply_line_hl(buf, lnum0, hl)
-	pcall(vim.hl.range, buf, state.ns, hl, { lnum0, 0 }, { lnum0, -1 })
+	if not (buf and vim.api.nvim_buf_is_valid(buf)) then
+		return
+	end
+	local line = vim.api.nvim_buf_get_lines(buf, lnum0, lnum0 + 1, false)[1] or ""
+	pcall(vim.api.nvim_buf_set_extmark, buf, state.ns, lnum0, 0, {
+		end_col = #line,
+		hl_eol = true,
+		hl_group = hl,
+		priority = 20,
+	})
+end
+
+local function apply_range_hl(buf, lnum0, start_col, end_col, hl, opts)
+	if not (buf and vim.api.nvim_buf_is_valid(buf)) or end_col <= start_col then
+		return
+	end
+	opts = opts or {}
+	pcall(vim.api.nvim_buf_set_extmark, buf, state.ns, lnum0, start_col, {
+		end_col = end_col,
+		hl_group = hl,
+		priority = opts.priority or 120,
+		url = opts.url,
+	})
 end
 
 local function render_history()
@@ -343,6 +497,173 @@ local function request_output_read(result)
 	end)
 end
 
+local known_source_extensions = {
+	cs = true,
+	cshtml = true,
+	fs = true,
+	fsx = true,
+	js = true,
+	jsx = true,
+	lua = true,
+	razor = true,
+	ts = true,
+	tsx = true,
+	vb = true,
+	xaml = true,
+}
+
+local function looks_like_source_path(path)
+	path = clean_path(path)
+	if path == "" or path:match("^https?://") then
+		return false
+	end
+	if path:find("[/\\]") or path:match("^%.%.?[/\\]") then
+		return true
+	end
+	local ext = path:match("%.([%w_]+)$")
+	return ext and known_source_extensions[ext:lower()] or false
+end
+
+local function add_file_link(links, seen, line, start_idx, end_idx, raw_path, lnum, col, context_path)
+	local path = clean_path(raw_path)
+	if not looks_like_source_path(path) then
+		return
+	end
+
+	local filename = resolve_file(path, context_path)
+	if not filename then
+		return
+	end
+
+	local location = {
+		filename = filename,
+		lnum = math.max(1, tonumber(lnum) or 1),
+		col = math.max(1, tonumber(col) or 1),
+	}
+	local key = ("%d:%d:%s:%d:%d"):format(start_idx, end_idx, location.filename, location.lnum, location.col)
+	if seen[key] then
+		return
+	end
+
+	table.insert(links, {
+		start_col = start_idx - 1,
+		end_col = end_idx,
+		target = location,
+		url = uri_for_location(location),
+		text = line:sub(start_idx, end_idx),
+	})
+	seen[key] = true
+end
+
+local function parse_dotnet_stack_links(line, links, seen, context_path)
+	local search_start = 1
+	while true do
+		local _, in_end = line:find("%s+in%s+", search_start)
+		if not in_end then
+			return
+		end
+
+		local line_start, line_end, lnum = line:find(":line%s+(%d+)", in_end + 1)
+		if not line_start then
+			search_start = in_end + 1
+		else
+			add_file_link(
+				links,
+				seen,
+				line,
+				in_end + 1,
+				line_end,
+				line:sub(in_end + 1, line_start - 1),
+				lnum,
+				1,
+				context_path
+			)
+			search_start = line_end + 1
+		end
+	end
+end
+
+local function parse_pattern_links(line, links, seen, context_path)
+	local patterns = {
+		{
+			pattern = "([%w%._%-%+~/%\\:][%w%._%-%+~/%\\: ]-%.%w+)%((%d+),(%d+)%)",
+			has_col = true,
+		},
+		{
+			pattern = "([%w%._%-%+~/%\\:][%w%._%-%+~/%\\: ]-%.%w+)%((%d+)%)",
+		},
+		{
+			pattern = "([%w%._%-%+~/%\\:][%w%._%-%+~/%\\: ]-%.%w+):(%d+):(%d+)",
+			has_col = true,
+		},
+		{
+			pattern = "([%w%._%-%+~/%\\:][%w%._%-%+~/%\\: ]-%.%w+):(%d+)",
+		},
+	}
+
+	for _, matcher in ipairs(patterns) do
+		local search_start = 1
+		while true do
+			local start_idx, end_idx, path, lnum, col = line:find(matcher.pattern, search_start)
+			if not start_idx then
+				break
+			end
+			add_file_link(links, seen, line, start_idx, end_idx, path, lnum, matcher.has_col and col or 1, context_path)
+			search_start = end_idx + 1
+		end
+	end
+end
+
+local function parse_file_links(line, context_path)
+	local links = {}
+	local seen = {}
+	parse_dotnet_stack_links(line, links, seen, context_path)
+	parse_pattern_links(line, links, seen, context_path)
+	table.sort(links, function(a, b)
+		return a.start_col < b.start_col
+	end)
+	return links
+end
+
+local function output_line_hl(line)
+	if line:match("^%s*Expected%s*:") or line:match("^%s*Expected%s") then
+		return state.hl.expected
+	end
+	if line:match("^%s*Actual%s*:") or line:match("^%s*Actual%s") then
+		return state.hl.actual
+	end
+	if line:match("^%s*at%s+") or line:match("^%s*%-%-%-%s") then
+		return state.hl.stack
+	end
+	if line:match("[Ee]xception") or line:match("%f[%a][Ee]rror%f[%A]") or line:match("%f[%a][Ff]ailed%f[%A]") then
+		return state.hl.output_error
+	end
+	if line:match("%f[%a][Ww]arn") then
+		return state.hl.output_warn
+	end
+	return nil
+end
+
+local function error_location(node, err)
+	if not node then
+		return nil
+	end
+
+	local data = node:data()
+	if not data or not data.path then
+		return nil
+	end
+
+	local range = node.closest_value_for and node:closest_value_for("range") or data.range
+	local line0 = err and err.line or (range and range[1]) or (data.range and data.range[1]) or 0
+	local col0 = (range and range[2]) or (data.range and data.range[2]) or 0
+	return {
+		filename = vim.fs.normalize(data.path),
+		lnum = math.max(1, line0 + 1),
+		col = math.max(1, col0 + 1),
+	}
+end
+
 function render_output()
 	if not (state.buf_right and vim.api.nvim_buf_is_valid(state.buf_right)) then
 		return
@@ -358,7 +679,10 @@ function render_output()
 
 	local lines = {}
 	local hl_lines = {}
+	local range_hls = {}
 	state._line_actions = {}
+	state._line_links = {}
+	state._line_locations = {}
 
 	local function add_line(text, hl, action)
 		table.insert(lines, text)
@@ -368,6 +692,37 @@ function render_output()
 		end
 		if action then
 			state._line_actions[lnum0 + 1] = action
+		end
+	end
+
+	local function add_output_lines(text, opts)
+		opts = opts or {}
+		for _, raw_line in ipairs(split_preserving_current_behavior(text)) do
+			table.insert(lines, raw_line)
+			local lnum0 = #lines - 1
+			local row = lnum0 + 1
+			local visible_line = strip_ansi(raw_line)
+			local line_hl = output_line_hl(visible_line) or opts.line_hl
+			local links = parse_file_links(visible_line, opts.context_path)
+
+			if line_hl then
+				table.insert(hl_lines, { lnum0, line_hl })
+			end
+			if opts.default_location then
+				state._line_locations[row] = opts.default_location
+			end
+			if #links > 0 then
+				state._line_links[row] = links
+				for _, link in ipairs(links) do
+					table.insert(range_hls, {
+						lnum0 = lnum0,
+						start_col = link.start_col,
+						end_col = link.end_col,
+						hl = state.hl.file,
+						url = link.url,
+					})
+				end
+			end
 		end
 	end
 
@@ -416,9 +771,10 @@ function render_output()
 		unknown = state.hl.unknown,
 	}
 
-	local function add_output_section(test_id, result)
+	local function add_output_section(test_id, result, node)
 		local expanded = is_output_expanded(run.id, test_id)
 		local prefix = expanded and "▼" or "▶"
+		local context_path = node and node:data() and node:data().path or nil
 
 		if result and result.output and result._output_state == nil then
 			result._output_state = "idle"
@@ -457,10 +813,7 @@ function render_output()
 			if result._output_state == "ready" and result._output_text and result._output_text ~= "" then
 				add_line(("  %s Output"):format(prefix), state.hl.section, toggle)
 				if expanded then
-					vim.list_extend(lines, split_preserving_current_behavior(result._output_text))
-					-- vim.iter(split_preserving_current_behavior(result._output_text)):each(function(line)
-					-- 	table.insert(lines, line)
-					-- end)
+					add_output_lines(result._output_text, { context_path = context_path })
 				end
 				return
 			end
@@ -470,10 +823,7 @@ function render_output()
 		if out and out ~= "" then
 			add_line(("  %s Output"):format(prefix), state.hl.section, toggle)
 			if expanded then
-				vim.list_extend(lines, split_preserving_current_behavior(out))
-				-- vim.iter(split_preserving_current_behavior(out)):each(function(line)
-				-- 	table.insert(lines, line)
-				-- end)
+				add_output_lines(out, { context_path = context_path })
 			end
 		end
 	end
@@ -483,8 +833,9 @@ function render_output()
 		local name = id
 
 		local node = run.client and run.client:get_position(id, { adapter = run.adapter_id })
+		local data
 		if node then
-			local data = node:data()
+			data = node:data()
 			name = data.name or data.path or id
 		end
 
@@ -493,14 +844,15 @@ function render_output()
 		if result and result.errors and #result.errors > 0 then
 			for _, err in ipairs(result.errors) do
 				local msg = err.message or "(error)"
-				vim.list_extend(lines, split_preserving_current_behavior("  ✖ " .. msg))
-				-- vim.iter(split_preserving_current_behavior("  ✖ " .. msg)):each(function(line)
-				-- 	table.insert(lines, line)
-				-- end)
+				add_output_lines("  ✖ " .. msg, {
+					context_path = data and data.path or nil,
+					default_location = error_location(node, err),
+					line_hl = state.hl.output_error,
+				})
 			end
 		end
 
-		add_output_section(id, result)
+		add_output_section(id, result, node)
 		table.insert(lines, "")
 	end
 
@@ -515,11 +867,14 @@ function render_output()
 		add_test_block(id, results[id])
 	end
 
-	set_buf_lines(state.buf_right, lines)
+	set_buf_lines(state.buf_right, lines, { ansi = true })
 
 	vim.api.nvim_buf_clear_namespace(state.buf_right, state.ns, 0, -1)
 	for _, pair in ipairs(hl_lines) do
 		apply_line_hl(state.buf_right, pair[1], pair[2])
+	end
+	for _, item in ipairs(range_hls) do
+		apply_range_hl(state.buf_right, item.lnum0, item.start_col, item.end_col, item.hl, { url = item.url })
 	end
 end
 
@@ -536,6 +891,102 @@ local function is_win_valid(win)
 	return win and vim.api.nvim_win_is_valid(win)
 end
 
+local function is_run_history_win(win)
+	if not is_win_valid(win) then
+		return false
+	end
+	local buf = vim.api.nvim_win_get_buf(win)
+	return buf == state.buf_left or buf == state.buf_right
+end
+
+local function find_parent_win()
+	if is_win_valid(state.parent_win) and not is_run_history_win(state.parent_win) then
+		return state.parent_win
+	end
+
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		if not is_run_history_win(win) then
+			local buf = vim.api.nvim_win_get_buf(win)
+			if vim.bo[buf].buftype == "" then
+				return win
+			end
+		end
+	end
+
+	for _, win in ipairs(vim.api.nvim_list_wins()) do
+		if not is_run_history_win(win) then
+			return win
+		end
+	end
+end
+
+local function jump_to_location(location)
+	if not (location and location.filename) then
+		return false
+	end
+
+	local win = find_parent_win()
+	if win then
+		pcall(vim.api.nvim_set_current_win, win)
+	else
+		pcall(vim.cmd, "aboveleft split")
+		win = vim.api.nvim_get_current_win()
+	end
+
+	local ok, err = pcall(vim.cmd, "edit " .. vim.fn.fnameescape(location.filename))
+	if not ok then
+		vim.notify(("run_history: failed to open %s: %s"):format(location.filename, err), vim.log.levels.ERROR)
+		return false
+	end
+
+	local lnum = math.max(1, tonumber(location.lnum) or 1)
+	local line_count = vim.api.nvim_buf_line_count(0)
+	lnum = math.min(lnum, line_count)
+	local line = vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, false)[1] or ""
+	local col = math.max(0, (tonumber(location.col) or 1) - 1)
+	col = math.min(col, #line)
+	pcall(vim.api.nvim_win_set_cursor, win or 0, { lnum, col })
+	pcall(vim.cmd, "normal! zv")
+	return true
+end
+
+local function details_location_under_cursor()
+	if not is_win_valid(state.win_right) then
+		return nil
+	end
+
+	local cursor = vim.api.nvim_win_get_cursor(state.win_right)
+	local row = cursor[1]
+	local col = cursor[2]
+	local links = state._line_links[row] or {}
+	for _, link in ipairs(links) do
+		if col >= link.start_col and col < link.end_col then
+			return link.target
+		end
+	end
+
+	if #links == 1 then
+		return links[1].target
+	end
+	return state._line_locations[row]
+end
+
+local function activate_details_line(prefer_location)
+	local location = details_location_under_cursor()
+	if location then
+		jump_to_location(location)
+		return
+	end
+
+	if not prefer_location and is_win_valid(state.win_right) then
+		local row = vim.api.nvim_win_get_cursor(state.win_right)[1]
+		local action = state._line_actions[row]
+		if action then
+			action()
+		end
+	end
+end
+
 local function close_ui()
 	if is_win_valid(state.win_left) then
 		pcall(vim.api.nvim_win_close, state.win_left, true)
@@ -545,6 +996,7 @@ local function close_ui()
 	end
 	state.win_left, state.win_right = nil, nil
 	state.buf_left, state.buf_right = nil, nil
+	state.parent_win = nil
 end
 
 -- TODO: refactor these out
@@ -574,6 +1026,9 @@ local function open_ui()
 		vim.bo[state.buf_right].modifiable = false
 
 		local prev_win = vim.api.nvim_get_current_win()
+		if not is_run_history_win(prev_win) then
+			state.parent_win = prev_win
+		end
 		local dock_height = math.max(10, math.min(18, math.floor(vim.o.lines * 0.25)))
 		vim.cmd("botright " .. dock_height .. "split")
 
@@ -639,12 +1094,8 @@ local function open_ui()
 			end
 		end, "Focus list")
 		map(state.buf_right, "<CR>", function()
-			local row = vim.api.nvim_win_get_cursor(state.win_right)[1]
-			local action = state._line_actions[row]
-			if action then
-				action()
-			end
-		end, "Toggle output section")
+			activate_details_line(false)
+		end, "Open location or toggle output section")
 		map(state.buf_right, "za", function()
 			local row = vim.api.nvim_win_get_cursor(state.win_right)[1]
 			local action = state._line_actions[row]
@@ -652,6 +1103,9 @@ local function open_ui()
 				action()
 			end
 		end, "Toggle output section")
+		map(state.buf_right, "gf", function()
+			activate_details_line(true)
+		end, "Open file location")
 
 		state.selected = math.max(1, math.min(state.selected, #state.runs))
 		render_history()
