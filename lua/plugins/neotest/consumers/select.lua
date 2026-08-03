@@ -258,12 +258,19 @@ end
 ---@class neotest.select.OpenArgs : snacks.picker.Config
 ---@field adapter? string Only list tests for a specific adapter id
 ---@field run_args? neotest.run.RunArgs Extra args passed to neotest.run.run
+---@field mappings? neotest.select.Mappings
+
+---@class neotest.select.Mappings
+---@field debug? string|false Debug selected tests with DAP (default: `<C-d>`)
 
 ---Open a Snacks picker for discovered leaf tests.
 ---@param opts? neotest.select.OpenArgs
 function M.open(opts)
 	opts = opts or {}
 	local items = collect_items(opts)
+	local mappings = vim.tbl_extend("force", {
+		debug = "<C-d>",
+	}, opts.mappings or {})
 
 	nio.scheduler()
 
@@ -274,7 +281,13 @@ function M.open(opts)
 
 	local picker_opts = vim.deepcopy(opts)
 	picker_opts.adapter = nil
+	picker_opts.mappings = nil
 	picker_opts.run_args = nil
+
+	local debug_keys = {}
+	if mappings.debug then
+		debug_keys[mappings.debug] = { "debug", mode = { "n", "i" }, desc = "Debug selected tests" }
+	end
 
 	picker_opts = vim.tbl_deep_extend("force", {
 		title = "Neotest",
@@ -287,6 +300,21 @@ function M.open(opts)
 			selected = {
 				show_always = true,
 			},
+		},
+		actions = {
+			debug = function(picker)
+				local selected = picker:selected({ fallback = true })
+				picker:close()
+				local debug_opts = vim.deepcopy(opts)
+				debug_opts.run_args = vim.tbl_extend("force", debug_opts.run_args or {}, {
+					strategy = "dap",
+				})
+				run_items(selected, debug_opts)
+			end,
+		},
+		win = {
+			input = { keys = debug_keys },
+			list = { keys = debug_keys },
 		},
 		confirm = function(picker)
 			local selected = picker:selected({ fallback = true })
