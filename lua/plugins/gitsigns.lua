@@ -1,11 +1,12 @@
-require("gitsigns").setup({
+local gs = require("gitsigns")
+gs.setup({
 	current_line_blame = true,
 	numhl = true,
 	-- current_line_blame_formatter_opts = {
 	--     relative_time = true,
 	-- },
 	on_attach = function(bufnr)
-		local gs = package.loaded.gitsigns
+		-- local gs = require('gitsigns')
 
 		local function map(mode, l, r, opts)
 			opts = opts or {}
@@ -20,7 +21,7 @@ require("gitsigns").setup({
 			else
 				gs.nav_hunk("next")
 			end
-		end, { expr = true, desc = "Next Hunk" })
+		end, { desc = "Next Hunk" })
 
 		map("n", "[h", function()
 			if vim.wo.diff then
@@ -28,7 +29,7 @@ require("gitsigns").setup({
 			else
 				gs.nav_hunk("prev")
 			end
-		end, { expr = true, desc = "Previous Hunk" })
+		end, { desc = "Previous Hunk" })
 
 		-- Actions
 		map({ "n", "v" }, "<leader>hs", ":Gitsigns stage_hunk<CR>", { desc = "Stage hunk" })
