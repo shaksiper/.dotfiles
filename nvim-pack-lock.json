@@ -30,7 +30,7 @@
       "src": "https://github.com/kazhala/close-buffers.nvim"
     },
     "codediff.nvim": {
-      "rev": "dc38f0b8a2ba8cc198cc024f3abe887341788820",
+      "rev": "31510a9b34c032b6fe98fc158d4066702f68cff2",
       "src": "https://github.com/esmuellert/codediff.nvim"
     },
     "conform.nvim": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fyler.nvim": {
-      "rev": "bc1f8e420f566dd3b3db1f0aff2e6932947bdd71",
+      "rev": "322c79d446884e9939a958294e6108ae8cfbdb12",
       "src": "https://github.com/FylerOrg/fyler.nvim"
     },
     "git-conflict.nvim": {
@@ -99,7 +99,7 @@
       "src": "https://github.com/ofirgall/goto-breakpoints.nvim"
     },
     "grug-far.nvim": {
-      "rev": "0f6a5d0d7a70659b11bbcd6b3673ee0fe61b6024",
+      "rev": "6e05398cf6cad05b3fb46569db96b1ccfcbbd402",
       "src": "https://github.com/MagicDuck/grug-far.nvim"
     },
     "indent-blankline.nvim": {
@@ -123,7 +123,7 @@
       "src": "https://github.com/ggandor/leap-spooky.nvim"
     },
     "leap.nvim": {
-      "rev": "940bc5e716a8cde63bd47e1b13f30fd9075ec0c8",
+      "rev": "57dff92b81db7ae32260d626f30dfcfb13d00d27",
       "src": "https://codeberg.org/andyg/leap.nvim.git"
     },
     "lspkind-nvim": {
@@ -200,7 +200,7 @@
       "src": "https://github.com/rcarriga/nvim-dap-ui"
     },
     "nvim-dap-view": {
-      "rev": "b8c8aa91f42055d7f69012587cde4f1d99f2a701",
+      "rev": "eda349094a87c6ff5a9c75bbbc88bce45836ae08",
       "src": "https://github.com/igorlfs/nvim-dap-view"
     },
     "nvim-dap-virtual-text": {
@@ -220,7 +220,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "b7b920947f21339ee41fbb38c79d6445e12900aa",
+      "rev": "9ae2b3b63b924b1329724dae76e9d2c5c40b389c",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-nio": {
@@ -228,7 +228,7 @@
       "src": "https://github.com/nvim-neotest/nvim-nio"
     },
     "nvim-scissors": {
-      "rev": "9cc1ba06afa8b23b0d30cadc02c40940df1d701e",
+      "rev": "77dfcafd53088c7941f2d383541aa8fdda7fd7b7",
       "src": "https://github.com/chrisgrieser/nvim-scissors"
     },
     "nvim-scrollview": {
@@ -240,11 +240,11 @@
       "src": "https://github.com/kylechui/nvim-surround"
     },
     "nvim-treesitter": {
-      "rev": "61df84986b4b4ec469ee745a182e433d49f8c27e",
+      "rev": "0f32dff7f19476629c77467f887b95e5e2d33509",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "851e865342e5a4cb1ae23d31caf6e991e1c99f1e",
+      "rev": "898ee307df58f854d11cd7edd06472574d48014e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
     },
@@ -338,15 +338,14 @@
     },
     "tabout.nvim": {
       "rev": "9a3499480a8e53dcaa665e2836f287e3b7764009",
-      "src": "https://github.com/shaksiper/tabout.nvim",
-      "version": "'feat/back-jump-inside'"
+      "src": "https://github.com/shaksiper/tabout.nvim"
     },
     "tokyonight.nvim": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim"
     },
     "treewalker.nvim": {
-      "rev": "cfe3c69396233ddbbd6b581b00868985f78ffd9e",
+      "rev": "afa598a8a380602d6a488b1ce7f7db619606cbfb",
       "src": "https://github.com/aaronik/treewalker.nvim"
     },
     "trouble.nvim": {
