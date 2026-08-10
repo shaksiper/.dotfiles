@@ -1,5 +1,6 @@
 local Snacks = require("snacks")
 local helpers = require("plugins.snacks-helpers")
+require("plugins.snacks-smart-path").setup(Snacks)
 
 vim.api.nvim_create_autocmd("User", {
 	pattern = "OilActionsPost",
@@ -85,6 +86,11 @@ Snacks.setup({
 	},
 	picker = {
 		enabled = true,
+		formatters = {
+			file = {
+				smart = true, -- preserve the directory that distinguishes duplicate filenames
+			},
+		},
 		win = {
 			input = {
 				keys = {
